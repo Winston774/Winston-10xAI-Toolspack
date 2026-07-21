@@ -1,0 +1,32 @@
+name: Bug 或安裝問題
+description: 回報無法安裝、載入或使用的問題
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: input
+    id: week
+    attributes:
+      label: 週次與工具名稱
+      placeholder: 2026-W31 YouTube Helper
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 操作步驟
+      description: 請列出發生問題前做過的步驟。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 預期結果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 實際結果與錯誤畫面
+      description: 請勿貼上 API Key、Token、Cookie 或個人資料。
+    validations:
+      required: true

@@ -1,0 +1,17 @@
+name: 功能建議
+description: 建議新的工具、範例或改善方式
+title: "[Idea] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 想解決的問題
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建議做法
+    validations:
+      required: true

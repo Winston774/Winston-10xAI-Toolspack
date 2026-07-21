@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Replace with extension name",
+  "version": "0.1.0",
+  "description": "Replace with a clear description.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": []
+}
