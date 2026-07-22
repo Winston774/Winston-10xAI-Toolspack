@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>畫面文字辨識</title>
+    <link rel="stylesheet" href="design-system.css">
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="sidepanel.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-lockup">
+        <img src="icons/icon-48.png" alt="" class="brand-icon">
+        <div>
+          <span class="brand-kicker">NOISE WINSTON / SCREEN TEXT</span>
+          <h1>畫面文字辨識</h1>
+        </div>
+      </div>
+      <button id="settingsButton" class="icon-button" type="button">設定</button>
+    </header>
+
+    <main>
+      <section id="pendingView" class="view">
+        <div class="section-heading">
+          <div><span class="step-index">01</span><h2>準備框選</h2></div>
+          <span id="pageTitle" class="page-pill"></span>
+        </div>
+        <div id="pendingDisclosureSlot">
+          <div id="captureDisclosure">
+            <div class="disclosure-card">
+              <strong>截圖與傳送範圍</strong>
+              <p>Chrome 會先在本機記憶體擷取目前可視區。只有你框選的裁切圖，或你明確選擇的完整可視區，才會在確認後送給 Gemini。</p>
+              <p>免費層內容可能依 Google 條款用於改善服務；不要框選密碼、個資、公司機密或其他敏感資料。</p>
+            </div>
+            <label class="consent-row">
+              <input id="consentCheckbox" type="checkbox">
+              <span>我已瞭解，下次不需要再顯示</span>
+            </label>
+          </div>
+        </div>
+        <button id="startSelectionButton" class="primary-button full-button" type="button" disabled>開始框選</button>
+        <button id="captureViewportButton" class="secondary-button full-button" type="button" disabled>擷取完整可視區</button>
+        <p id="pendingNote" class="status-message" role="status"></p>
+      </section>
+
+      <section id="selectingView" class="view state-card" hidden>
+        <span class="eyebrow">SELECTING</span>
+        <div class="activity-mark" aria-hidden="true"></div>
+        <h2 id="selectingTitle">請在網頁上拖曳框選</h2>
+        <p id="selectingDescription">放開滑鼠後會自動裁切；按 Esc 可取消。框選期間不要捲動、縮放或切換分頁。</p>
+        <button id="cancelSelectionButton" class="secondary-button" type="button">取消</button>
+      </section>
+
+      <section id="previewView" class="view" hidden>
+        <div class="section-heading">
+          <div><span class="step-index">02</span><h2>確認裁切範圍</h2></div>
+          <span id="cropMeta" class="page-pill"></span>
+        </div>
+        <figure class="preview-frame">
+          <img id="cropPreview" alt="即將送往 Gemini 的裁切畫面">
+        </figure>
+        <div id="previewDisclosureSlot"></div>
+        <fieldset class="mode-picker">
+          <legend>處理方式</legend>
+          <label class="mode-option">
+            <input type="radio" name="ocrMode" value="translate" checked>
+            <span><strong>轉錄＋繁中翻譯</strong><small>保留逐字原文，再產生台灣繁體中文</small></span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="ocrMode" value="transcribe">
+            <span><strong>只轉錄</strong><small>不產生譯文，適合中文、程式碼或表格</small></span>
+          </label>
+        </fieldset>
+        <p class="send-notice">按下送出後，只有上方裁切圖會傳給 Gemini；不會建立 OCR 歷史。</p>
+        <div class="button-row">
+          <button id="redoPreviewButton" class="secondary-button" type="button">重新框選</button>
+          <button id="runOcrButton" class="primary-button" type="button">送給 Gemini</button>
+        </div>
+        <button id="discardPreviewButton" class="text-button centered" type="button">捨棄這張圖</button>
+      </section>
+
+      <section id="runningView" class="view state-card" hidden>
+        <span class="eyebrow">GEMINI IS READING</span>
+        <div class="activity-mark" aria-hidden="true"></div>
+        <h2>正在辨識畫面文字</h2>
+        <p>圖片只保留在這次面板工作階段。通常幾秒內完成，請不要關閉面板。</p>
+      </section>
+
+      <section id="resultView" class="view" hidden>
+        <div class="section-heading">
+          <div><span class="step-index success-step">03</span><h2>辨識完成</h2></div>
+          <span id="languagePill" class="success-pill"></span>
+        </div>
+        <div id="noTextNotice" class="notice warning" hidden>
+          <strong>沒有偵測到可可靠轉錄的文字</strong>
+          <span>可以放大畫面、縮小框選範圍或改用較清楚的影格。</span>
+        </div>
+        <section id="transcriptBlock" class="result-block">
+          <div class="result-heading">
+            <label for="transcriptText">逐字原文</label>
+            <button id="copyTranscriptButton" class="text-button" type="button">複製原文</button>
+          </div>
+          <textarea id="transcriptText" rows="7" spellcheck="false"></textarea>
+        </section>
+        <section id="translationBlock" class="result-block">
+          <div class="result-heading">
+            <label for="translationText">繁中譯文</label>
+            <button id="copyTranslationButton" class="text-button" type="button">複製譯文</button>
+          </div>
+          <textarea id="translationText" rows="7"></textarea>
+        </section>
+        <section id="unclearBlock" class="unclear-block" hidden>
+          <strong>模型標記為不清楚</strong>
+          <ul id="unclearList"></ul>
+        </section>
+        <details class="result-details">
+          <summary>處理資訊</summary>
+          <p id="resultMeta"></p>
+        </details>
+        <div class="button-row">
+          <button id="newSelectionButton" class="primary-button" type="button">重新框選</button>
+          <button id="finishButton" class="secondary-button" type="button">清除並重新開始</button>
+        </div>
+        <p id="copyStatus" class="status-message status-success" role="status"></p>
+      </section>
+
+      <section id="errorView" class="view" hidden>
+        <div class="section-heading">
+          <div><span class="step-index error-step">!</span><h2>這次沒有完成</h2></div>
+        </div>
+        <div class="notice error">
+          <strong id="errorTitle">無法處理</strong>
+          <span id="errorMessage"></span>
+        </div>
+        <div class="button-stack">
+          <button id="retryOcrButton" class="primary-button" type="button" hidden>保留圖片，再試一次</button>
+          <button id="retrySelectionButton" class="secondary-button" type="button">重新框選</button>
+          <button id="errorSettingsButton" class="text-button" type="button" hidden>開啟 Gemini 設定</button>
+          <button id="dismissErrorButton" class="text-button" type="button">清除並重新開始</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>Created by Winston · 圖片與 OCR 結果不寫入歷史</footer>
+    <script src="lib/shortcut-utils.js"></script>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gemini 選取翻譯設定</title>
+    <link rel="stylesheet" href="design-system.css">
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="options.css?v=0.6.0">
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <div class="brand-lockup">
+          <img src="icons/icon-48.png" alt="" class="brand-icon">
+          <div><span class="brand-kicker">NOISE WINSTON / LAB 002</span><strong class="wordmark">noise winston</strong></div>
+        </div>
+        <span class="page-kicker">SETTINGS / TRANSLATION</span>
+        <h1>Gemini 選取翻譯設定</h1>
+        <p>同一組 Gemini 設定會用於反白翻譯與畫面 OCR。API 呼叫只由 background service worker 執行。</p>
+      </header>
+
+      <section class="section">
+        <div class="section-heading">
+          <div><span class="section-index">01</span><h2>Gemini API</h2></div>
+          <p id="keyStatus">載入中</p>
+        </div>
+
+        <label class="field">
+          <span>API key</span>
+          <input id="apiKeyInput" type="password" autocomplete="off" placeholder="貼上新的 Gemini API key">
+        </label>
+
+        <label class="field">
+          <span>模型</span>
+          <input id="modelInput" type="text" list="modelOptions" autocomplete="off" spellcheck="false">
+          <datalist id="modelOptions">
+            <option value="gemini-3.1-flash-lite"></option>
+            <option value="gemini-3.5-flash-lite"></option>
+            <option value="gemini-3.6-flash"></option>
+          </datalist>
+        </label>
+
+        <p class="section-description">Key 會存於這台瀏覽器的 <code>chrome.storage.local</code>，並限制為 trusted extension contexts，方便保留既有工作流；但本機 Extension storage 仍不是秘密保管庫。請使用可撤銷的專用 Key，不要把開發者共用 Key 打包發布。</p>
+
+        <div class="actions">
+          <button id="saveButton" class="primary-button" type="button">儲存設定</button>
+          <button id="clearKeyButton" class="danger-button" type="button">清除 API key</button>
+          <button id="testButton" class="secondary-button" type="button">測試 Gemini</button>
+        </div>
+
+        <p id="statusMessage" class="status-message" role="status"></p>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div><span class="section-index">02</span><h2>外觀模式</h2></div>
+          <p>變更會立即同步</p>
+        </div>
+        <p class="section-description">預設跟隨裝置；同一設定會套用到 popup、設定頁、側邊面板與網頁翻譯浮層。</p>
+        <fieldset class="theme-options" aria-label="外觀模式">
+          <label class="theme-option">
+            <input type="radio" name="themeMode" value="system" checked>
+            <span><strong>跟隨系統</strong><small>自動配合裝置亮色或暗色</small></span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="themeMode" value="light">
+            <span><strong>亮色</strong><small>暖象牙閱讀介面</small></span>
+          </label>
+          <label class="theme-option">
+            <input type="radio" name="themeMode" value="dark">
+            <span><strong>暗色</strong><small>深色工作介面</small></span>
+          </label>
+        </fieldset>
+        <p id="themeStatus" class="status-message" role="status"></p>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div><span class="section-index">03</span><h2>畫面擷取</h2></div>
+          <p>變更會立即同步</p>
+        </div>
+
+        <div class="capture-shortcut">
+          <label class="preference-option">
+            <input id="regionShortcutEnabled" type="checkbox" checked>
+            <span><strong>啟用直接框選快捷鍵</strong><small>按下後開啟 Side Panel，並立即進入拖曳框選狀態。</small></span>
+          </label>
+
+          <div class="shortcut-editor">
+            <span class="shortcut-title">框選區域</span>
+            <div class="shortcut-controls">
+              <button id="regionShortcutRecorder" class="shortcut-recorder" type="button" aria-describedby="shortcutHelp">
+                <kbd id="regionShortcutPreview">Alt + Shift + X</kbd>
+                <small id="regionShortcutRecorderHint">點一下，再按新的組合鍵</small>
+              </button>
+              <button id="resetRegionShortcutButton" class="secondary-button" type="button">恢復預設</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="capture-shortcut">
+          <label class="preference-option">
+            <input id="viewportShortcutEnabled" type="checkbox" checked>
+            <span><strong>啟用完整可視區快捷鍵</strong><small>按下後立即擷取目前分頁可見畫面，接著顯示確認預覽。</small></span>
+          </label>
+
+          <div class="shortcut-editor">
+            <span class="shortcut-title">完整可視區</span>
+            <div class="shortcut-controls">
+              <button id="viewportShortcutRecorder" class="shortcut-recorder" type="button" aria-describedby="shortcutHelp">
+                <kbd id="viewportShortcutPreview">Alt + Shift + V</kbd>
+                <small id="viewportShortcutRecorderHint">點一下，再按新的組合鍵</small>
+              </button>
+              <button id="resetViewportShortcutButton" class="secondary-button" type="button">恢復預設</button>
+            </div>
+          </div>
+        </div>
+
+        <p id="shortcutHelp" class="section-description">兩組快捷鍵不能相同。快捷鍵至少需要 Ctrl、Alt 或 Meta 其中一個修飾鍵；不會在輸入框、文字區域或可編輯內容中觸發。請避開 Chrome、作業系統或網站保留的組合鍵。Chrome 內建頁面與內建 PDF viewer 不支援擷取。</p>
+
+        <label class="preference-option">
+          <input id="showCaptureNotice" type="checkbox" checked>
+          <span><strong>框選前顯示「截圖與傳送範圍」提醒</strong><small>若在提示中勾選「我已瞭解，下次不需要再顯示」，這裡會自動關閉；需要時可在此重新開啟。</small></span>
+        </label>
+
+        <p id="captureSettingsStatus" class="status-message" role="status"></p>
+      </section>
+
+      <section class="section">
+        <div class="section-heading"><div><span class="section-index">04</span><h2>使用說明</h2></div></div>
+        <ol class="steps">
+          <li>到 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">Google AI Studio</a> 建立 API key。</li>
+          <li>貼上 API key 後儲存。</li>
+          <li>在一般網頁或本機檔案反白文字，右下角出現小 icon 後，把滑鼠移到 icon 上。</li>
+          <li>要辨識圖片或影片文字，先暫停影片，再按 Alt + Shift + X 直接框選，或按 Alt + Shift + V 擷取完整可視區；兩組快捷鍵都能在上方調整。</li>
+          <li>Side Panel 只會在你確認後把裁切區送給 Gemini；OCR 圖片與結果不會寫入歷史。</li>
+          <li>如果要支援 file:// 本機檔案，請到 chrome://extensions 的此插件詳細資料頁開啟「允許存取檔案網址」。</li>
+        </ol>
+      </section>
+    </main>
+
+    <script src="lib/shortcut-utils.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

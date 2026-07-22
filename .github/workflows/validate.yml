@@ -17,3 +17,39 @@ jobs:
       - name: Validate repository structure
         shell: pwsh
         run: ./scripts/validate-repo.ps1
+      - name: Test completed Chrome extensions
+        shell: pwsh
+        run: |
+          $manifests = Get-ChildItem ./weeks -Filter manifest.json -Recurse -File |
+            Where-Object { $_.FullName -match '[\\/]completed[\\/]' }
+          foreach ($manifest in $manifests) {
+            $extensionRoot = $manifest.Directory.FullName
+            $javascriptFiles = Get-ChildItem $extensionRoot -Filter *.js -Recurse -File
+            foreach ($javascriptFile in $javascriptFiles) {
+              node --check $javascriptFile.FullName
+              if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            }
+
+            $testRoot = Join-Path $extensionRoot 'tests'
+            if (Test-Path $testRoot -PathType Container) {
+              $testFiles = Get-ChildItem $testRoot -Filter *.mjs -File
+              if ($testFiles) {
+                node --test $testFiles.FullName
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+              }
+            }
+          }
+      - name: Build and inspect weekly release archives
+        shell: pwsh
+        run: |
+          $metadataFiles = Get-ChildItem ./weeks -Filter metadata.yml -Recurse -File
+          foreach ($metadataFile in $metadataFiles) {
+            ./scripts/build-release.ps1 -WeekPath $metadataFile.Directory.FullName
+          }
+      - name: Upload weekly release candidates
+        uses: actions/upload-artifact@v4
+        with:
+          name: toolspack-weekly-release-candidates
+          path: dist/*.zip
+          if-no-files-found: error
+          retention-days: 7
