@@ -38,7 +38,8 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
-目前正在建立第一期內容。請查看 [完整目錄](CATALOG.md)。
+- [2026-W30：Gemini 畫面文字 OCR](weeks/2026/2026-w30-gemini-screen-text-ocr/README.md) — 用快捷鍵框選圖片、影片或 Canvas 的文字，交給 Gemini 轉錄並翻譯。
+- 其他內容請查看 [完整目錄](CATALOG.md)。
 
 ## 給維護者
 

@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "Gemini Selection Translator",
+  "version": "0.6.2",
+  "description": "Translate selected text or capture a screen region for Gemini OCR and Traditional Chinese translation.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "activeTab",
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Gemini 選取翻譯與畫面 OCR",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/icon-32.png"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+      ]
+    }
+  ],
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+      ],
+      "js": [
+        "theme.js",
+        "lib/shortcut-utils.js",
+        "content.js"
+      ],
+      "css": [
+        "design-system.css",
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

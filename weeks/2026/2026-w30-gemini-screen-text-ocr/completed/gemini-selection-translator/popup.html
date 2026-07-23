@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gemini 選取翻譯</title>
+    <link rel="stylesheet" href="design-system.css">
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="popup.css?v=0.6.0">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <img src="icons/icon-48.png" alt="" class="brand-icon">
+          <div>
+            <span class="brand-kicker">NOISE WINSTON / LAB 002</span>
+            <h1>Gemini 選取翻譯</h1>
+            <p id="summary">載入中</p>
+          </div>
+        </div>
+        <button id="settingsButton" class="secondary-button" type="button">設定</button>
+      </header>
+
+      <section id="setupWarning" class="notice" hidden>
+        <strong>尚未設定 API key</strong>
+        <span>請先到設定頁貼上 Gemini API key。</span>
+      </section>
+
+      <section class="capture-launcher">
+        <div>
+          <strong>圖片或影片文字不能複製？</strong>
+          <span>框選畫面後，用 Gemini 逐字轉錄與翻譯。</span>
+        </div>
+        <button id="captureButton" class="primary-button" type="button">框選畫面文字</button>
+        <p id="captureStatus" role="status"></p>
+      </section>
+
+      <nav class="tabs" aria-label="功能切換" role="tablist">
+        <button id="libraryTab" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="libraryPanel" tabindex="0" data-tab="library">單字庫</button>
+        <button id="reviewTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="reviewPanel" tabindex="-1" data-tab="review">複習</button>
+      </nav>
+
+      <section id="libraryPanel" class="panel" role="tabpanel" aria-labelledby="libraryTab">
+        <div class="section-label"><span>WORD LIBRARY</span><i>01</i></div>
+        <div class="toolbar">
+          <input id="searchInput" type="search" placeholder="搜尋單字或中文釋義" autocomplete="off">
+          <div class="toolbar-actions">
+            <button id="exportJsonButton" class="secondary-button" type="button">JSON</button>
+            <button id="exportCsvButton" class="secondary-button" type="button">CSV</button>
+          </div>
+        </div>
+        <div id="emptyLibrary" class="empty-state" hidden>
+          反白單字後 hover 翻譯 icon，翻譯成功的單字會出現在這裡。
+        </div>
+        <div id="wordList" class="word-list" aria-live="polite"></div>
+      </section>
+
+      <section id="reviewPanel" class="panel" role="tabpanel" aria-labelledby="reviewTab" hidden>
+        <div class="section-label"><span>REVIEW SESSION</span><i>02</i></div>
+        <div id="emptyReview" class="empty-state" hidden>
+          目前沒有可複習的單字。
+        </div>
+        <article id="flashcard" class="flashcard" hidden>
+          <div class="flashcard-top">
+            <span id="cardStatus" class="status-pill">新字</span>
+            <span id="cardCount"></span>
+          </div>
+          <button id="cardRevealButton" class="card-face" type="button">
+            <strong id="cardWord"></strong>
+            <span id="cardHint">點一下顯示中文釋義</span>
+          </button>
+          <div id="cardAnswer" class="card-answer" hidden>
+            <p id="cardPartOfSpeech"></p>
+            <p id="cardTranslation"></p>
+          </div>
+          <div class="review-actions">
+            <button id="learningButton" class="secondary-button" type="button">還不熟</button>
+            <button id="knownButton" class="primary-button" type="button">會了</button>
+            <button id="nextButton" class="secondary-button" type="button">下一張</button>
+          </div>
+        </article>
+      </section>
+      <footer class="creator">Created by Winston.</footer>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

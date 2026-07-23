@@ -1,0 +1,76 @@
+:root,
+#gst-root,
+[data-nw-theme="light"] {
+  --nw-canvas: #F1EFE7;
+  --nw-surface: #FFFFFF;
+  --nw-surface-raised: #FFFFFF;
+  --nw-surface-muted: #EAE9E2;
+  --nw-border: #C9C8C1;
+  --nw-border-strong: #6B6B68;
+  --nw-text: #111111;
+  --nw-text-muted: #6B6B68;
+  --nw-purple: #7432FF;
+  --nw-purple-hover: #5B20E6;
+  --nw-purple-text: #7432FF;
+  --nw-lime: #DFF813;
+  --nw-focus: #1877F2;
+  --nw-success: #18A76B;
+  --nw-warning: #D8B400;
+  --nw-error: #DB1B1B;
+  --nw-brand-ink: #111111;
+  --nw-brand-ivory: #F1EFE7;
+  --nw-on-purple: #FFFFFF;
+  --nw-on-lime: #111111;
+  --nw-font-display: Italiana, Georgia, serif;
+  --nw-font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --nw-font-signal: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --nw-radius-sm: 6px;
+  --nw-radius-md: 10px;
+  --nw-radius-lg: 16px;
+  --nw-motion-fast: 120ms;
+  --nw-motion-standard: 180ms;
+  --nw-shadow: rgba(17, 17, 17, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-nw-theme="light"]),
+  #gst-root:not([data-nw-theme="light"]),
+  [data-nw-theme="system"] {
+    --nw-canvas: #0D0F12;
+    --nw-surface: #16191E;
+    --nw-surface-raised: #1D2128;
+    --nw-surface-muted: #242933;
+    --nw-border: #353B47;
+    --nw-border-strong: #4A5261;
+    --nw-text: #F4F1E8;
+    --nw-text-muted: #B4B5B9;
+    --nw-purple: #8550FF;
+    --nw-purple-hover: #7432E8;
+    --nw-purple-text: #B092FF;
+    --nw-focus: #5DA9FF;
+    --nw-success: #46D6A0;
+    --nw-warning: #F4C95D;
+    --nw-error: #FF7272;
+    --nw-shadow: rgba(0, 0, 0, 0.42);
+  }
+}
+
+:root[data-nw-theme="dark"],
+[data-nw-theme="dark"] {
+  --nw-canvas: #0D0F12;
+  --nw-surface: #16191E;
+  --nw-surface-raised: #1D2128;
+  --nw-surface-muted: #242933;
+  --nw-border: #353B47;
+  --nw-border-strong: #4A5261;
+  --nw-text: #F4F1E8;
+  --nw-text-muted: #B4B5B9;
+  --nw-purple: #8550FF;
+  --nw-purple-hover: #7432E8;
+  --nw-purple-text: #B092FF;
+  --nw-focus: #5DA9FF;
+  --nw-success: #46D6A0;
+  --nw-warning: #F4C95D;
+  --nw-error: #FF7272;
+  --nw-shadow: rgba(0, 0, 0, 0.42);
+}
