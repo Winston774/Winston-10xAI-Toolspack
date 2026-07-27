@@ -6,7 +6,7 @@
 
 1. 前往 [CATALOG.md](CATALOG.md) 選擇一週內容。
 2. 打開該週的 `README.md`，先確認需要準備的工具。
-3. 不熟悉 Git 也沒關係：正式發布後可直接從 GitHub Releases 下載 ZIP。
+3. 不熟悉 Git 也沒關係：可直接從 [GitHub Releases](https://github.com/Winston774/Winston-10xAI-Toolspack/releases) 下載 ZIP。
 4. 完成任務後，依照該週的「成果證據」與「通過標準」自我檢查。
 5. 到 GitHub Discussions 分享成果；安裝或程式問題請建立 Issue。
 
@@ -38,7 +38,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
-- [2026-W30：Gemini 畫面文字 OCR](weeks/2026/2026-w30-gemini-screen-text-ocr/README.md) — 用快捷鍵框選圖片、影片或 Canvas 的文字，交給 Gemini 轉錄並翻譯。
+- [2026-W30：Gemini 畫面文字 OCR](weeks/2026/2026-w30-gemini-screen-text-ocr/README.md)（`1.0.0 Stable`）— 用快捷鍵框選圖片、影片或 Canvas 的文字，交給 Gemini 轉錄並翻譯。
 - 其他內容請查看 [完整目錄](CATALOG.md)。
 
 ## 給維護者
@@ -47,4 +47,4 @@ scripts/     驗證與打包工具
 
 ## 授權
 
-授權條款尚未定案。正式公開前，請分別決定範例程式碼與教材／圖片的使用範圍；在授權文件加入前，所有內容均保留權利。
+本倉庫的程式碼、教材與隨附素材依 [MIT License](LICENSE) 授權。

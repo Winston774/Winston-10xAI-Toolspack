@@ -3,8 +3,8 @@ title: Gemini 畫面文字 OCR
 type: chrome-extension
 difficulty: intermediate
 estimated_minutes: 90
-status: preview
-published_at: null
-version: 0.9.0
+status: stable
+published_at: 2026-07-27
+version: 1.0.0
 artifact_version: 0.6.2
 minimum_chrome_version: 116

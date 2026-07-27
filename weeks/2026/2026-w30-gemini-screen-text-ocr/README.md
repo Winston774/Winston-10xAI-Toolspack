@@ -33,7 +33,7 @@
 - 預估時間：安裝與體驗約 30 分鐘；完整拆解約 90 分鐘
 - 支援平台：Windows／macOS／ChromeOS，Chrome 116 以上
 - Extension 版本：`0.6.2`
-- 本週內容版本：`0.9.0 Preview`；合併並建立正式 Release 後升為 `1.0.0 Stable`
+- 本週內容版本：`1.0.0 Stable`
 
 ## 需要準備
 
@@ -48,7 +48,7 @@ Gemini API 是否免費、可用額度與支援地區會隨模型、帳號和 Go
 
 不需要 Git，也不需要終端機：
 
-1. 正式發佈後，從 GitHub Releases 下載 `2026-w30-v1.0.0` 的 ZIP 並解壓縮。Preview 期間可在 GitHub 按 `Code → Download ZIP` 下載目前分支，再找到 `weeks/2026/2026-w30-gemini-screen-text-ocr/completed/gemini-selection-translator/`。
+1. 從 [`2026-w30-v1.0.0` GitHub Release](https://github.com/Winston774/Winston-10xAI-Toolspack/releases/tag/2026-w30-v1.0.0) 下載 `2026-w30-gemini-screen-text-ocr.zip` 並解壓縮。
 2. 在 Chrome 開啟 `chrome://extensions`。
 3. 打開右上角「開發人員模式」。
 4. 按「載入未封裝項目」。
@@ -133,5 +133,6 @@ Gemini API 是否免費、可用額度與支援地區會隨模型、帳號和 Go
 
 ## 版本紀錄
 
-- 本週內容 `v0.9.0 Preview`：首次整理進 Toolspack，包含 Extension `v0.6.2`、完整教學與驗證文件；完成 PR、CI 與正式 Release 後升為 `v1.0.0 Stable`。
+- 本週內容 `v1.0.0 Stable`：首次正式公開發布，包含 Extension `v0.6.2`、完整教學、驗證文件與 MIT License。
+- 本週內容 `v0.9.0 Preview`：首次整理進 Toolspack，並完成 PR、CI 與發布前驗證。
 - Extension `v0.6.2`：修正第一次只用自訂快捷鍵時缺少截圖權限的冷啟動問題，並完成 region／viewport 回歸測試。

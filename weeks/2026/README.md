@@ -8,4 +8,4 @@
 
 | 週次 | 主題 | 類型 | 狀態 |
 |---|---|---|---|
-| [2026-W30](2026-w30-gemini-screen-text-ocr/README.md) | Gemini 畫面文字 OCR | Chrome Extension | Preview |
+| [2026-W30](2026-w30-gemini-screen-text-ocr/README.md) | Gemini 畫面文字 OCR | Chrome Extension | Stable |
