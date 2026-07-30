@@ -61,7 +61,14 @@ jobs:
       - name: Build and inspect weekly release archives
         shell: pwsh
         run: |
-          $metadataFiles = Get-ChildItem ./weeks -Filter metadata.yml -Recurse -File
+          $weeksRoot = (Resolve-Path ./weeks).Path
+          $weekNamePattern = '^\d{4}-w\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$'
+          $metadataFiles = Get-ChildItem ./weeks -Filter metadata.yml -Recurse -File |
+            Where-Object {
+              $_.Directory.Name -match $weekNamePattern -and
+              $_.Directory.Parent.Name -match '^\d{4}$' -and
+              $_.Directory.Parent.Parent.FullName -eq $weeksRoot
+            }
           foreach ($metadataFile in $metadataFiles) {
             ./scripts/build-release.ps1 -WeekPath $metadataFile.Directory.FullName
           }
