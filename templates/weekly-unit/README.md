@@ -8,7 +8,7 @@
 
 ## 基本資料
 
-- 類型：AI Skill / Chrome Extension
+- 類型：AI Skill / Chrome Extension / Local AI Tool
 - 難度：初級 / 中級 / 進階
 - 預估時間：60 分鐘
 - 支援平台：Windows / macOS / Chrome

@@ -6,6 +6,14 @@
 
 - 尚無。
 
+## 2026-W31 v1.0.0 — 2026-07-30
+
+- 加入 Stylebase 設計靈感資料庫與 `Local AI Tool` 週次類型。
+- 加入本地圖片索引、SHA-256 去重、SQLite／FTS5 搜尋與人工來源欄位。
+- 加入明確觸發的 Codex 圖片分析、單工佇列、JSON Schema、Visual DNA 與 Prompt Kit。
+- 加入完整教學、架構、資料隱私、圖片權利、疑難排解與驗證文件。
+- 擴充 Repository Validator 與 GitHub Actions，驗證 completed Node.js 工具。
+
 ## 2026-W30 v1.0.0 — 2026-07-27
 
 - 建立 Winston 10xAI Toolspack 基礎結構。

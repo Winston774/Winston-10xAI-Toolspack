@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Validate repository structure
         shell: pwsh
         run: ./scripts/validate-repo.ps1
@@ -39,10 +43,32 @@ jobs:
               }
             }
           }
+      - name: Test completed local AI tools
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem ./weeks -Filter package.json -Recurse -File |
+            Where-Object { $_.FullName -match '[\\/]completed[\\/]' }
+          foreach ($packageFile in $packages) {
+            Push-Location $packageFile.Directory.FullName
+            try {
+              npm run validate
+              if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            }
+            finally {
+              Pop-Location
+            }
+          }
       - name: Build and inspect weekly release archives
         shell: pwsh
         run: |
-          $metadataFiles = Get-ChildItem ./weeks -Filter metadata.yml -Recurse -File
+          $weeksRoot = (Resolve-Path ./weeks).Path
+          $weekNamePattern = '^\d{4}-w\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$'
+          $metadataFiles = Get-ChildItem ./weeks -Filter metadata.yml -Recurse -File |
+            Where-Object {
+              $_.Directory.Name -match $weekNamePattern -and
+              $_.Directory.Parent.Name -match '^\d{4}$' -and
+              $_.Directory.Parent.Parent.FullName -eq $weeksRoot
+            }
           foreach ($metadataFile in $metadataFiles) {
             ./scripts/build-release.ps1 -WeekPath $metadataFile.Directory.FullName
           }

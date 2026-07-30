@@ -108,7 +108,7 @@ try {
         $manifestEntries = @($entries | Where-Object { $_ -match '^completed/.+/manifest\.json$' })
         $invalidEntries = @($entries | Where-Object {
             $_.Contains('\') -or
-            $_ -match '(^|/)(AGENTS\.md|\.git|\.idea|\.vscode|__pycache__|node_modules|dist|build|qa-evidence|qa-preview)(/|$)' -or
+            $_ -match '(^|/)(AGENTS\.md|SKOOL-POST\.md|\.git|\.idea|\.vscode|__pycache__|node_modules|dist|build|qa-evidence|qa-preview)(/|$)' -or
             $_ -match '(^|/)\.env(?:\.(?!example$).+)?$|\.(?:pem|key|p12|pfx|crx|zip|log)$'
         })
 

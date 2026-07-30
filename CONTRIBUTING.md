@@ -3,7 +3,7 @@
 ## 建立新週次
 
 1. 從 `templates/weekly-unit/` 複製一份到 `weeks/YYYY/YYYY-wNN-topic/`。
-2. 依內容類型，將 `templates/skill/` 或 `templates/chrome-extension/` 複製到該週的 `completed/`。
+2. 依內容類型，將 `templates/skill/`、`templates/chrome-extension/` 或 `templates/local-ai-tool/` 複製到該週的 `completed/`。
 3. 完成該週 `README.md`、`metadata.yml`、starter、completed、assets 與 tests。
 4. 更新 `CATALOG.md`。
 5. 在 Windows PowerShell 執行 `powershell -ExecutionPolicy Bypass -File .\scripts\validate-repo.ps1`。
@@ -22,4 +22,5 @@
 - 不需要手寫 CLI 才能完成基本學習路徑。
 - 已寫明成果證據、通過標準與重試方式。
 - 沒有 API Key、Token、Cookie 或個人資料。
+- 沒有講師用發布文案或 SKOOL 貼文草稿。
 - 自動驗證通過。
