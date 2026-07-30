@@ -1,0 +1,420 @@
+<!doctype html>
+<!--
+THESIS: Stylebase is a local proof table where collected images become searchable design evidence; it refuses the generic AI dashboard.
+OWN-WORLD: Paper white, graphite rules, calibration blue selection marks, safety red errors, compact proof labels, and an image-led contact sheet.
+STORY: Import or scan references, watch analysis progress, inspect Visual DNA and provenance, then copy a prompt or implementation recipe.
+FIRST VIEWPORT: A slim index sits left, an asymmetric contact sheet dominates the center, a loupe inspector anchors right, and the live queue runs along the bottom.
+FORM: Operate/Experience hybrid; grounded direction position 3, registration-console staging with persistent filters and visible analysis fan-out, seed 182e82e7.
+-->
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Stylebase 是本地優先的視覺參考資料庫，協助設計師整理、分析與重用網頁、UI、產品與品牌設計影像。"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Stylebase — 視覺參考資料庫</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">跳到視覺索引</a>
+
+    <svg class="icon-sprite" aria-hidden="true">
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="6.5"></circle>
+        <path d="m16 16 4 4"></path>
+      </symbol>
+      <symbol id="icon-import" viewBox="0 0 24 24">
+        <path d="M12 3v12"></path>
+        <path d="m7.5 8 4.5-5 4.5 5"></path>
+        <path d="M5 14v6h14v-6"></path>
+      </symbol>
+      <symbol id="icon-scan" viewBox="0 0 24 24">
+        <path d="M4 8V4h4"></path>
+        <path d="M16 4h4v4"></path>
+        <path d="M20 16v4h-4"></path>
+        <path d="M8 20H4v-4"></path>
+        <path d="M7 12h10"></path>
+      </symbol>
+      <symbol id="icon-library" viewBox="0 0 24 24">
+        <path d="M4 5h16v14H4z"></path>
+        <path d="M9 5v14"></path>
+        <path d="M4 10h5"></path>
+      </symbol>
+      <symbol id="icon-inbox" viewBox="0 0 24 24">
+        <path d="M4 5h16v14H4z"></path>
+        <path d="M4 14h5l2 2h2l2-2h5"></path>
+      </symbol>
+      <symbol id="icon-collection" viewBox="0 0 24 24">
+        <path d="M5 5h14v14H5z"></path>
+        <path d="M8 2v3M16 2v3M8 19v3M16 19v3"></path>
+      </symbol>
+      <symbol id="icon-queue" viewBox="0 0 24 24">
+        <path d="M6 7h12M6 12h12M6 17h8"></path>
+        <circle cx="4" cy="7" r=".75" fill="currentColor" stroke="none"></circle>
+        <circle cx="4" cy="12" r=".75" fill="currentColor" stroke="none"></circle>
+        <circle cx="4" cy="17" r=".75" fill="currentColor" stroke="none"></circle>
+      </symbol>
+      <symbol id="icon-settings" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"></path>
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <path d="m5 5 14 14M19 5 5 19"></path>
+      </symbol>
+      <symbol id="icon-chevron" viewBox="0 0 24 24">
+        <path d="m8 10 4 4 4-4"></path>
+      </symbol>
+      <symbol id="icon-copy" viewBox="0 0 24 24">
+        <path d="M9 8h10v11H9z"></path>
+        <path d="M5 16V5h10"></path>
+      </symbol>
+      <symbol id="icon-refresh" viewBox="0 0 24 24">
+        <path d="M19 8a8 8 0 1 0 .5 7"></path>
+        <path d="M19 3v5h-5"></path>
+      </symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14"></path>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6"></path>
+      </symbol>
+      <symbol id="icon-alert" viewBox="0 0 24 24">
+        <path d="M12 3 2.5 20h19z"></path>
+        <path d="M12 8v5M12 17h.01"></path>
+      </symbol>
+    </svg>
+
+    <div class="app-shell" id="app">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Stylebase 視覺索引首頁">
+          <span class="brand-name">STYLEBASE</span>
+          <span class="brand-context">視覺索引</span>
+        </a>
+
+        <form class="search-form" id="search-form" role="search">
+          <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+          <label class="sr-only" for="search-input">搜尋視覺參考</label>
+          <input
+            id="search-input"
+            name="q"
+            type="search"
+            autocomplete="off"
+            placeholder="搜尋風格、版面、色彩、文字或來源…"
+          />
+          <kbd aria-label="快捷鍵斜線">/</kbd>
+        </form>
+
+        <div class="topbar-actions" aria-label="匯入與掃描">
+          <input
+            id="file-input"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            multiple
+            hidden
+          />
+          <button
+            class="button button--quiet"
+            id="import-button"
+            type="button"
+            aria-label="匯入影像"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#icon-import"></use></svg>
+            <span>匯入影像</span>
+          </button>
+          <button
+            class="button button--quiet"
+            id="scan-button"
+            type="button"
+            aria-label="掃描圖片資料夾"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#icon-scan"></use></svg>
+            <span>掃描資料夾</span>
+          </button>
+          <button
+            class="button button--primary"
+            id="recognize-button"
+            type="button"
+            aria-label="將選取影像送交 Codex 辨識"
+            disabled
+          >
+            <svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+            <span>送交 Codex</span>
+          </button>
+        </div>
+      </header>
+
+      <aside class="index-rail" aria-label="資料庫索引">
+        <div class="rail-heading">
+          <span>資料庫</span>
+          <span class="rail-status" id="rail-status">連線中</span>
+        </div>
+
+        <nav class="primary-nav" id="primary-nav">
+          <button class="nav-item is-active" type="button" data-view="library" aria-current="page">
+            <svg class="icon" aria-hidden="true"><use href="#icon-library"></use></svg>
+            <span>素材庫</span>
+            <output id="count-library">—</output>
+          </button>
+          <button class="nav-item" type="button" data-view="inbox">
+            <svg class="icon" aria-hidden="true"><use href="#icon-inbox"></use></svg>
+            <span>待整理</span>
+            <output id="count-inbox">—</output>
+          </button>
+          <button class="nav-item" type="button" data-view="collections">
+            <svg class="icon" aria-hidden="true"><use href="#icon-collection"></use></svg>
+            <span>收藏集</span>
+            <output id="count-collections">—</output>
+          </button>
+          <button class="nav-item" type="button" data-action="queue">
+            <svg class="icon" aria-hidden="true"><use href="#icon-queue"></use></svg>
+            <span>Codex 佇列</span>
+            <output id="count-queue">—</output>
+          </button>
+          <button class="nav-item" type="button" data-action="settings">
+            <svg class="icon" aria-hidden="true"><use href="#icon-settings"></use></svg>
+            <span>設定</span>
+            <span class="status-dot" id="settings-status-dot" aria-label="設定狀態"></span>
+          </button>
+        </nav>
+
+        <section class="collection-index" aria-labelledby="collection-index-title">
+          <div class="collection-index-heading">
+            <h2 id="collection-index-title">收藏索引</h2>
+            <button class="icon-button" id="new-collection-button" type="button" aria-label="新增收藏集">
+              <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+            </button>
+          </div>
+          <div id="collection-nav" class="collection-links"></div>
+        </section>
+
+        <p class="rail-footnote">
+          本地優先<br />
+          原始影像保留在你的電腦
+        </p>
+      </aside>
+
+      <main class="workspace" id="workspace" tabindex="-1">
+        <section class="workspace-heading" aria-labelledby="view-title">
+          <div>
+            <p class="view-kicker" id="view-kicker">視覺索引</p>
+            <h1 id="view-title">素材庫</h1>
+          </div>
+          <p class="result-summary" id="result-summary" aria-live="polite">正在讀取本地資料庫…</p>
+        </section>
+
+        <section class="filter-strip" aria-label="篩選與排序">
+          <label>
+            <span>領域</span>
+            <select id="discipline-filter">
+              <option value="">全部領域</option>
+              <option value="web">網頁</option>
+              <option value="ui">UI</option>
+              <option value="product">產品</option>
+              <option value="brand">品牌</option>
+              <option value="concept">概念</option>
+            </select>
+          </label>
+          <label>
+            <span>狀態</span>
+            <select id="status-filter">
+              <option value="">全部狀態</option>
+              <option value="complete">分析完成</option>
+              <option value="needs_review">待確認</option>
+              <option value="queued">等待分析</option>
+              <option value="processing">分析中</option>
+              <option value="needs_setup">Codex 未就緒</option>
+              <option value="failed">失敗</option>
+              <option value="stale_analysis">需更新</option>
+              <option value="missing">原檔遺失</option>
+            </select>
+          </label>
+          <label>
+            <span>排序</span>
+            <select id="sort-select">
+              <option value="newest">最新加入</option>
+              <option value="title">名稱</option>
+              <option value="status">分析狀態</option>
+            </select>
+          </label>
+          <button class="text-button" id="clear-filters-button" type="button">清除條件</button>
+        </section>
+
+        <section class="batch-bar" id="batch-bar" hidden aria-label="批次操作">
+          <strong id="batch-count">已選 0 張</strong>
+          <span>以 Ctrl / Cmd 或每張影像右上角的選取框加入批次</span>
+          <small class="codex-disclosure codex-disclosure--batch">
+            送交時才會將選取影像傳送至 Codex 服務；匯入本身不會上傳。
+          </small>
+          <div>
+            <button class="text-button" id="clear-selection-button" type="button">取消選取</button>
+            <button
+              class="button button--primary"
+              id="batch-analyze-button"
+              type="button"
+              aria-label="將批次選取影像送交 Codex 辨識"
+            >
+              送交 Codex
+            </button>
+          </div>
+        </section>
+
+        <section class="setup-notice" id="setup-notice" hidden aria-labelledby="setup-title">
+          <svg class="icon" aria-hidden="true"><use href="#icon-alert"></use></svg>
+          <div>
+            <h2 id="setup-title">Codex CLI / Agent 尚未就緒</h2>
+            <p>
+              你仍可在本機匯入、整理與瀏覽；匯入不會上傳，只有按「送交 Codex」才會傳送影像。
+            </p>
+          </div>
+          <button class="button button--quiet" type="button" data-action="settings">開啟設定</button>
+        </section>
+
+        <section class="state-panel state-panel--loading" id="loading-state" aria-live="polite">
+          <span class="loading-rule"></span>
+          <p>正在校準視覺索引與分析佇列…</p>
+        </section>
+
+        <section class="state-panel state-panel--error" id="error-state" hidden>
+          <svg class="icon" aria-hidden="true"><use href="#icon-alert"></use></svg>
+          <div>
+            <h2>無法讀取本地資料庫</h2>
+            <p id="error-message">請確認本地服務仍在執行，再重新載入。</p>
+          </div>
+          <button class="button button--quiet" id="retry-load-button" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+            重新載入
+          </button>
+        </section>
+
+        <section class="contact-sheet" id="gallery" aria-label="視覺參考影像" hidden></section>
+
+        <section class="collection-overview" id="collection-overview" hidden aria-labelledby="collection-title">
+          <div class="collection-overview-head">
+            <div>
+              <p class="view-kicker">人工策展與條件式視圖</p>
+              <h2 id="collection-title">收藏集</h2>
+            </div>
+            <button class="button button--primary" type="button" data-action="new-collection">
+              <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+              新增收藏集
+            </button>
+          </div>
+          <div class="collection-table" id="collection-table"></div>
+        </section>
+      </main>
+
+      <aside class="inspector" id="inspector" aria-label="影像詳細檢視">
+        <div class="inspector-empty" id="inspector-empty">
+          <span class="registration-target" aria-hidden="true"></span>
+          <p>選取影像以開啟校樣檢視</p>
+          <small>方向鍵切換影像 · Esc 關閉</small>
+        </div>
+        <div id="inspector-content" hidden></div>
+      </aside>
+
+      <footer class="queue-bar" id="queue-bar" aria-label="分析佇列">
+        <button class="queue-summary" id="queue-toggle" type="button" aria-expanded="false">
+          <span class="queue-summary-label">
+            <svg class="icon" aria-hidden="true"><use href="#icon-queue"></use></svg>
+            Codex 分析佇列
+          </span>
+          <strong id="queue-active-count">00</strong>
+          <span id="queue-summary-text">尚無工作</span>
+          <svg class="icon queue-chevron" aria-hidden="true"><use href="#icon-chevron"></use></svg>
+        </button>
+        <div class="queue-track" id="queue-track" aria-live="polite"></div>
+        <div class="queue-actions">
+          <button class="text-button" id="retry-needs-setup-button" type="button" hidden>
+            完成設定後重試
+          </button>
+        </div>
+      </footer>
+    </div>
+
+    <dialog class="sheet-dialog" id="collection-dialog" aria-labelledby="collection-dialog-title">
+      <form id="collection-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="view-kicker">策展</p>
+            <h2 id="collection-dialog-title">新增收藏集</h2>
+          </div>
+          <button class="icon-button" type="button" data-close-dialog aria-label="關閉">
+            <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+          </button>
+        </div>
+        <label class="field">
+          <span>收藏集名稱</span>
+          <input id="collection-name" name="name" required maxlength="80" autocomplete="off" />
+        </label>
+        <div class="dialog-actions">
+          <button class="button button--quiet" type="button" data-close-dialog>取消</button>
+          <button class="button button--primary" type="submit">建立收藏集</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="sheet-dialog sheet-dialog--wide" id="settings-dialog" aria-labelledby="settings-dialog-title">
+      <form id="settings-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="view-kicker">本地分析環境</p>
+            <h2 id="settings-dialog-title">設定</h2>
+          </div>
+          <button class="icon-button" type="button" data-close-dialog aria-label="關閉">
+            <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+          </button>
+        </div>
+
+        <div class="settings-grid">
+          <div class="field">
+            <span>監看資料夾</span>
+            <output class="path-readout" id="setting-inbox-path">讀取中…</output>
+            <small>將影像放入這個資料夾，再按「啟動辨識」。</small>
+          </div>
+          <label class="field">
+            <span>Codex 模型</span>
+            <input
+              id="setting-codex-model"
+              name="codexModel"
+              maxlength="120"
+              placeholder="留空以使用已登入的預設模型"
+              autocomplete="off"
+            />
+            <small>只接受 Codex CLI / Agent 可識別的模型名稱。</small>
+          </label>
+        </div>
+
+        <dl class="codex-ledger" id="provider-ledger">
+          <div>
+            <dt>Codex CLI / Agent</dt>
+            <dd id="codex-readiness">檢查中</dd>
+          </div>
+          <div>
+            <dt>執行模式</dt>
+            <dd id="codex-execution-mode">本地 Agent</dd>
+          </div>
+          <div>
+            <dt>同時工作數</dt>
+            <dd>1</dd>
+          </div>
+          <div>
+            <dt>Prompt 版本</dt>
+            <dd id="codex-prompt-version">—</dd>
+          </div>
+        </dl>
+
+        <div class="dialog-actions">
+          <button class="button button--quiet" type="button" data-close-dialog>取消</button>
+          <button class="button button--primary" type="submit">儲存設定</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="live-region" id="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

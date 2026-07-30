@@ -1,6 +1,6 @@
 # Winston 10xAI Toolspack
 
-每週一個可以直接使用、拆解、練習與分享的 AI Skill 或 Chrome Extension。
+每週一個可以直接使用、拆解、練習與分享的 AI Skill、Chrome Extension 或 Local AI Tool。
 
 ## 從這裡開始
 
@@ -14,6 +14,7 @@
 
 - **AI Skill**：可重複使用的指令、參考資料、腳本與範例。
 - **Chrome Extension**：可在 Chrome 載入、操作與修改的擴充功能。
+- **Local AI Tool**：在自己的電腦執行、保留本地資料並可選擇串接 AI 的完整工具。
 
 ## 倉庫結構
 
@@ -38,6 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W31：Stylebase 設計靈感資料庫](weeks/2026/2026-w31-stylebase-design-inspiration-library/README.md)（`1.0.0 Stable`）— 將設計截圖建立本地索引，並以 Codex 輔助分析成 Visual DNA 與 Prompt Kit。
 - [2026-W30：Gemini 畫面文字 OCR](weeks/2026/2026-w30-gemini-screen-text-ocr/README.md)（`1.0.0 Stable`）— 用快捷鍵框選圖片、影片或 Canvas 的文字，交給 Gemini 轉錄並翻譯。
 - 其他內容請查看 [完整目錄](CATALOG.md)。
 

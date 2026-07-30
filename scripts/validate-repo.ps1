@@ -29,9 +29,10 @@ foreach ($file in $requiredRootFiles) {
 
 $skillTemplate = Join-Path $repoRoot 'templates/skill/SKILL.md'
 $extensionManifest = Join-Path $repoRoot 'templates/chrome-extension/manifest.json'
+$localToolTemplate = Join-Path $repoRoot 'templates/local-ai-tool/README.md'
 $weeklyTemplate = Join-Path $repoRoot 'templates/weekly-unit/metadata.yml'
 
-foreach ($path in @($skillTemplate, $extensionManifest, $weeklyTemplate)) {
+foreach ($path in @($skillTemplate, $extensionManifest, $localToolTemplate, $weeklyTemplate)) {
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
         $errors.Add("Missing template: $path")
     }
@@ -120,7 +121,7 @@ foreach ($yearDirectory in $yearDirectories) {
         if ($metadataValues.id -and -not $unit.Name.StartsWith("$($metadataValues.id)-")) {
             $errors.Add("$($unit.Name) does not match metadata id $($metadataValues.id)")
         }
-        if ($metadataValues.type -and $metadataValues.type -notin @('skill', 'chrome-extension')) {
+        if ($metadataValues.type -and $metadataValues.type -notin @('skill', 'chrome-extension', 'local-ai-tool')) {
             $errors.Add("$($unit.Name) has invalid type $($metadataValues.type)")
         }
         if ($metadataValues.difficulty -and $metadataValues.difficulty -notin @('beginner', 'intermediate', 'advanced')) {
@@ -171,6 +172,41 @@ foreach ($yearDirectory in $yearDirectories) {
             }
         }
 
+        if ($metadataValues.type -eq 'local-ai-tool') {
+            $completedPath = Join-Path $unit.FullName 'completed'
+            $packages = Get-ChildItem -LiteralPath $completedPath -Filter package.json -Recurse -File -ErrorAction SilentlyContinue
+            if (-not $packages) {
+                $errors.Add("$($unit.Name) has no completed Node.js package")
+            }
+
+            foreach ($packageFile in $packages) {
+                try {
+                    $package = Get-Content -LiteralPath $packageFile.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+                    if ([string]::IsNullOrWhiteSpace($package.name) -or [string]::IsNullOrWhiteSpace($package.version)) {
+                        $errors.Add("$($unit.Name) completed package must include name and version")
+                    }
+                    if ($package.version -ne $metadataValues.version) {
+                        $errors.Add("$($unit.Name) completed package version must match metadata version")
+                    }
+                    if (-not $package.scripts.test -or -not $package.scripts.validate) {
+                        $errors.Add("$($unit.Name) completed package must include test and validate scripts")
+                    }
+                    if (-not (Test-Path -LiteralPath (Join-Path $packageFile.Directory.FullName 'README.md') -PathType Leaf)) {
+                        $errors.Add("$($unit.Name) completed local tool is missing README.md")
+                    }
+                }
+                catch {
+                    $errors.Add("Invalid completed package $($packageFile.FullName): $($_.Exception.Message)")
+                }
+            }
+
+            foreach ($requiredDoc in @('docs/privacy-and-content-rights.md', 'docs/troubleshooting.md', 'docs/verification.md')) {
+                if (-not (Test-Path -LiteralPath (Join-Path $unit.FullName $requiredDoc) -PathType Leaf)) {
+                    $errors.Add("$($unit.Name) is missing $requiredDoc")
+                }
+            }
+        }
+
         $publishedItems = Get-ChildItem -LiteralPath $unit.FullName -Recurse -Force -ErrorAction SilentlyContinue
         $linkedItems = @($unit) + @($publishedItems) | Where-Object {
             $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)
@@ -182,6 +218,7 @@ foreach ($yearDirectory in $yearDirectories) {
         $forbiddenFiles = $publishedItems | Where-Object { -not $_.PSIsContainer } |
             Where-Object {
                 $_.Name -eq 'AGENTS.md' -or
+                $_.Name -eq 'SKOOL-POST.md' -or
                 $_.Name -eq '.env' -or
                 ($_.Name -like '.env.*' -and $_.Name -ne '.env.example') -or
                 $_.Name -match '\.(?:pem|key|p12|pfx|crx|zip|log)$'

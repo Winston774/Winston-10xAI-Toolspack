@@ -1,0 +1,25 @@
+{
+  "name": "stylebase-design-inspiration-library",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first design inspiration library with optional Codex image analysis.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Winston774/Winston-10xAI-Toolspack.git",
+    "directory": "weeks/2026/2026-w31-stylebase-design-inspiration-library/completed/stylebase-design-inspiration-library"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env server.mjs",
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "test": "node --test tests/button-state.test.mjs tests/codex-agent.test.mjs tests/library.test.mjs tests/palette-swatch.test.mjs",
+    "check": "node --check server.mjs && node --check src/db.mjs && node --check src/library.mjs && node --check src/analysis-schema.mjs && node --check src/codex-agent.mjs && node --check public/button-state.js && node --check public/palette-swatch.js && node --check public/app.js && node --check scripts/smoke-test.mjs && node --check scripts/validate-release.mjs",
+    "smoke": "node scripts/smoke-test.mjs",
+    "validate:release": "node scripts/validate-release.mjs",
+    "validate": "npm run check && npm test && npm run smoke && npm run validate:release"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

@@ -1,0 +1,14 @@
+data/
+library/inbox/*
+!library/inbox/.gitkeep
+.env
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+node_modules/
+coverage/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

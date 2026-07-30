@@ -1,0 +1,11 @@
+id: 2026-w31
+title: Stylebase 設計靈感資料庫
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 90
+status: stable
+published_at: 2026-07-30
+version: 1.0.0
+runtime: node-24
+platform: windows
+license: MIT
