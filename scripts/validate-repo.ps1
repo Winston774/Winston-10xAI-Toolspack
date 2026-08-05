@@ -140,6 +140,87 @@ foreach ($yearDirectory in $yearDirectories) {
             $errors.Add("$($unit.Name) version must use MAJOR.MINOR.PATCH")
         }
 
+        if ($metadataValues.type -eq 'skill') {
+            $completedPath = Join-Path $unit.FullName 'completed'
+            $skillFiles = Get-ChildItem -LiteralPath $completedPath -Filter SKILL.md -Recurse -File -ErrorAction SilentlyContinue
+            if (-not $skillFiles) {
+                $errors.Add("$($unit.Name) has no completed SKILL.md")
+            }
+
+            foreach ($skillFile in $skillFiles) {
+                $skillDirectory = $skillFile.Directory
+                if ($skillDirectory.Name -notmatch '^[a-z0-9]+(?:-[a-z0-9]+)*$' -or $skillDirectory.Name.Length -gt 64) {
+                    $errors.Add("$($unit.Name) has invalid skill directory name $($skillDirectory.Name)")
+                }
+
+                $skillContent = Get-Content -LiteralPath $skillFile.FullName -Raw -Encoding UTF8
+                $frontmatterMatch = [regex]::Match(
+                    $skillContent,
+                    '(?s)\A---\r?\n(?<yaml>.*?)\r?\n---(?:\r?\n|\z)'
+                )
+                if (-not $frontmatterMatch.Success) {
+                    $errors.Add("$($unit.Name) completed skill has invalid frontmatter: $($skillFile.FullName)")
+                    continue
+                }
+
+                $frontmatter = $frontmatterMatch.Groups['yaml'].Value
+                $skillName = Get-MetadataValue -Content $frontmatter -Key 'name'
+                $skillDescription = Get-MetadataValue -Content $frontmatter -Key 'description'
+                if ([string]::IsNullOrWhiteSpace($skillName)) {
+                    $errors.Add("$($unit.Name) completed skill is missing frontmatter name")
+                }
+                elseif ($skillName -ne $skillDirectory.Name) {
+                    $errors.Add("$($unit.Name) skill name $skillName does not match directory $($skillDirectory.Name)")
+                }
+                if ([string]::IsNullOrWhiteSpace($skillDescription)) {
+                    $errors.Add("$($unit.Name) completed skill is missing frontmatter description")
+                }
+
+                $referenceMatches = [regex]::Matches(
+                    $skillContent,
+                    '\]\((?<path>references/[^\s\)#]+)(?:#[^\)]*)?\)'
+                )
+                $linkedReferences = [System.Collections.Generic.HashSet[string]]::new(
+                    [System.StringComparer]::OrdinalIgnoreCase
+                )
+                foreach ($referenceMatch in $referenceMatches) {
+                    $referencePath = $referenceMatch.Groups['path'].Value
+                    $null = $linkedReferences.Add($referencePath.Replace('\', '/'))
+                    $resolvedReference = Join-Path $skillDirectory.FullName (
+                        $referencePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar)
+                    )
+                    if (-not (Test-Path -LiteralPath $resolvedReference -PathType Leaf)) {
+                        $errors.Add("$($unit.Name) skill reference is missing: $referencePath")
+                    }
+                }
+
+                $referencesDirectory = Join-Path $skillDirectory.FullName 'references'
+                if (Test-Path -LiteralPath $referencesDirectory -PathType Container) {
+                    $referenceFiles = Get-ChildItem -LiteralPath $referencesDirectory -Recurse -File
+                    foreach ($referenceFile in $referenceFiles) {
+                        $relativeReference = $referenceFile.FullName.Substring($skillDirectory.FullName.Length + 1).Replace('\', '/')
+                        if (-not $linkedReferences.Contains($relativeReference)) {
+                            $errors.Add("$($unit.Name) has unreferenced skill file: $relativeReference")
+                        }
+                    }
+                }
+
+                $agentMetadataPath = Join-Path $skillDirectory.FullName 'agents/openai.yaml'
+                if (Test-Path -LiteralPath $agentMetadataPath -PathType Leaf) {
+                    $agentMetadata = Get-Content -LiteralPath $agentMetadataPath -Raw -Encoding UTF8
+                    foreach ($requiredAgentField in @('display_name', 'short_description', 'default_prompt')) {
+                        if ($agentMetadata -notmatch "(?m)^\s+${requiredAgentField}:\s+.+$") {
+                            $errors.Add("$($unit.Name) agents/openai.yaml is missing $requiredAgentField")
+                        }
+                    }
+                    $skillInvocation = '$' + $skillName
+                    if ($skillName -and $agentMetadata -notmatch [regex]::Escape($skillInvocation)) {
+                        $errors.Add("$($unit.Name) agents/openai.yaml default prompt does not mention $skillInvocation")
+                    }
+                }
+            }
+        }
+
         if ($metadataValues.type -eq 'chrome-extension') {
             $completedPath = Join-Path $unit.FullName 'completed'
             $manifests = Get-ChildItem -LiteralPath $completedPath -Filter manifest.json -Recurse -File -ErrorAction SilentlyContinue
