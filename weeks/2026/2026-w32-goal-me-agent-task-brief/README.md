@@ -29,7 +29,7 @@
 - 預估時間：安裝與第一次使用約 20 分鐘；完整練習約 60 分鐘
 - 支援平台：Codex、Claude Code，以及可讀取 Agent Skills 或接受完整提示詞的 AI Agent
 - Skill 版本：`1.0.0`
-- 本週狀態：`Preview`
+- 本週狀態：`Stable`
 
 ## 需要準備
 
@@ -45,8 +45,8 @@
 
 ### 不使用 Git
 
-1. 下載本倉庫的 [main 分支 ZIP](https://github.com/Winston774/Winston-10xAI-Toolspack/archive/refs/heads/main.zip) 並解壓縮。
-2. 找到 `weeks/2026/2026-w32-goal-me-agent-task-brief/completed/goal-me`。
+1. 從 [`2026-w32-v1.0.0` GitHub Release](https://github.com/Winston774/Winston-10xAI-Toolspack/releases/tag/2026-w32-v1.0.0) 下載 `2026-w32-goal-me-agent-task-brief.zip` 並解壓縮。
+2. 找到 `completed/goal-me`。
 3. 將整個 `goal-me` 資料夾複製到個人技能目錄：
    - Codex：`%USERPROFILE%\.codex\skills\goal-me`
    - Claude Code：`%USERPROFILE%\.claude\skills\goal-me`
@@ -133,4 +133,4 @@ Claude Code 的技能目錄與呼叫方式可參考[官方 Skills 文件](https:
 
 ## 版本紀錄
 
-- `v1.0.0 Preview`：首次發布繁體中文 `goal-me`，包含執行型、探索型、混合型、多 Agent、權限邊界、防取巧驗收與斷點續跑流程。
+- `v1.0.0 Stable`：首次正式發布繁體中文 `goal-me`，包含執行型、探索型、混合型、多 Agent、權限邊界、防取巧驗收與斷點續跑流程。

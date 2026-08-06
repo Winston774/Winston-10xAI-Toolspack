@@ -8,6 +8,6 @@
 
 | 週次 | 主題 | 類型 | 狀態 |
 |---|---|---|---|
-| [2026-W32](2026-w32-goal-me-agent-task-brief/README.md) | Goal Me：AI Agent 目標任務書 | AI Skill | Preview |
+| [2026-W32](2026-w32-goal-me-agent-task-brief/README.md) | Goal Me：AI Agent 目標任務書 | AI Skill | Stable |
 | [2026-W31](2026-w31-stylebase-design-inspiration-library/README.md) | Stylebase 設計靈感資料庫 | Local AI Tool | Stable |
 | [2026-W30](2026-w30-gemini-screen-text-ocr/README.md) | Gemini 畫面文字 OCR | Chrome Extension | Stable |
