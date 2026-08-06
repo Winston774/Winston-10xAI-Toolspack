@@ -1,0 +1,10 @@
+id: 2026-w32
+title: Goal Me：AI Agent 目標任務書
+type: skill
+difficulty: intermediate
+estimated_minutes: 60
+status: stable
+published_at: 2026-08-06
+version: 1.0.0
+platform: codex-claude-code-agent-skills
+license: MIT

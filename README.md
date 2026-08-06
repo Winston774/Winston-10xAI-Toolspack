@@ -39,6 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W32：Goal Me — AI Agent 目標任務書](weeks/2026/2026-w32-goal-me-agent-task-brief/README.md)（`1.0.0 Stable`）— 將一句模糊想法轉成可獨立執行、續跑與驗收的 Agent 工作規格。
 - [2026-W31：Stylebase 設計靈感資料庫](weeks/2026/2026-w31-stylebase-design-inspiration-library/README.md)（`1.0.0 Stable`）— 將設計截圖建立本地索引，並以 Codex 輔助分析成 Visual DNA 與 Prompt Kit。
 - [2026-W30：Gemini 畫面文字 OCR](weeks/2026/2026-w30-gemini-screen-text-ocr/README.md)（`1.0.0 Stable`）— 用快捷鍵框選圖片、影片或 Canvas 的文字，交給 Gemini 轉錄並翻譯。
 - 其他內容請查看 [完整目錄](CATALOG.md)。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "目標任務書"
+  short_description: "把模糊想法轉成可由 AI Agent 獨立完成的任務書"
+  default_prompt: "使用 $goal-me，把我的想法整理成可直接交給 AI Agent 執行與驗收的目標任務書。"
