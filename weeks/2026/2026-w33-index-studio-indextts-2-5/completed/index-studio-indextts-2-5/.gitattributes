@@ -1,0 +1,2 @@
+# Example audio files are now downloaded on demand from HuggingFace/ModelScope.
+# See indextts/utils/examples_downloader.py

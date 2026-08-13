@@ -1,0 +1,13 @@
+{
+  "name": "index-studio-indextts-2-5-release-checks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-dependency release checks for the Python-based Index Studio project.",
+  "scripts": {
+    "test": "node --test tests/release.test.mjs",
+    "validate": "npm run test && node scripts/validate-release.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="IndexTTS 2.5 本機語音實驗工作台">
+  <title>Index Studio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #f1efe7;
+      --surface: #ffffff;
+      --surface-strong: #eae9e2;
+      --surface-muted: #deddd6;
+      --text: #111111;
+      --text-soft: #454542;
+      --text-faint: #6b6b68;
+      --border: #c9c8c1;
+      --border-strong: #6b6b68;
+      --accent: #7432ff;
+      --accent-hover: #5b20e6;
+      --accent-soft: color-mix(in srgb, #7432ff 8%, #ffffff);
+      --signal: #dff813;
+      --signal-ink: #111111;
+      --focus: #1877f2;
+      --success: #18a76b;
+      --danger: #db1b1b;
+      --warning: #b39400;
+      --radius-sm: 4px;
+      --radius: 7px;
+      --radius-lg: 12px;
+      --font-sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei UI", "Microsoft JhengHei", "Segoe UI Variable", system-ui, sans-serif;
+      --font-signal: "Roboto Condensed", "Arial Narrow", "Aptos Narrow", var(--font-sans);
+      --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      --motion-fast: 120ms;
+      --motion-standard: 180ms;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --canvas: #0d0f12;
+      --surface: #16191e;
+      --surface-strong: #1d2128;
+      --surface-muted: #242933;
+      --text: #f4f1e8;
+      --text-soft: #d0cec7;
+      --text-faint: #b4b5b9;
+      --border: #353b47;
+      --border-strong: #4a5261;
+      --accent: #8550ff;
+      --accent-hover: #7432e8;
+      --accent-soft: color-mix(in srgb, #8550ff 15%, #16191e);
+      --signal: #dff813;
+      --focus: #5da9ff;
+      --success: #46d6a0;
+      --danger: #ff7272;
+      --warning: #f4c95d;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html:not([data-theme]) {
+        color-scheme: dark;
+        --canvas: #0d0f12;
+        --surface: #16191e;
+        --surface-strong: #1d2128;
+        --surface-muted: #242933;
+        --text: #f4f1e8;
+        --text-soft: #d0cec7;
+        --text-faint: #b4b5b9;
+        --border: #353b47;
+        --border-strong: #4a5261;
+        --accent: #8550ff;
+        --accent-hover: #7432e8;
+        --accent-soft: color-mix(in srgb, #8550ff 15%, #16191e);
+        --signal: #dff813;
+        --focus: #5da9ff;
+        --success: #46d6a0;
+        --danger: #ff7272;
+        --warning: #f4c95d;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-width: 320px; max-width: 100%; overflow-x: clip; background: var(--canvas); }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background: var(--canvas);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 100%;
+      overflow-x: clip;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    button, input[type="file"], input[type="range"], select { cursor: pointer; }
+
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    summary:focus-visible,
+    a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 72%, transparent);
+      outline-offset: 2px;
+    }
+
+    button:active { transform: translateY(1px) scale(.99); }
+
+    .appbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      padding: 10px clamp(16px, 3vw, 40px);
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--canvas) 96%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--text);
+      color: var(--canvas);
+      font-family: var(--font-signal);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .brand-copy { display: grid; gap: 1px; min-width: 0; }
+    .brand-copy strong { font-size: 15px; font-weight: 820; letter-spacing: -.02em; }
+    .brand-copy span { color: var(--text-faint); font-family: var(--font-signal); font-size: 11px; letter-spacing: .035em; white-space: nowrap; }
+
+    .appbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    .server-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-soft);
+      font-family: var(--font-signal);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .status-light {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    .server-status[data-state="ready"] .status-light { background: var(--success); }
+    .server-status[data-state="error"] .status-light { background: var(--danger); }
+    .server-status[data-state="offline"] .status-light { background: var(--danger); }
+
+    .ghost-button,
+    .secondary-button,
+    .preset-button,
+    .mode-button {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color var(--motion-standard) ease, background var(--motion-standard) ease, color var(--motion-standard) ease;
+    }
+
+    .ghost-button { min-height: 36px; padding: 0 12px; font-family: var(--font-signal); font-size: 12px; font-weight: 700; }
+    .ghost-button:hover, .secondary-button:hover, .preset-button:hover { border-color: var(--text); background: var(--surface-strong); }
+
+    main {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: clamp(18px, 3vw, 40px);
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, .62fr);
+      align-items: end;
+      gap: clamp(24px, 5vw, 72px);
+      margin: 0 0 24px;
+      padding: 14px 0 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .intro-copy { min-width: 0; }
+    .intro-kicker { display: block; margin-bottom: 10px; color: var(--accent); font-family: var(--font-signal); font-size: 11px; font-weight: 780; letter-spacing: .08em; }
+    .intro h1 { max-width: 19ch; margin: 0 0 8px; font-size: clamp(28px, 3vw, 44px); line-height: 1.08; letter-spacing: -.045em; }
+    .intro p { max-width: 54ch; margin: 0; color: var(--text-soft); font-size: 14px; }
+    .intro-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+    .intro-facts div { min-width: 0; padding: 3px 14px 3px 16px; border-left: 1px solid var(--border); }
+    .intro-facts dt { color: var(--text-faint); font-family: var(--font-signal); font-size: 10px; font-weight: 760; letter-spacing: .07em; }
+    .intro-facts dd { overflow: hidden; margin: 6px 0 0; font-family: var(--font-signal); font-size: 13px; font-weight: 760; text-overflow: ellipsis; white-space: nowrap; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(330px, .82fr);
+      align-items: start;
+      gap: clamp(16px, 2vw, 24px);
+    }
+
+    .workspace > *, .section, .field, .field-row { min-width: 0; }
+
+    .panel {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .compose { padding: clamp(20px, 2.5vw, 32px); }
+    .result-panel { position: sticky; top: 88px; overflow: hidden; border-top: 6px solid var(--signal); }
+
+    .section + .section { margin-top: 30px; padding-top: 28px; border-top: 1px solid var(--border); }
+    .section-head { margin-bottom: 17px; }
+    .section-head h2 { margin: 0 0 4px; font-size: 19px; letter-spacing: -.025em; }
+    .section-head p { margin: 0; color: var(--text-faint); font-size: 13px; }
+
+    .field { display: grid; gap: 8px; }
+    .field-row + .field { margin-top: 18px; }
+    .field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 14px; }
+    .field-row.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    label, .field-label { color: var(--text); font-size: 13px; font-weight: 680; }
+    .helper { color: var(--text-faint); font-size: 12px; font-weight: 450; }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--canvas) 72%, var(--surface));
+      color: var(--text);
+      transition: border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, background var(--motion-standard) ease;
+    }
+
+    input[type="text"], input[type="number"], select { height: 44px; min-height: 44px; padding: 0 12px; }
+    .select-control { position: relative; min-width: 0; }
+    .select-control select { appearance: none; padding-right: 48px; }
+    .select-control::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 19px;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid var(--text);
+      border-bottom: 2px solid var(--text);
+      pointer-events: none;
+      transform: translateY(-68%) rotate(45deg);
+    }
+    textarea { min-height: 150px; resize: vertical; padding: 12px; line-height: 1.6; }
+    input::placeholder, textarea::placeholder { color: var(--text-faint); opacity: 1; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 18%, transparent); outline: none; }
+
+    .dropzone {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      min-height: 82px;
+      padding: 15px;
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--canvas) 72%, var(--surface));
+      transition: border-color var(--motion-standard) ease, background var(--motion-standard) ease;
+    }
+
+    .dropzone:hover, .dropzone.has-file { border-color: var(--accent); background: var(--accent-soft); }
+    .dropzone input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+    .dropzone-copy { min-width: 0; pointer-events: none; }
+    .dropzone-copy strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dropzone-copy span { display: block; margin-top: 3px; color: var(--text-faint); font-size: 12px; }
+    .file-action { padding: 7px 10px; border: 1px solid var(--text); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-family: var(--font-signal); font-size: 11px; font-weight: 760; pointer-events: none; }
+    .audio-preview { width: 100%; height: 38px; margin-top: 10px; }
+
+    .textarea-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--text-faint); font-size: 12px; }
+    .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    .preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; padding: 1px; border-radius: var(--radius-sm); background: var(--border); overflow: hidden; }
+    .preset-button { min-height: 70px; padding: 12px 14px; border: 0; border-radius: 0; text-align: left; }
+    .preset-button strong { display: block; font-size: 13px; }
+    .preset-button span { display: block; margin-top: 3px; color: var(--text-faint); font-size: 11px; line-height: 1.35; }
+    .preset-button:hover { color: var(--accent); background: var(--accent-soft); }
+
+    .mode-switch {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      padding: 5px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+    }
+
+    .mode-button { min-height: 40px; padding: 7px 9px; background: transparent; border-color: transparent; color: var(--text-soft); font-size: 12px; font-weight: 700; }
+    .mode-button[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: #ffffff; }
+    .mode-panel { margin-top: 14px; }
+    [hidden] { display: none !important; }
+
+    .range-row { display: grid; grid-template-columns: minmax(0, 1fr) 52px; align-items: center; gap: 12px; min-height: 44px; }
+    input[type="range"] { width: 100%; min-width: 0; accent-color: var(--accent); }
+    output { color: var(--text-soft); font-family: var(--font-mono); font-size: 12px; text-align: right; }
+
+    .vector-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 18px; }
+    .vector-item { display: grid; grid-template-columns: 54px minmax(0, 1fr) 36px; align-items: center; gap: 8px; }
+    .vector-item label { font-size: 12px; }
+
+    .check-row { display: flex; align-items: center; gap: 9px; color: var(--text-soft); font-size: 13px; }
+    .check-row input { width: 17px; height: 17px; accent-color: var(--accent); }
+
+    details { border: 1px solid var(--border); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--canvas) 72%, var(--surface)); }
+    summary { padding: 13px 14px; cursor: pointer; color: var(--text); font-family: var(--font-signal); font-weight: 760; }
+    .advanced-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; padding: 2px 14px 16px; }
+
+    .error-message {
+      margin-top: 15px;
+      padding: 11px 12px;
+      border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+      border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+      color: var(--danger);
+      font-size: 13px;
+    }
+
+    .generate-button {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 20px;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 760;
+      letter-spacing: .01em;
+      transition: background var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-fast) ease;
+    }
+
+    .generate-button:hover:not(:disabled) { background: var(--accent-hover); }
+    .generate-button:disabled { cursor: not-allowed; opacity: .5; }
+
+    .result-head { padding: 20px 22px 16px; border-bottom: 1px solid #333333; background: #111111; color: #f1efe7; }
+    .result-head h2 { margin: 0; font-size: 17px; }
+    .result-head p { margin: 4px 0 0; color: #c9c8c1; font-size: 12px; }
+    .result-body { min-height: 310px; padding: 22px; }
+
+    .empty-state { display: grid; min-height: 265px; align-content: center; justify-items: center; padding: 24px; text-align: center; }
+    .waveform-placeholder { display: flex; align-items: center; justify-content: center; gap: 4px; width: 158px; height: 54px; margin-bottom: 20px; }
+    .waveform-placeholder i { display: block; width: 4px; border-radius: 1px; background: var(--border-strong); }
+    .waveform-placeholder i:nth-child(1), .waveform-placeholder i:nth-child(9) { height: 14px; }
+    .waveform-placeholder i:nth-child(2), .waveform-placeholder i:nth-child(8) { height: 24px; }
+    .waveform-placeholder i:nth-child(3), .waveform-placeholder i:nth-child(7) { height: 36px; }
+    .waveform-placeholder i:nth-child(4), .waveform-placeholder i:nth-child(6) { height: 46px; }
+    .waveform-placeholder i:nth-child(5) { height: 54px; background: var(--accent); }
+    .empty-state strong { font-size: 15px; }
+    .empty-state p { max-width: 31ch; margin: 6px 0 0; color: var(--text-faint); font-size: 13px; }
+
+    .loading-state { min-height: 265px; padding: 32px 6px; }
+    .loading-line { position: relative; height: 5px; overflow: hidden; border-radius: 1px; background: var(--surface-muted); }
+    .loading-line::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 42%; border-radius: inherit; background: var(--accent); animation: loading 1.35s ease-in-out infinite; }
+    .loading-state h3 { margin: 24px 0 5px; font-size: 16px; }
+    .loading-state p { margin: 0; color: var(--text-faint); font-size: 13px; }
+
+    @keyframes loading { from { transform: translateX(-110%); } to { transform: translateX(345%); } }
+
+    .audio-result { padding-left: 14px; border-left: 5px solid var(--signal); }
+    .audio-result audio { width: 100%; }
+    .result-copy { margin: 18px 0; }
+    .result-copy h3 { margin: 0 0 6px; font-size: 18px; }
+    .result-copy p { display: -webkit-box; overflow: hidden; margin: 0; color: var(--text-soft); font-size: 13px; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 18px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .metric { padding: 11px 0; }
+    .metric + .metric { padding-left: 14px; border-left: 1px solid var(--border); }
+    .metric span { display: block; color: var(--text-faint); font-size: 11px; }
+    .metric strong { display: block; margin-top: 3px; font-family: var(--font-mono); font-size: 14px; }
+    .secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 14px; border-color: var(--signal); background: var(--signal); color: var(--signal-ink); font-family: var(--font-signal); font-weight: 780; text-decoration: none; white-space: nowrap; }
+    .secondary-button:hover { border-color: var(--signal-ink); background: var(--signal); color: var(--signal-ink); }
+
+    .history { border-top: 1px solid var(--border); }
+    .history-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 22px 10px; }
+    .history-head h3 { margin: 0; font-size: 13px; }
+    .history-head span { color: var(--text-faint); font-size: 11px; }
+    .history-list { display: grid; gap: 1px; max-height: 280px; overflow: auto; padding-bottom: 10px; }
+    .history-item { padding: 12px 22px; border-top: 1px solid var(--border); background: var(--surface); }
+    .history-item:hover { background: var(--surface-strong); }
+    .history-item-head { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 7px; }
+    .history-item strong { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .history-item span { flex: 0 0 auto; color: var(--text-faint); font-family: var(--font-mono); font-size: 10px; }
+    .history-item audio { width: 100%; height: 32px; }
+
+    .footer-note { margin: 20px 2px 0; color: var(--text-faint); font-size: 12px; }
+    .footer-note code { font-family: var(--font-mono); color: var(--text-soft); }
+
+    @media (max-width: 980px) {
+      .intro { grid-template-columns: 1fr; gap: 22px; }
+      .intro-facts { max-width: 560px; }
+      .workspace { grid-template-columns: 1fr; }
+      .result-panel { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .appbar { align-items: center; padding-inline: 14px; }
+      .appbar-actions { flex: 0 0 auto; }
+      .brand-copy span { display: none; }
+      .ghost-button { min-height: 34px; padding-inline: 9px; }
+      .server-status { max-width: 130px; }
+      .server-status span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      main { padding: 16px; }
+      .intro { gap: 18px; margin-top: 4px; padding-bottom: 22px; }
+      .intro h1 { font-size: clamp(28px, 9vw, 38px); }
+      .intro-facts div { padding-inline: 10px; }
+      .intro-facts dt { font-size: 9px; }
+      .intro-facts dd { font-size: 11px; }
+      .field-row, .field-row.three, .advanced-grid { grid-template-columns: 1fr; }
+      .mode-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .preset-grid, .vector-grid { grid-template-columns: 1fr; }
+      .dropzone { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .file-action { justify-self: start; }
+      .range-row { grid-template-columns: minmax(0, 1fr) 44px; gap: 8px; }
+      .compose { padding: 18px; }
+      .result-head, .result-body { padding-left: 18px; padding-right: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">I</div>
+      <div class="brand-copy">
+        <strong>Index Studio</strong>
+        <span>NOISE WINSTON VOICE WORKBENCH</span>
+      </div>
+    </div>
+    <div class="appbar-actions">
+      <div class="server-status" id="serverStatus" data-state="loading" role="status" aria-live="polite">
+        <span class="status-light" aria-hidden="true"></span>
+        <span id="serverStatusText">正在連線</span>
+      </div>
+      <button class="ghost-button" id="themeToggle" type="button" aria-pressed="false">深色模式</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="pageTitle">
+      <div class="intro-copy">
+        <span class="intro-kicker">LOCAL VOICE WORKBENCH</span>
+        <h1 id="pageTitle">用同一個聲音，測試每一種表達。</h1>
+        <p>上傳一段聲音，切換語言、情緒、語速與發音標註，保留每次生成的可重現參數。</p>
+      </div>
+      <dl class="intro-facts" aria-label="工作台資訊">
+        <div><dt>MODEL</dt><dd>IndexTTS 2.5</dd></div>
+        <div><dt>RUNTIME</dt><dd>本機 GPU</dd></div>
+        <div><dt>OUTPUT</dt><dd>WAV + JSON</dd></div>
+      </dl>
+    </section>
+
+    <div class="workspace">
+      <form class="panel compose" id="generationForm">
+        <section class="section" aria-labelledby="voiceHeading">
+          <div class="section-head">
+            <h2 id="voiceHeading">聲音來源</h2>
+            <p>建議使用乾淨、無背景音樂、單人說話的 5 到 15 秒音檔。</p>
+          </div>
+          <div class="field">
+            <span class="field-label">聲紋參考音檔</span>
+            <label class="dropzone" id="voiceDropzone" for="voiceFile">
+              <span class="dropzone-copy">
+                <strong id="voiceFileName">拖放音檔或按此選取</strong>
+                <span>WAV、MP3、FLAC、M4A、OGG、AAC，最大 64 MB</span>
+              </span>
+              <span class="file-action">選取音檔</span>
+              <input id="voiceFile" name="voice" type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.ogg,.aac" required>
+            </label>
+            <audio class="audio-preview" id="voicePreview" controls preload="metadata" hidden></audio>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="scriptHeading">
+          <div class="section-head">
+            <h2 id="scriptHeading">合成內容</h2>
+            <p>IndexTTS 2.5 支援中文、英文、日文、西班牙文與阿拉伯文。</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="language">語言</label>
+              <div class="select-control">
+                <select id="language" name="language">
+                  <option value="ZH-TW" selected>中文</option>
+                  <option value="EN">English</option>
+                  <option value="JA">日本語</option>
+                  <option value="ES">Español</option>
+                  <option value="AR">العربية</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="durationFactor">時長係數 <span class="helper">小於 1 較快，大於 1 較慢</span></label>
+              <div class="range-row">
+                <input id="durationFactor" name="duration_factor" type="range" min="0.5" max="2" value="1" step="0.01">
+                <output id="durationOutput" for="durationFactor">1.00</output>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="text">文字</label>
+            <textarea id="text" name="text" maxlength="5000" placeholder="輸入想讓模型說出的內容" required></textarea>
+            <div class="textarea-meta">
+              <span>可使用 &lt;字詞|發音&gt; 標註控制讀音</span>
+              <span class="mono" id="characterCount">0 / 5000</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="labHeading">
+          <div class="section-head">
+            <h2 id="labHeading">能力實驗</h2>
+            <p>套用範本後仍可自由修改。聲紋音檔會保留。</p>
+          </div>
+          <div class="preset-grid">
+            <button class="preset-button" type="button" data-preset="cross-language">
+              <strong>跨語言聲紋</strong>
+              <span>用同一段聲音生成英文內容</span>
+            </button>
+            <button class="preset-button" type="button" data-preset="emotion-text">
+              <strong>文字情緒</strong>
+              <span>分離說話內容與情緒描述</span>
+            </button>
+            <button class="preset-button" type="button" data-preset="speed">
+              <strong>語速控制</strong>
+              <span>套用 0.75 時長係數測試較快語速</span>
+            </button>
+            <button class="preset-button" type="button" data-preset="pronunciation">
+              <strong>發音控制</strong>
+              <span>使用拼音標註消除多音字歧義</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="emotionHeading">
+          <div class="section-head">
+            <h2 id="emotionHeading">情緒控制</h2>
+            <p>情緒參考、八維向量與描述文字都能獨立於聲紋來源。</p>
+          </div>
+          <div class="mode-switch" role="tablist" aria-label="情緒控制方式">
+            <button class="mode-button" type="button" role="tab" aria-selected="true" data-mode="voice">沿用聲音</button>
+            <button class="mode-button" type="button" role="tab" aria-selected="false" data-mode="reference">參考音檔</button>
+            <button class="mode-button" type="button" role="tab" aria-selected="false" data-mode="vector">情緒向量</button>
+            <button class="mode-button" type="button" role="tab" aria-selected="false" data-mode="text">文字描述</button>
+          </div>
+          <input id="emotionMode" name="emotion_mode" type="hidden" value="voice">
+
+          <div class="mode-panel" data-mode-panel="voice">
+            <p class="helper">直接沿用聲紋參考音檔的情緒與韻律。</p>
+          </div>
+
+          <div class="mode-panel" data-mode-panel="reference" hidden>
+            <div class="field">
+              <span class="field-label">情緒參考音檔</span>
+              <label class="dropzone" id="emotionDropzone" for="emotionFile">
+                <span class="dropzone-copy">
+                  <strong id="emotionFileName">選取帶有目標情緒的音檔</strong>
+                  <span>這段音檔提供情緒，聲紋仍取自上方音檔</span>
+                </span>
+                <span class="file-action">選取音檔</span>
+                <input id="emotionFile" name="emotion_audio" type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.ogg,.aac">
+              </label>
+              <audio class="audio-preview" id="emotionPreview" controls preload="metadata" hidden></audio>
+            </div>
+          </div>
+
+          <div class="mode-panel" data-mode-panel="vector" hidden>
+            <div class="vector-grid">
+              <div class="vector-item"><label for="vecHappy">高興</label><input id="vecHappy" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecAngry">憤怒</label><input id="vecAngry" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecSad">悲傷</label><input id="vecSad" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecAfraid">害怕</label><input id="vecAfraid" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecDisgusted">厭惡</label><input id="vecDisgusted" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecMelancholic">低落</label><input id="vecMelancholic" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecSurprised">驚訝</label><input id="vecSurprised" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+              <div class="vector-item"><label for="vecCalm">平靜</label><input id="vecCalm" data-vector type="range" min="0" max="1" value="0" step="0.05"><output>0.00</output></div>
+            </div>
+          </div>
+
+          <div class="mode-panel" data-mode-panel="text" hidden>
+            <div class="field">
+              <label for="emotionText">情緒描述 <span class="helper">留空時會分析合成文字</span></label>
+              <textarea id="emotionText" name="emotion_text" rows="3" placeholder="例如：壓低聲音，緊張地提醒身邊的人" style="min-height: 90px"></textarea>
+            </div>
+          </div>
+
+          <div class="field" id="emotionWeightField" hidden>
+            <label for="emotionWeight">情緒權重</label>
+            <div class="range-row">
+              <input id="emotionWeight" name="emotion_weight" type="range" min="0" max="1" value="0.65" step="0.01">
+              <output id="emotionWeightOutput" for="emotionWeight">0.65</output>
+            </div>
+          </div>
+
+          <label class="check-row" id="randomEmotionRow" hidden>
+            <input id="useRandom" name="use_random" type="checkbox">
+            開啟情緒隨機採樣，可能降低聲紋還原度
+          </label>
+        </section>
+
+        <section class="section" aria-labelledby="advancedHeading">
+          <div class="section-head">
+            <h2 id="advancedHeading">生成設定</h2>
+            <p>預設值適合先做能力驗證，進階參數可用於重現與微調。</p>
+          </div>
+          <div class="field-row three" style="margin-bottom: 16px">
+            <div class="field">
+              <label for="seed">Seed</label>
+              <input id="seed" name="seed" type="number" min="0" max="2147483647" value="42" step="1">
+            </div>
+            <div class="field">
+              <label for="segmentTokens">分句 Token</label>
+              <input id="segmentTokens" name="max_text_tokens_per_segment" type="number" min="20" max="600" value="120" step="2">
+            </div>
+            <div class="field">
+              <label for="intervalSilence">段落間隔 ms</label>
+              <input id="intervalSilence" name="interval_silence" type="number" min="0" max="2000" value="200" step="10">
+            </div>
+          </div>
+          <details>
+            <summary>進階採樣參數</summary>
+            <div class="advanced-grid">
+              <div class="field"><label for="temperature">Temperature</label><input id="temperature" name="temperature" type="number" min="0.1" max="2" value="0.8" step="0.1"></div>
+              <div class="field"><label for="topP">Top P</label><input id="topP" name="top_p" type="number" min="0" max="1" value="0.8" step="0.01"></div>
+              <div class="field"><label for="topK">Top K</label><input id="topK" name="top_k" type="number" min="0" max="100" value="30" step="1"></div>
+              <div class="field"><label for="numBeams">Num Beams</label><input id="numBeams" name="num_beams" type="number" min="1" max="10" value="3" step="1"></div>
+              <div class="field"><label for="repetitionPenalty">Repetition Penalty</label><input id="repetitionPenalty" name="repetition_penalty" type="number" min="0.1" max="20" value="10" step="0.1"></div>
+              <div class="field"><label for="lengthPenalty">Length Penalty</label><input id="lengthPenalty" name="length_penalty" type="number" min="-2" max="2" value="0" step="0.1"></div>
+              <div class="field"><label for="maxMelTokens">Max Mel Tokens</label><input id="maxMelTokens" name="max_mel_tokens" type="number" min="50" max="5000" value="1500" step="10"></div>
+              <div class="field" style="align-content: end">
+                <label class="check-row"><input id="doSample" name="do_sample" type="checkbox" checked>開啟採樣</label>
+                <label class="check-row"><input id="textNormalization" name="text_normalization" type="checkbox" checked>文字正規化</label>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <div class="error-message" id="formError" role="alert" hidden></div>
+        <button class="generate-button" id="generateButton" type="submit" disabled>等待模型就緒</button>
+      </form>
+
+      <aside class="panel result-panel" aria-labelledby="resultHeading">
+        <div class="result-head">
+          <h2 id="resultHeading">生成結果</h2>
+          <p>每次結果都會保留 WAV 與參數紀錄。</p>
+        </div>
+        <div class="result-body">
+          <div class="empty-state" id="emptyState">
+            <div class="waveform-placeholder" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <strong>尚未生成音訊</strong>
+            <p>完成左側設定後開始生成，結果會出現在這裡。</p>
+          </div>
+
+          <div class="loading-state" id="loadingState" hidden>
+            <div class="loading-line" aria-hidden="true"></div>
+            <h3>模型正在合成</h3>
+            <p id="elapsedText">已等待 0 秒</p>
+          </div>
+
+          <div class="audio-result" id="audioResult" hidden>
+            <audio id="resultAudio" controls preload="metadata"></audio>
+            <div class="result-copy">
+              <h3>音訊已完成</h3>
+              <p id="resultText"></p>
+            </div>
+            <div class="metrics">
+              <div class="metric"><span>生成時間</span><strong id="generationMetric">0.0 秒</strong></div>
+              <div class="metric"><span>音訊長度</span><strong id="durationMetric">讀取中</strong></div>
+            </div>
+            <a class="secondary-button" id="downloadLink" href="#" download>下載 WAV</a>
+          </div>
+        </div>
+
+        <section class="history" id="historySection" hidden aria-labelledby="historyHeading">
+          <div class="history-head">
+            <h3 id="historyHeading">本次工作階段</h3>
+            <span>最多保留 5 筆</span>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+      </aside>
+    </div>
+
+    <p class="footer-note">本機 API 預設使用 <code>127.0.0.1:7861</code>，GPU 工作會依序執行。</p>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const API_BASE = location.protocol === "file:" ? "http://127.0.0.1:7861" : "";
+      const form = document.querySelector("#generationForm");
+      const generateButton = document.querySelector("#generateButton");
+      const formError = document.querySelector("#formError");
+      const serverStatus = document.querySelector("#serverStatus");
+      const serverStatusText = document.querySelector("#serverStatusText");
+      const voiceFile = document.querySelector("#voiceFile");
+      const emotionFile = document.querySelector("#emotionFile");
+      const text = document.querySelector("#text");
+      const language = document.querySelector("#language");
+      const durationFactor = document.querySelector("#durationFactor");
+      const emotionMode = document.querySelector("#emotionMode");
+      const emotionWeight = document.querySelector("#emotionWeight");
+      const emotionText = document.querySelector("#emotionText");
+      const useRandom = document.querySelector("#useRandom");
+      const emptyState = document.querySelector("#emptyState");
+      const loadingState = document.querySelector("#loadingState");
+      const audioResult = document.querySelector("#audioResult");
+      const resultAudio = document.querySelector("#resultAudio");
+      const historyList = document.querySelector("#historyList");
+      const historySection = document.querySelector("#historySection");
+
+      let modelReady = false;
+      let isGenerating = false;
+      let elapsedTimer = null;
+      let waitStarted = 0;
+      let healthTimer = null;
+      let voiceObjectUrl = null;
+      let emotionObjectUrl = null;
+
+      const themeToggle = document.querySelector("#themeToggle");
+      const resolvedTheme = () => document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const syncThemeToggle = () => {
+        const isDark = resolvedTheme() === "dark";
+        themeToggle.textContent = isDark ? "淺色模式" : "深色模式";
+        themeToggle.setAttribute("aria-pressed", String(isDark));
+      };
+
+      const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("index-studio-theme", theme);
+        syncThemeToggle();
+      };
+
+      const requestedTheme = new URLSearchParams(location.search).get("theme");
+      const savedTheme = requestedTheme || localStorage.getItem("index-studio-theme");
+      if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
+      else syncThemeToggle();
+      themeToggle.addEventListener("click", () => {
+        const current = resolvedTheme();
+        setTheme(current === "dark" ? "light" : "dark");
+      });
+
+      const setStatus = (state, message) => {
+        serverStatus.dataset.state = state;
+        serverStatusText.textContent = message;
+      };
+
+      const updateSubmitState = () => {
+        const hasVoice = voiceFile.files.length > 0;
+        const hasText = text.value.trim().length > 0;
+        const needsEmotionFile = emotionMode.value === "reference";
+        const hasEmotionFile = emotionFile.files.length > 0;
+        generateButton.disabled = !modelReady || isGenerating || !hasVoice || !hasText || (needsEmotionFile && !hasEmotionFile);
+        if (isGenerating) generateButton.textContent = "生成中，請稍候";
+        else if (!modelReady) generateButton.textContent = "等待模型就緒";
+        else generateButton.textContent = "生成語音";
+      };
+
+      const checkHealth = async () => {
+        try {
+          const response = await fetch(`${API_BASE}/api/health`, { cache: "no-store" });
+          if (!response.ok) throw new Error("health request failed");
+          const health = await response.json();
+          modelReady = health.state === "ready";
+          const state = health.state === "idle" ? "loading" : health.state;
+          setStatus(state, health.busy ? "GPU 忙碌中" : health.message);
+          if (modelReady && healthTimer) {
+            clearInterval(healthTimer);
+            healthTimer = setInterval(checkHealth, 8000);
+          }
+        } catch (_) {
+          modelReady = false;
+          setStatus("offline", "API 未連線");
+        }
+        updateSubmitState();
+      };
+
+      checkHealth();
+      healthTimer = setInterval(checkHealth, 2000);
+
+      const bindPreview = (input, preview, name, dropzone, currentUrlSetter) => {
+        input.addEventListener("change", () => {
+          const file = input.files[0];
+          currentUrlSetter(file ? URL.createObjectURL(file) : null);
+          name.textContent = file ? file.name : "拖放音檔或按此選取";
+          dropzone.classList.toggle("has-file", Boolean(file));
+          preview.hidden = !file;
+          updateSubmitState();
+        });
+      };
+
+      bindPreview(
+        voiceFile,
+        document.querySelector("#voicePreview"),
+        document.querySelector("#voiceFileName"),
+        document.querySelector("#voiceDropzone"),
+        (url) => {
+          if (voiceObjectUrl) URL.revokeObjectURL(voiceObjectUrl);
+          voiceObjectUrl = url;
+          document.querySelector("#voicePreview").src = url || "";
+        }
+      );
+
+      bindPreview(
+        emotionFile,
+        document.querySelector("#emotionPreview"),
+        document.querySelector("#emotionFileName"),
+        document.querySelector("#emotionDropzone"),
+        (url) => {
+          if (emotionObjectUrl) URL.revokeObjectURL(emotionObjectUrl);
+          emotionObjectUrl = url;
+          document.querySelector("#emotionPreview").src = url || "";
+        }
+      );
+
+      const updateMode = (mode) => {
+        emotionMode.value = mode;
+        document.querySelectorAll(".mode-button").forEach((button) => {
+          button.setAttribute("aria-selected", String(button.dataset.mode === mode));
+        });
+        document.querySelectorAll("[data-mode-panel]").forEach((panel) => {
+          panel.hidden = panel.dataset.modePanel !== mode;
+        });
+        document.querySelector("#emotionWeightField").hidden = !["reference", "vector", "text"].includes(mode);
+        document.querySelector("#randomEmotionRow").hidden = !["vector", "text"].includes(mode);
+        updateSubmitState();
+      };
+
+      document.querySelectorAll(".mode-button").forEach((button) => {
+        button.addEventListener("click", () => updateMode(button.dataset.mode));
+      });
+
+      const bindRangeOutput = (input, output, digits = 2) => {
+        const render = () => { output.value = Number(input.value).toFixed(digits); };
+        input.addEventListener("input", render);
+        render();
+      };
+
+      bindRangeOutput(durationFactor, document.querySelector("#durationOutput"));
+      bindRangeOutput(emotionWeight, document.querySelector("#emotionWeightOutput"));
+      document.querySelectorAll("[data-vector]").forEach((input) => bindRangeOutput(input, input.nextElementSibling));
+
+      text.addEventListener("input", () => {
+        document.querySelector("#characterCount").textContent = `${text.value.length} / 5000`;
+        updateSubmitState();
+      });
+
+      const presets = {
+        "cross-language": () => {
+          language.value = "EN";
+          text.value = "The same voice can carry a new language while keeping its identity and natural rhythm.";
+          durationFactor.value = "1";
+          updateMode("voice");
+        },
+        "emotion-text": () => {
+          language.value = "ZH-TW";
+          text.value = "先別出聲，他就在門外。我們得悄悄離開這裡。";
+          emotionText.value = "壓低聲音，緊張又害怕地提醒身邊的人";
+          emotionWeight.value = "0.6";
+          updateMode("text");
+        },
+        "speed": () => {
+          language.value = "ZH-TW";
+          text.value = "這段內容用來比較相同聲音在不同語速下的清晰度與自然度。";
+          durationFactor.value = "0.75";
+          updateMode("voice");
+        },
+        "pronunciation": () => {
+          language.value = "ZH-TW";
+          text.value = "他在銀<行|HANG2>裡工作，今天也很<行|XING2>。";
+          durationFactor.value = "1";
+          updateMode("voice");
+        }
+      };
+
+      const languageLabels = {
+        "ZH-TW": "中文",
+        ZH: "中文",
+        EN: "English",
+        JA: "日本語",
+        ES: "Español",
+        AR: "العربية"
+      };
+
+      document.querySelectorAll("[data-preset]").forEach((button) => {
+        button.addEventListener("click", () => {
+          presets[button.dataset.preset]();
+          text.dispatchEvent(new Event("input"));
+          durationFactor.dispatchEvent(new Event("input"));
+          emotionWeight.dispatchEvent(new Event("input"));
+          text.focus();
+        });
+      });
+
+      const showError = (message) => {
+        formError.textContent = message;
+        formError.hidden = false;
+      };
+
+      const clearError = () => {
+        formError.textContent = "";
+        formError.hidden = true;
+      };
+
+      const setResultView = (view) => {
+        emptyState.hidden = view !== "empty";
+        loadingState.hidden = view !== "loading";
+        audioResult.hidden = view !== "result";
+      };
+
+      const startElapsed = () => {
+        waitStarted = performance.now();
+        document.querySelector("#elapsedText").textContent = "已等待 0 秒";
+        elapsedTimer = setInterval(() => {
+          const seconds = Math.floor((performance.now() - waitStarted) / 1000);
+          document.querySelector("#elapsedText").textContent = `已等待 ${seconds} 秒`;
+        }, 1000);
+      };
+
+      const stopElapsed = () => {
+        if (elapsedTimer) clearInterval(elapsedTimer);
+        elapsedTimer = null;
+      };
+
+      const parseError = async (response) => {
+        try {
+          const data = await response.json();
+          return data.detail || "生成失敗，請檢查伺服器紀錄。";
+        } catch (_) {
+          return "生成失敗，請檢查伺服器紀錄。";
+        }
+      };
+
+      const addHistory = (result) => {
+        historySection.hidden = false;
+        const item = document.createElement("div");
+        item.className = "history-item";
+        const head = document.createElement("div");
+        head.className = "history-item-head";
+        const title = document.createElement("strong");
+        title.textContent = result.options.text;
+        const meta = document.createElement("span");
+        meta.textContent = `${languageLabels[result.options.language] || result.options.language}  Seed ${result.options.seed}`;
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.preload = "metadata";
+        audio.src = `${API_BASE}${result.audio_url}`;
+        head.append(title, meta);
+        item.append(head, audio);
+        historyList.prepend(item);
+        while (historyList.children.length > 5) historyList.lastElementChild.remove();
+      };
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearError();
+        if (!modelReady || isGenerating) return;
+        if (!voiceFile.files.length) return showError("請先上傳聲紋參考音檔。");
+        if (!text.value.trim()) return showError("請輸入要合成的文字。");
+        if (emotionMode.value === "reference" && !emotionFile.files.length) return showError("請上傳情緒參考音檔。");
+
+        const data = new FormData(form);
+        if (emotionMode.value !== "reference" || !emotionFile.files.length) {
+          data.delete("emotion_audio");
+        }
+        data.set("emotion_mode", emotionMode.value);
+        data.set("emotion_vector", JSON.stringify(Array.from(document.querySelectorAll("[data-vector]"), (input) => Number(input.value))));
+        data.set("use_random", String(useRandom.checked));
+        data.set("do_sample", String(document.querySelector("#doSample").checked));
+        data.set("text_normalization", String(document.querySelector("#textNormalization").checked));
+
+        isGenerating = true;
+        updateSubmitState();
+        setResultView("loading");
+        setStatus("loading", "GPU 生成中");
+        startElapsed();
+
+        try {
+          const response = await fetch(`${API_BASE}/api/generate`, { method: "POST", body: data });
+          if (!response.ok) throw new Error(await parseError(response));
+          const result = await response.json();
+          const audioUrl = `${API_BASE}${result.audio_url}`;
+          resultAudio.src = audioUrl;
+          document.querySelector("#downloadLink").href = audioUrl;
+          document.querySelector("#resultText").textContent = result.options.text;
+          document.querySelector("#generationMetric").textContent = `${result.generation_seconds.toFixed(1)} 秒`;
+          document.querySelector("#durationMetric").textContent = result.audio_duration_seconds == null ? "未知" : `${result.audio_duration_seconds.toFixed(1)} 秒`;
+          setResultView("result");
+          addHistory(result);
+        } catch (error) {
+          showError(error.message || "生成失敗，請重試。");
+          setResultView(resultAudio.src ? "result" : "empty");
+        } finally {
+          stopElapsed();
+          isGenerating = false;
+          await checkHealth();
+          updateSubmitState();
+        }
+      });
+
+      updateMode("voice");
+      updateSubmitState();
+    })();
+  </script>
+</body>
+</html>
