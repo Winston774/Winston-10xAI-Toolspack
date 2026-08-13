@@ -5,6 +5,7 @@ Thumbs.db
 !.env.example
 node_modules/
 dist/
+weeks/**/SKOOL-POST.md
 build/
 *.log
 *.zip

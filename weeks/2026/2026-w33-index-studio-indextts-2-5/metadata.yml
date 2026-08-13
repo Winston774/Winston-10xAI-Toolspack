@@ -1,0 +1,13 @@
+id: 2026-w33
+title: Index Studio：IndexTTS 2.5 本機語音實驗工作台
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 120
+status: stable
+published_at: 2026-08-13
+version: 1.0.0
+runtime: python-3.11-and-node-20
+platform: windows
+license: LicenseRef-Bilibili-IndexTTS
+source_repository: https://github.com/Winston774/index-studio-indextts-2-5
+upstream_repository: https://github.com/index-tts/index-tts

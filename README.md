@@ -39,6 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W33：Index Studio — IndexTTS 2.5 本機語音實驗工作台](weeks/2026/2026-w33-index-studio-indextts-2-5/README.md)（`1.0.0 Stable`）— 在 Windows 本機控制五語言、情緒、語速與發音，保存 WAV／JSON 做可重現 A/B。
 - [2026-W32：Goal Me — AI Agent 目標任務書](weeks/2026/2026-w32-goal-me-agent-task-brief/README.md)（`1.0.0 Stable`）— 將一句模糊想法轉成可獨立執行、續跑與驗收的 Agent 工作規格。
 - [2026-W31：Stylebase 設計靈感資料庫](weeks/2026/2026-w31-stylebase-design-inspiration-library/README.md)（`1.0.0 Stable`）— 將設計截圖建立本地索引，並以 Codex 輔助分析成 Visual DNA 與 Prompt Kit。
 - [2026-W30：Gemini 畫面文字 OCR](weeks/2026/2026-w30-gemini-screen-text-ocr/README.md)（`1.0.0 Stable`）— 用快捷鍵框選圖片、影片或 Canvas 的文字，交給 Gemini 轉錄並翻譯。
@@ -50,4 +51,4 @@ scripts/     驗證與打包工具
 
 ## 授權
 
-本倉庫的程式碼、教材與隨附素材依 [MIT License](LICENSE) 授權。
+本倉庫自行創作的程式碼、教材與隨附素材依 [MIT License](LICENSE) 授權。個別週次若含第三方或衍生專案，以該週 `metadata.yml` 與 completed 內授權檔為準；根目錄 MIT 不會覆蓋第三方授權。
