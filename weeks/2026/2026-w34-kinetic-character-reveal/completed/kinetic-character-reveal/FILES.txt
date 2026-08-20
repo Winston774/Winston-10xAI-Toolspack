@@ -1,0 +1,17 @@
+FILES.txt
+README.md
+SKILL.md
+agents/openai.yaml
+assets/icon.svg
+assets/input-brief.yaml
+assets/negative-constraints.txt
+assets/output-template.md
+evals/trigger-prompts.csv
+examples/example-output.md
+examples/example-request.md
+examples/original-ao-prompt.txt
+references/constraint-matrix.md
+references/cut-blueprint.md
+references/source-analysis.md
+references/style-dna.md
+scripts/validate_prompt.py
