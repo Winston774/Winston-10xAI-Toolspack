@@ -39,6 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W34：Kinetic Character Reveal — 13-Cut 動態角色登場提示詞系統](weeks/2026/2026-w34-kinetic-character-reveal/README.md)（`1.0.0 Stable`）— 抽取 Style DNA、鎖定角色與視覺規則，產生並驗證 15 秒動態角色登場 Prompt。
 - [2026-W33：Index Studio — IndexTTS 2.5 本機語音實驗工作台](weeks/2026/2026-w33-index-studio-indextts-2-5/README.md)（`1.0.0 Stable`）— 在 Windows 本機控制五語言、情緒、語速與發音，保存 WAV／JSON 做可重現 A/B。
 - [2026-W32：Goal Me — AI Agent 目標任務書](weeks/2026/2026-w32-goal-me-agent-task-brief/README.md)（`1.0.0 Stable`）— 將一句模糊想法轉成可獨立執行、續跑與驗收的 Agent 工作規格。
 - [2026-W31：Stylebase 設計靈感資料庫](weeks/2026/2026-w31-stylebase-design-inspiration-library/README.md)（`1.0.0 Stable`）— 將設計截圖建立本地索引，並以 Codex 輔助分析成 Visual DNA 與 Prompt Kit。

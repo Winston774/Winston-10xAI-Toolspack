@@ -1,0 +1,13 @@
+interface:
+  display_name: "Kinetic Character Reveal"
+  short_description: "產生並稽核 13-cut 動態角色登場影片提示詞"
+  icon_small: "./assets/icon.svg"
+  icon_large: "./assets/icon.svg"
+  default_prompt: "使用 $kinetic-character-reveal，把我的角色概念整理成角色一致、時間軸可驗證的 13-cut 動態登場影片提示詞。"
+policy:
+  products:
+    - "chatgpt"
+    - "codex"
+    - "api"
+    - "atlas"
+  allow_implicit_invocation: true

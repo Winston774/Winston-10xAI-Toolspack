@@ -1,0 +1,10 @@
+id: 2026-w34
+title: Kinetic Character Reveal：13-Cut 動態角色登場提示詞系統
+type: skill
+difficulty: intermediate
+estimated_minutes: 90
+status: stable
+published_at: 2026-08-20
+version: 1.0.0
+platform: codex-agent-skills
+license: MIT

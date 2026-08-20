@@ -1,0 +1,13 @@
+id,should_trigger,prompt
+trigger-01,true,"用這個參考提示詞抽取 motion graphics 角色登場片的 style DNA"
+trigger-02,true,"幫我做一支 15 秒、13 cut、動態字體主導的角色 reveal prompt"
+trigger-03,true,"把 AO 的提示詞改成同系列的紅色滑板男角色，但保留節奏架構"
+trigger-04,true,"檢查這份 AI 影片提示詞的角色一致性與每段時間有沒有重疊"
+trigger-05,true,"Create a premium kinetic typography x streetwear character trailer with an immutable character bible"
+trigger-06,true,"請列出這支影片提示詞哪些是硬約束、哪些可以自由替換"
+trigger-07,true,"用 faithful 模式只替換動作，不要改 AO 服裝與色盤"
+trigger-08,true,"產生三個同一視覺家族但不同角色、色盤與主幾何的版本"
+negative-01,false,"幫我寫一支三分鐘、有對白的科幻短片"
+negative-02,false,"生成一張靜態動漫角色海報"
+negative-03,false,"幫我整理訪談影片的剪輯腳本"
+negative-04,false,"把這篇文章改寫成 YouTube 口播稿"

@@ -1,0 +1,70 @@
+# Fill only what matters. The skill should infer missing optional fields.
+mode: series                 # extract | faithful | series | remix | audit
+target_model: model-agnostic # e.g. Sora, Veo, Runway, Kling, model-agnostic
+output_language: en          # final generation prompt language
+analysis_language: zh-TW
+
+film:
+  aspect_ratio: "16:9"
+  fps: 24
+  duration_seconds: 15.0
+  cut_count: 13
+  graphic_ratio: 80
+  character_ratio: 20
+  tempo_character: fast_hard_percussive
+
+character:
+  name: ""
+  archetype: ""
+  apparent_age_range: "adult"
+  face: ""
+  eyes: ""
+  skin_tone: ""
+  hair: ""
+  proportions: ""
+  outfit:
+    outerwear: ""
+    top: ""
+    bottom: ""
+    footwear: ""
+    accessories: []
+    logos_labels: []
+    materials: []
+    color_placement: ""
+  immutable: true
+
+brand:
+  identity_token: ""       # 1–4 letters or one short word
+  hero_slogan: ""          # 2–5 words
+  trait_words: ["", "", "", ""]
+  poster_numbers: ["01", "02", "03", "04"]
+
+visual_system:
+  palette:
+    base_field: "white"
+    dominant_accent: "cobalt"
+    secondary_accent: "ice blue"
+    neutral: "silver-grey"
+    contrast_ink: "black"
+  recurring_geometry: ["circle", "ring", "diagonal stripe"]
+  graphic_motifs: ["kinetic typography", "barcode", "UI ticks", "halftone", "speed lines", "shutter flashes"]
+  texture_theme: "clean editorial"
+  emblem_motif: ""
+
+motion:
+  action_family: "parkour"
+  action_inventory: []
+  transition_family: ["hard cut", "graphic wipe", "whip-pan", "shatter handoff", "freeze-release", "overexpose"]
+  slow_motion_slots: [5, 12]
+
+variation:
+  preserve_cut_roles: true
+  preserve_timing: true
+  axes_to_change: []
+  forbidden_changes: []
+
+output:
+  include_style_dna: true
+  include_binding_map: true
+  include_negative_constraints: true
+  include_validation_summary: true

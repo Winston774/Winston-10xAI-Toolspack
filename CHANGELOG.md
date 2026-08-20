@@ -6,6 +6,13 @@
 
 - 尚無。
 
+## 2026-W34 v1.0.0 — 2026-08-20
+
+- 正式發布 Kinetic Character Reveal：13-Cut 動態角色登場提示詞系統。
+- 加入 EXTRACT、FAITHFUL、SERIES、REMIX、AUDIT 五種工作模式。
+- 加入 Style DNA、約束矩陣、13-Cut Blueprint、Prompt 資產、範例與觸發評估資料。
+- 加入零依賴 Prompt Validator、安裝教學、素材權利、疑難排解與自動／人工驗收邊界。
+
 ## 2026-W33 v1.0.0 — 2026-08-13
 
 - 正式發布 Index Studio：IndexTTS 2.5 本機語音實驗工作台。
