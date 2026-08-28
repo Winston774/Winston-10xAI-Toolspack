@@ -8,6 +8,7 @@
 
 | 週次 | 主題 | 類型 | 狀態 |
 |---|---|---|---|
+| [2026-W35](2026-w35-mastery-loop/README.md) | Mastery Loop：可驗證的點擊式精熟學習系統 | AI Skill | Stable |
 | [2026-W34](2026-w34-kinetic-character-reveal/README.md) | Kinetic Character Reveal：13-Cut 動態角色登場提示詞系統 | AI Skill | Stable |
 | [2026-W33](2026-w33-index-studio-indextts-2-5/README.md) | Index Studio：IndexTTS 2.5 本機語音實驗工作台 | Local AI Tool | Stable |
 | [2026-W32](2026-w32-goal-me-agent-task-brief/README.md) | Goal Me：AI Agent 目標任務書 | AI Skill | Stable |
