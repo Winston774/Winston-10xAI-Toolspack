@@ -1,0 +1,10 @@
+id: 2026-w35
+title: Mastery Loop：可驗證的點擊式精熟學習系統
+type: skill
+difficulty: advanced
+estimated_minutes: 240
+status: stable
+published_at: 2026-08-28
+version: 1.0.0
+platform: codex-agent-skills
+license: MIT

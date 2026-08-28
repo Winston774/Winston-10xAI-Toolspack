@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mastery Loop"
+  short_description: "Batch assessment, knowledge-map learning, and review"
+  default_prompt: "Use $mastery-loop to scope my goal, run a batch assessment, build an evidence-linked Learning Map, and finish with a new-scenario Review."

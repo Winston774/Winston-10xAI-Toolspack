@@ -6,6 +6,13 @@
 
 - 尚無。
 
+## 2026-W35 v1.0.0 — 2026-08-28
+
+- 正式發布 Mastery Loop：可驗證的點擊式精熟學習系統。
+- 加入 version 3 批次 Assessment、證據連結 Learning Map、新情境 Review 與 delayed review。
+- 加入點擊優先介面、答案防洩漏、不可變 response、idempotent retry、phase lock 與 crash recovery。
+- 加入 90 項自動測試、完整安裝教學、資料隱私、安全邊界、驗證方式與疑難排解。
+
 ## 2026-W34 v1.0.0 — 2026-08-20
 
 - 正式發布 Kinetic Character Reveal：13-Cut 動態角色登場提示詞系統。
