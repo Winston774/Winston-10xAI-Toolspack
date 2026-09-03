@@ -6,6 +6,13 @@
 
 - 尚無。
 
+## 2026-W36 v0.1.0 Preview — 2026-09-03
+
+- 發布 Gomoku Lab WebMCP 人機五子棋 Preview。
+- 加入 8 個頁面工具、棋盤版本檢查、公開決策摘要、可見分析標記與 Audit Log。
+- 加入桌面／手機操作、TypeScript、production build 與靜態契約驗證紀錄。
+- 公開記錄尚待處理的核准版本競態與 19 項未使用 UI scaffold lint 診斷，完成修正與原生 WebMCP 驗收後再升級 Stable。
+
 ## 2026-W35 v1.0.0 — 2026-08-28
 
 - 正式發布 Mastery Loop：可驗證的點擊式精熟學習系統。

@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f1efe7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0d0f12" media="(prefers-color-scheme: dark)" />
+  <meta name="description" content="Gomoku Lab：ChatGPT 外部模型透過 WebMCP 讀取、分析並操作即時五子棋棋盤。" />
+  <meta property="og:title" content="Gomoku Lab — WebMCP Agent Demo" />
+  <meta property="og:description" content="ChatGPT 外部模型透過 WebMCP 讀取、分析並操作即時五子棋棋盤。" />
+  <meta property="og:image" content="https://gomoku-lab-webmcp-agent-demo.noisewinston.chatgpt.site/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Gomoku Lab — WebMCP Agent Demo" />
+  <meta name="twitter:description" content="ChatGPT 外部模型透過 WebMCP 讀取、分析並操作即時五子棋棋盤。" />
+  <meta name="twitter:image" content="https://gomoku-lab-webmcp-agent-demo.noisewinston.chatgpt.site/og.png" />
+  <title>Gomoku Lab — WebMCP Agent Demo</title>
+  <link rel="stylesheet" href="/noise-winston.tokens.css" />
+  <style>
+    :root {
+      --app-nav-surface: var(--nw-color-ink);
+      --app-nav-text: var(--nw-color-white);
+      --app-nav-muted: var(--nw-color-dark-text-muted);
+      --app-board-frame: #694321;
+      --app-board-surface: #d8aa66;
+      --app-thinking-surface: rgb(17 17 17 / 0.82);
+    }
+    *{box-sizing:border-box}
+    html{background:var(--nw-canvas);scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:var(--nw-canvas);color:var(--nw-text);font-family:var(--nw-font-body);font-size:var(--nw-type-body);-webkit-font-smoothing:antialiased}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    button:disabled,[aria-disabled="true"]{cursor:not-allowed;opacity:.55}
+    button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--nw-focus);outline-offset:3px}
+    .skip-link{position:fixed;top:var(--nw-space-3);left:var(--nw-space-3);z-index:100;padding:var(--nw-space-3) var(--nw-space-5);background:var(--nw-result);color:var(--nw-result-foreground);border-radius:var(--nw-radius-control);font-weight:800;transform:translateY(-160%);transition:transform var(--nw-motion-fast) var(--nw-ease-out)}
+    .skip-link:focus{transform:translateY(0)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .topbar{min-height:68px;padding:0 var(--nw-space-6);background:var(--app-nav-surface);color:var(--app-nav-text);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--nw-color-dark-border);position:sticky;top:0;z-index:30}
+    .brand{display:flex;align-items:center;gap:var(--nw-space-4);min-width:0}
+    .brand-mark{width:36px;height:36px;border-radius:var(--nw-radius-control);position:relative;flex:0 0 auto;background:var(--nw-color-purple)}
+    .brand-mark:before,.brand-mark:after{content:"";position:absolute;border-radius:50%;width:10px;height:10px;top:13px}
+    .brand-mark:before{left:7px;background:var(--nw-color-ink)}
+    .brand-mark:after{right:7px;background:var(--nw-color-white)}
+    .brand-name{font-weight:900;letter-spacing:-.03em;font-size:17px;white-space:nowrap}
+    .brand-sub{font:700 var(--nw-type-caption)/1.35 var(--nw-font-signal);letter-spacing:.08em;color:var(--nw-color-lime);text-transform:uppercase;margin-top:2px;white-space:nowrap}
+    .top-actions{display:flex;align-items:center;gap:var(--nw-space-4)}
+    .status-badge{min-height:32px;display:inline-flex;align-items:center;gap:var(--nw-space-3);border:1px solid var(--nw-border);border-radius:var(--nw-radius-badge);padding:var(--nw-space-2) var(--nw-space-4);background:var(--nw-surface-grouped);color:var(--nw-text);font:700 var(--nw-type-caption)/1.35 var(--nw-font-signal);white-space:nowrap}
+    .status-pill{border-color:var(--nw-color-dark-border-strong);background:var(--nw-color-dark-surface);color:var(--app-nav-text)}
+    .status-dot{width:8px;height:8px;border-radius:50%;background:var(--nw-color-dark-warning)}
+    .status-dot.native{background:var(--nw-success)}
+    .app{width:min(100%,var(--nw-layout-max));margin:0 auto;padding:var(--nw-space-6);display:grid;grid-template-columns:240px minmax(480px,1fr) 340px;gap:var(--nw-space-5);align-items:start}
+    .panel{background:var(--nw-surface);border:1px solid var(--nw-border);border-radius:var(--nw-radius-card)}
+    .left-rail{display:grid;gap:var(--nw-space-5);position:sticky;top:92px}
+    .intro-card{padding:var(--nw-card-padding);background:var(--nw-surface-grouped);color:var(--nw-text);border-color:var(--nw-border)}
+    .eyebrow{font:800 var(--nw-type-caption)/1.35 var(--nw-font-signal);letter-spacing:.08em;text-transform:uppercase;color:var(--nw-action-text)}
+    .intro-card h1{font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.12;letter-spacing:-.03em;margin:var(--nw-space-4) 0 var(--nw-space-3);max-width:10ch}
+    .intro-card p{font-size:var(--nw-type-body-sm);line-height:1.6;color:var(--nw-text-muted);margin:0;max-width:22ch}
+    .control-card{padding:var(--nw-space-5)}
+    .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--nw-space-3);margin-bottom:var(--nw-space-4)}
+    .section-head h2{font-size:var(--nw-type-body-sm);font-weight:800;margin:0;color:var(--nw-text)}
+    .section-head span{font:var(--nw-type-caption)/1.35 var(--nw-font-signal);color:var(--nw-text-muted)}
+    .control-list{display:grid;gap:var(--nw-space-3)}
+    .control-btn{width:100%;min-height:48px;border:1px solid var(--nw-border);background:var(--nw-surface);border-radius:var(--nw-radius-control);padding:var(--nw-space-3) var(--nw-space-4);display:flex;align-items:center;justify-content:space-between;gap:var(--nw-space-3);color:var(--nw-text);text-align:left;font-size:var(--nw-type-body-sm);transition:background var(--nw-motion-standard) var(--nw-ease-out),border-color var(--nw-motion-standard) var(--nw-ease-out),color var(--nw-motion-standard) var(--nw-ease-out),transform var(--nw-motion-fast) var(--nw-ease-out)}
+    .control-btn:hover{transform:translateY(-1px);border-color:var(--nw-border-strong);background:var(--nw-surface-grouped)}
+    .control-btn .icon{width:28px;height:28px;border-radius:var(--nw-radius-control);background:var(--nw-surface-grouped);display:grid;place-items:center;flex:0 0 auto;font:800 var(--nw-type-caption)/1 var(--nw-font-signal);margin-right:var(--nw-space-3)}
+    .control-btn .label{display:flex;align-items:center;min-width:0;font-weight:700}
+    .control-btn small{color:var(--nw-text-muted);font:var(--nw-type-caption)/1.35 var(--nw-font-signal);text-align:right}
+    .control-btn.prompt-action:first-child{border-color:var(--nw-action);background:var(--nw-action);color:var(--nw-action-foreground)}
+    .control-btn.prompt-action:first-child:hover{border-color:var(--nw-action-hover);background:var(--nw-action-hover)}
+    .control-btn.prompt-action:first-child .icon{background:rgb(255 255 255/.16)}
+    .control-btn.prompt-action:first-child small{color:var(--nw-action-foreground)}
+    .control-separator{grid-column:1/-1;display:flex;align-items:center;gap:var(--nw-space-3);margin-top:var(--nw-space-2);color:var(--nw-text-muted);font:700 var(--nw-type-caption)/1.35 var(--nw-font-signal);letter-spacing:.08em;text-transform:uppercase}
+    .control-separator:before,.control-separator:after{content:"";height:1px;background:var(--nw-border);flex:1}
+    .control-btn.new-game-action{grid-column:1/-1;background:var(--nw-surface-grouped);border-color:var(--nw-border-strong);color:var(--nw-text)}
+    .control-btn.new-game-action:hover{border-color:var(--nw-action);color:var(--nw-action-text)}
+    .control-btn.new-game-action .icon{background:var(--nw-surface);color:var(--nw-action-text)}
+    .control-btn.new-game-action small{color:var(--nw-text-muted)}
+    .control-note{display:none;margin-top:var(--nw-space-4);border:1px solid var(--nw-success);background:color-mix(in srgb,var(--nw-success) 10%,var(--nw-surface));color:var(--nw-text);border-radius:var(--nw-radius-control);padding:var(--nw-space-4);font-size:var(--nw-type-body-sm);line-height:1.55}
+    .control-note.show{display:block}
+    .protocol-disclosure{margin:var(--nw-space-4) 0;border-top:1px solid var(--nw-border);background:var(--nw-surface)}
+    .protocol-disclosure summary{min-height:44px;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:var(--nw-space-4);padding:var(--nw-space-3) 0;cursor:pointer;color:var(--nw-text)}
+    .protocol-disclosure summary::-webkit-details-marker{display:none}
+    .protocol-summary-label{font:800 var(--nw-type-caption)/1.35 var(--nw-font-signal);letter-spacing:.04em;text-transform:uppercase}
+    .protocol-summary-meta{display:flex;align-items:center;gap:var(--nw-space-3);font-size:var(--nw-type-caption);color:var(--nw-text-muted)}
+    .protocol-chevron{display:inline-block;transition:transform var(--nw-motion-standard) var(--nw-ease-out)}
+    .protocol-disclosure[open] .protocol-chevron{transform:rotate(180deg)}
+    .protocol-content{padding-bottom:var(--nw-space-3);border-top:1px solid var(--nw-border)}
+    .protocol-row{display:flex;align-items:center;justify-content:space-between;gap:var(--nw-space-4);padding:var(--nw-space-3) 0;border-top:1px solid var(--nw-border);font-size:var(--nw-type-caption)}
+    .protocol-row:first-of-type{border-top:0}
+    .protocol-row span{color:var(--nw-text-muted)}
+    .protocol-row strong{font-weight:700;text-align:right}
+    .board-panel{padding:var(--nw-space-6);min-height:calc(100vh - 116px);display:flex;flex-direction:column;align-items:center;border:0;box-shadow:var(--nw-shadow-raised)}
+    .board-toolbar{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--nw-space-4);padding:0 0 var(--nw-space-5)}
+    .turn-info{display:flex;align-items:center;gap:var(--nw-space-4)}
+    .turn-stone{width:32px;height:32px;border-radius:50%;background:#11191a;border:2px solid var(--nw-surface);box-shadow:0 3px 10px rgb(0 0 0/.28)}
+    .turn-stone.white{background:#fff;border-color:var(--nw-border);box-shadow:0 2px 8px rgb(17 17 17/.16)}
+    .turn-copy strong{display:block;font-size:var(--nw-type-body);letter-spacing:-.02em}
+    .turn-copy span{display:block;margin-top:2px;font-size:var(--nw-type-body-sm);color:var(--nw-text-muted)}
+    .board-status{display:flex;align-items:center}
+    .mode-badge:before,.live-tag:before{content:"";width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+    .mode-badge:before{background:var(--nw-action)}
+    .board-shell{width:min(100%,720px);aspect-ratio:1;position:relative;border-radius:var(--nw-radius-media);padding:var(--nw-space-4);background:var(--app-board-frame);box-shadow:var(--nw-shadow-raised);overflow:hidden}
+    .board-shell:before{display:none}
+    #board{display:block;width:100%;height:100%;border-radius:var(--nw-radius-control);touch-action:manipulation;position:relative;z-index:1;cursor:crosshair;background:var(--app-board-surface)}
+    .thinking-overlay{position:absolute;inset:var(--nw-space-4);border-radius:var(--nw-radius-control);background:var(--app-thinking-surface);backdrop-filter:blur(3px);z-index:4;display:none;align-items:center;justify-content:center;color:var(--app-nav-text)}
+    .thinking-overlay.show{display:flex}
+    .thinking-card{text-align:center;padding:var(--nw-space-6);max-width:300px}
+    .thinking-orbit{width:54px;height:54px;border:1px solid var(--nw-color-dark-border-strong);border-radius:50%;margin:0 auto var(--nw-space-4);position:relative;animation:spin 2.4s linear infinite}
+    .thinking-orbit:before,.thinking-orbit:after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;top:20px}
+    .thinking-orbit:before{left:-6px;background:var(--nw-color-ink)}
+    .thinking-orbit:after{right:-6px;background:var(--nw-color-white)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .thinking-card strong{display:block;font-size:var(--nw-type-body)}
+    .thinking-card p{font-size:var(--nw-type-body-sm);color:var(--app-nav-muted);line-height:1.55;margin:var(--nw-space-3) 0 var(--nw-space-4)}
+    .intervene-btn{min-height:44px;border:1px solid var(--nw-color-dark-border-strong);background:var(--nw-color-dark-surface-raised);color:var(--app-nav-text);border-radius:var(--nw-radius-control);padding:var(--nw-space-3) var(--nw-space-5);font-size:var(--nw-type-body-sm)}
+    .analysis-strip{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--nw-space-4);padding-top:var(--nw-space-4)}
+    .legend{display:flex;flex-wrap:wrap;gap:var(--nw-space-4);font:var(--nw-type-caption)/1.35 var(--nw-font-signal);color:var(--nw-text-muted)}
+    .legend span{display:flex;align-items:center;gap:var(--nw-space-2)}
+    .legend i{width:10px;height:10px;border-radius:var(--nw-radius-badge);display:inline-block}
+    .legend .danger{background:var(--nw-error)}
+    .legend .best{background:var(--nw-focus)}
+    .legend .line{background:var(--nw-warning)}
+    .clear-btn{min-height:44px;border:1px solid var(--nw-border);background:var(--nw-surface);color:var(--nw-text-muted);border-radius:var(--nw-radius-control);padding:var(--nw-space-3) var(--nw-space-4);font-size:var(--nw-type-body-sm);font-weight:700;text-decoration:none;transition:background var(--nw-motion-fast) var(--nw-ease-out),border-color var(--nw-motion-fast) var(--nw-ease-out),color var(--nw-motion-fast) var(--nw-ease-out)}
+    .clear-btn:hover{border-color:var(--nw-action);background:color-mix(in srgb,var(--nw-action) 6%,var(--nw-surface));color:var(--nw-action-text)}
+    .approval{width:100%;margin-top:var(--nw-space-4);border:1px solid var(--nw-warning);background:color-mix(in srgb,var(--nw-warning) 12%,var(--nw-surface));border-radius:var(--nw-radius-card);padding:var(--nw-space-5);display:none;align-items:center;justify-content:space-between;gap:var(--nw-space-5)}
+    .approval.show{display:flex}
+    .approval-copy strong{font-size:var(--nw-type-body-sm);display:block}
+    .approval-copy span{font-size:var(--nw-type-body-sm);color:var(--nw-text-muted);line-height:1.45;display:block;margin-top:var(--nw-space-2)}
+    .approval-actions{display:flex;gap:var(--nw-space-3);flex:0 0 auto}
+    .approve,.reject{min-height:44px;border-radius:var(--nw-radius-control);padding:var(--nw-space-3) var(--nw-space-5);font-size:var(--nw-type-body-sm);font-weight:700}
+    .approve{border:1px solid var(--nw-action);background:var(--nw-action);color:var(--nw-action-foreground)}
+    .reject{border:1px solid var(--nw-border-strong);background:var(--nw-surface);color:var(--nw-text)}
+    .agent-panel{min-height:calc(100vh - 116px);position:sticky;top:92px;display:flex;flex-direction:column;overflow:hidden}
+    .agent-head{padding:var(--nw-space-5) var(--nw-space-5) 0;border-bottom:1px solid var(--nw-border)}
+    .agent-title-row{display:flex;align-items:center;justify-content:space-between;gap:var(--nw-space-4)}
+    .agent-id{display:flex;align-items:center}
+    .agent-id strong{display:block;font-size:var(--nw-type-body-sm)}
+    .agent-id span{display:block;font-size:var(--nw-type-caption);color:var(--nw-text-muted);margin-top:2px}
+    .live-tag:before{background:var(--nw-success)}
+    .tabs{display:grid;grid-template-columns:repeat(3,1fr);margin-top:var(--nw-space-5)}
+    .tab{min-height:44px;border:0;border-bottom:2px solid transparent;background:transparent;padding:var(--nw-space-3);font:700 var(--nw-type-caption)/1.35 var(--nw-font-signal);color:var(--nw-text-muted);transition:color var(--nw-motion-fast) var(--nw-ease-out),border-color var(--nw-motion-fast) var(--nw-ease-out)}
+    .tab:hover{color:var(--nw-text)}
+    .tab.active{border-bottom-color:var(--nw-action);color:var(--nw-action-text);font-weight:800}
+    .tab-pane{display:none;min-height:0;flex:1}
+    .tab-pane.active{display:flex;flex-direction:column}
+    .tab-pane[hidden]{display:none}
+    .messages{padding:var(--nw-space-5);display:flex;flex-direction:column;gap:var(--nw-space-4);overflow:auto;height:calc(100vh - 420px);min-height:260px;scrollbar-width:thin}
+    .message{display:flex;gap:var(--nw-space-3);align-items:flex-start}
+    .message.user{justify-content:flex-end}
+    .bubble{max-width:92%;border-radius:var(--nw-radius-card);padding:var(--nw-space-4);font-size:var(--nw-type-body-sm);line-height:1.6;background:var(--nw-surface-grouped);color:var(--nw-text);white-space:pre-wrap}
+    .message.user .bubble{background:var(--app-nav-surface);color:var(--app-nav-text);border-bottom-right-radius:var(--nw-radius-control)}
+    .message.agent .bubble{border-bottom-left-radius:var(--nw-radius-control)}
+    .tool-call{display:block;margin-top:var(--nw-space-3);padding:var(--nw-space-3);border-radius:var(--nw-radius-control);background:var(--nw-surface);color:var(--nw-action-text);font:var(--nw-type-caption)/1.45 var(--nw-font-mono)}
+    .tools-pane,.audit-pane{padding:0 var(--nw-space-5) var(--nw-space-5);overflow:auto;height:calc(100vh - 390px);min-height:320px}
+    .tool-summary{border-bottom:1px solid var(--nw-border);padding:var(--nw-space-4) 0}
+    .tool-summary.runtime-summary{margin:var(--nw-space-4) 0;padding:var(--nw-space-4);border:1px solid var(--nw-success);border-radius:var(--nw-radius-control);background:color-mix(in srgb,var(--nw-success) 10%,var(--nw-surface))}
+    .tool-summary header{display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .tool-summary code{font:700 var(--nw-type-caption)/1.4 var(--nw-font-mono);color:var(--nw-action-text);word-break:break-all}
+    .tool-kind{font:700 var(--nw-type-caption)/1.35 var(--nw-font-signal);border-radius:var(--nw-radius-badge);padding:var(--nw-space-2) var(--nw-space-3);background:var(--nw-surface-grouped);color:var(--nw-text);white-space:nowrap}
+    .tool-kind.approval{background:color-mix(in srgb,var(--nw-warning) 18%,var(--nw-surface))}
+    .tool-kind.trace{background:color-mix(in srgb,var(--nw-action) 12%,var(--nw-surface));color:var(--nw-action-text)}
+    .tool-summary p{font-size:var(--nw-type-body-sm);line-height:1.55;color:var(--nw-text-muted);margin:var(--nw-space-3) 0 0}
+    .audit-item{border-left:1px solid var(--nw-border-strong);padding:0 0 var(--nw-space-4) var(--nw-space-4);margin-left:var(--nw-space-2);position:relative}
+    .audit-item:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--nw-text-muted);position:absolute;left:-4.5px;top:3px}
+    .audit-item.success{border-color:var(--nw-success)}
+    .audit-item.success:before{background:var(--nw-success)}
+    .audit-item.rejected{border-color:var(--nw-error)}
+    .audit-item.rejected:before{background:var(--nw-error)}
+    .audit-item strong{font:700 var(--nw-type-caption)/1.4 var(--nw-font-mono);color:var(--nw-text)}
+    .audit-item span{font-size:var(--nw-type-caption);color:var(--nw-text-muted);display:block;margin-top:var(--nw-space-2);line-height:1.45}
+    .empty-state{padding:var(--nw-space-8) var(--nw-space-5);text-align:center;color:var(--nw-text-muted);font-size:var(--nw-type-body-sm);line-height:1.6}
+    .toast-wrap{position:fixed;left:50%;bottom:var(--nw-space-6);transform:translateX(-50%);display:grid;gap:var(--nw-space-3);z-index:90;pointer-events:none}
+    .toast{background:var(--app-nav-surface);color:var(--app-nav-text);border-radius:var(--nw-radius-control);padding:var(--nw-space-4) var(--nw-space-5);font-size:var(--nw-type-body-sm);box-shadow:var(--nw-shadow-overlay);animation:toastIn var(--nw-motion-slow) var(--nw-ease-out)}
+    @keyframes toastIn{from{opacity:0;transform:translateY(8px)}}
+    .footer-note{grid-column:1/-1;text-align:center;font:var(--nw-type-caption)/1.35 var(--nw-font-signal);color:var(--nw-text-muted);padding:var(--nw-space-3) 0 var(--nw-space-5)}
+    @media(prefers-color-scheme:dark){:root:not([data-nw-theme="light"]){--app-nav-surface:var(--nw-color-dark-surface-raised);--app-nav-text:var(--nw-color-dark-text);--app-nav-muted:var(--nw-color-dark-text-muted);--app-board-frame:#4a2f1e;--app-thinking-surface:rgb(13 15 18/.86)}}
+    @media(max-width:1120px){.app{grid-template-columns:minmax(480px,1fr) 340px}.left-rail{display:grid;grid-column:1/-1;grid-template-columns:240px minmax(0,1fr);position:static;align-items:stretch}.control-list{grid-template-columns:repeat(3,minmax(0,1fr))}.board-panel{min-height:auto}.agent-panel{min-height:760px}.footer-note{grid-column:1/-1}}
+    @media(max-width:860px){.topbar{padding:0 var(--nw-space-5)}.brand-sub{display:none}.app{display:flex;flex-direction:column;padding:var(--nw-space-4)}.left-rail{width:100%;grid-template-columns:1fr}.control-list{grid-template-columns:1fr}.board-panel,.agent-panel{width:100%}.agent-panel{min-height:680px;position:static}.messages{height:410px}.tools-pane,.audit-pane{height:520px}.board-shell{width:min(100%,680px)}.footer-note{width:100%}}
+    @media(max-width:540px){.topbar{min-height:62px}.brand-mark{width:32px;height:32px}.brand-mark:before,.brand-mark:after{top:11px}.brand-name{font-size:15px}.status-pill{padding:var(--nw-space-2) var(--nw-space-3)}.app{padding:var(--nw-space-3)}.intro-card,.control-card,.board-panel{padding:var(--nw-space-5)}.board-toolbar{align-items:flex-start}.board-shell{padding:var(--nw-space-3)}.thinking-overlay{inset:var(--nw-space-3)}.analysis-strip,.approval{align-items:flex-start;flex-direction:column}.approval-actions{width:100%}.approve,.reject{flex:1}.agent-panel{min-height:650px}.messages{height:380px}.top-actions .status-pill span:last-child{display:none}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.thinking-orbit{animation:none}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#gameBoard">跳至棋盤</a>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div><div class="brand-name">Gomoku Lab</div><div class="brand-sub">Human × Agent Shared State</div></div>
+    </div>
+    <div class="top-actions">
+      <div class="status-badge status-pill" id="mcpPill" role="status" aria-live="polite" title="WebMCP registration status"><i class="status-dot" id="mcpDot" aria-hidden="true"></i><span id="mcpStatus">偵測 WebMCP</span></div>
+    </div>
+  </header>
+
+  <main class="app">
+    <aside class="left-rail">
+      <section class="panel intro-card">
+        <div class="eyebrow">GPT-SITE / WEBMCP DEMO</div>
+        <h1>與 ChatGPT 下一盤棋</h1>
+        <p>與大型語言模型對弈</p>
+      </section>
+
+      <section class="panel control-card">
+        <div class="section-head"><h2>Demo controls</h2><span>直接體驗</span></div>
+        <div class="control-list">
+          <button class="control-btn prompt-action" data-action-label="請 AI 落子" data-prompt="請讀取目前棋局，分析風險，公布決策摘要後替白棋落子。"><span class="label"><span class="icon" aria-hidden="true">AI</span>請 AI 落子</span><small>複製落子提示</small></button>
+          <button class="control-btn prompt-action" data-action-label="只做分析" data-prompt="請讀取棋盤，顯示三個關鍵威脅與候選位置，暫時不要落子。"><span class="label"><span class="icon" aria-hidden="true">讀</span>只做分析</span><small>複製分析提示</small></button>
+          <button class="control-btn prompt-action" data-action-label="推演三手" data-prompt="請讀取棋盤並用 WebMCP 畫出接下來三手推演，暫時不要修改棋子。"><span class="label"><span class="icon" aria-hidden="true">3</span>推演三手</span><small>複製推演提示</small></button>
+          <div class="control-separator" aria-hidden="true">棋局管理</div>
+          <button class="control-btn new-game-action" id="newGameButton"><span class="label"><span class="icon" aria-hidden="true">＋</span>開始新棋局</span><small>立即開始</small></button>
+        </div>
+        <div class="control-note" id="promptCopyNote" role="status" aria-live="polite"></div>
+      </section>
+    </aside>
+
+    <section class="panel board-panel" id="gameBoard" aria-labelledby="turnTitle">
+      <div class="board-toolbar">
+        <div class="turn-info">
+          <div class="turn-stone" id="turnStone"></div>
+          <div class="turn-copy"><strong id="turnTitle">輪到你：黑棋</strong><span id="turnSubtitle">點選交叉點落子</span></div>
+        </div>
+        <div class="board-status"><span class="status-badge mode-badge" id="gameMode">對戰模式</span></div>
+      </div>
+
+      <div class="board-shell" id="boardShell">
+        <canvas id="board" role="application" aria-label="十五乘十五五子棋棋盤" aria-describedby="boardKeyboardHelp" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight Enter Space" tabindex="0"></canvas>
+        <p class="sr-only" id="boardKeyboardHelp">使用方向鍵移動鍵盤游標，按 Enter 或空白鍵落子。也可使用滑鼠或觸控點選交叉點。</p>
+      </div>
+
+      <div class="analysis-strip">
+        <div class="legend"><span><i class="danger"></i>立即威脅</span><span><i class="best"></i>建議位置</span><span><i class="line"></i>推演路線</span></div>
+        <button class="clear-btn" id="clearAnalysis">清除分析標記</button>
+      </div>
+
+      <div class="approval" id="approvalCard">
+        <div class="approval-copy"><strong id="approvalTitle">Agent 請求修改棋局</strong><span id="approvalReason"></span></div>
+        <div class="approval-actions"><button class="reject" id="rejectApproval">拒絕</button><button class="approve" id="approveApproval">核准</button></div>
+      </div>
+    </section>
+
+    <aside class="panel agent-panel">
+      <div class="agent-head">
+        <div class="agent-title-row">
+          <div class="agent-id"><div><strong>WebMCP Agent Trace</strong><span>由 ChatGPT 外部模型驅動</span></div></div>
+          <span class="status-badge live-tag">NO API KEY</span>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Agent 資訊">
+          <button class="tab active" id="chatTab" role="tab" aria-selected="true" aria-controls="chatPane" tabindex="0" data-tab="chat">決策</button>
+          <button class="tab" id="toolsTab" role="tab" aria-selected="false" aria-controls="toolsPane" tabindex="-1" data-tab="tools">Tools</button>
+          <button class="tab" id="auditTab" role="tab" aria-selected="false" aria-controls="auditPane" tabindex="-1" data-tab="audit">Audit</button>
+        </div>
+        <details class="protocol-disclosure">
+          <summary><span class="protocol-summary-label">Protocol state</span><span class="protocol-summary-meta"><span id="runtimeLabel">Fallback</span><span class="protocol-chevron" aria-hidden="true">⌄</span></span></summary>
+          <div class="protocol-content">
+            <div class="protocol-row"><span>Move intelligence</span><strong>ChatGPT LLM</strong></div>
+            <div class="protocol-row"><span>Concurrency</span><strong>Version locked</strong></div>
+            <div class="protocol-row"><span>Destructive action</span><strong>Human approval</strong></div>
+            <div class="protocol-row"><span>Traceability</span><strong>Audit enabled</strong></div>
+          </div>
+        </details>
+      </div>
+
+      <section class="tab-pane active" id="chatPane" role="tabpanel" aria-labelledby="chatTab">
+        <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions text"></div>
+      </section>
+
+      <section class="tab-pane" id="toolsPane" role="tabpanel" aria-labelledby="toolsTab" hidden><div class="tools-pane" id="toolsList"></div></section>
+      <section class="tab-pane" id="auditPane" role="tabpanel" aria-labelledby="auditTab" hidden><div class="audit-pane" id="auditList"></div></section>
+    </aside>
+
+    <div class="footer-note">Gomoku Lab · ChatGPT Site Tools (WebMCP) · No API key</div>
+  </main>
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(() => {
+  'use strict';
+  const SIZE=15, EMPTY=0, BLACK=1, WHITE=2;
+  const COLS='ABCDEFGHJKLMNOP';
+  const $=s=>document.querySelector(s);
+  const $$=s=>Array.from(document.querySelectorAll(s));
+  const cloneBoard=b=>b.map(r=>r.slice());
+  const other=p=>p===BLACK?WHITE:BLACK;
+  const playerName=p=>p===BLACK?'黑棋':p===WHITE?'白棋':'空位';
+  const coord=(r,c)=>`${COLS[c]||'?'}${SIZE-r}`;
+  const nowTime=()=>new Intl.DateTimeFormat('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());
+  const uid=()=>Math.random().toString(36).slice(2,9);
+
+  const state={
+    board:Array.from({length:SIZE},()=>Array(SIZE).fill(EMPTY)),
+    turn:BLACK,status:'playing',winner:EMPTY,version:0,history:[],lastMove:null,
+    highlights:[],variation:[],pendingDecision:null,
+    approval:null,audit:[],messages:[],nativeMCP:false,mcpRegistrations:[],mode:'play'
+  };
+
+  const els={
+    canvas:$('#board'),shell:$('#boardShell'),turnStone:$('#turnStone'),turnTitle:$('#turnTitle'),turnSubtitle:$('#turnSubtitle'),
+    gameMode:$('#gameMode'),
+    approval:$('#approvalCard'),approvalTitle:$('#approvalTitle'),approvalReason:$('#approvalReason'),messages:$('#messages'),audit:$('#auditList'),tools:$('#toolsList'),
+    mcpStatus:$('#mcpStatus'),mcpDot:$('#mcpDot'),runtimeLabel:$('#runtimeLabel'),promptCopyNote:$('#promptCopyNote'),toast:$('#toastWrap')
+  };
+  const ctx=els.canvas.getContext('2d');
+  let geom={size:0,pad:0,step:0,dpr:1};
+  let keyboardCursor={row:7,col:7},keyboardFocus=false;
+
+  function toast(text){
+    const node=document.createElement('div');node.className='toast';node.textContent=text;els.toast.appendChild(node);
+    setTimeout(()=>node.remove(),2800);
+  }
+
+  function addMessage(role,text,tool){
+    const message={id:uid(),role,text,tool};state.messages.push(message);renderMessages();return message;
+  }
+
+  function renderMessages(){
+    els.messages.innerHTML='';
+    state.messages.forEach(m=>{
+      const row=document.createElement('div');row.className=`message ${m.role}`;
+      const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=m.text;
+      if(m.tool){const call=document.createElement('span');call.className='tool-call';call.textContent=`↳ ${m.tool}`;bubble.appendChild(call)}
+      row.appendChild(bubble);els.messages.appendChild(row);
+    });
+    requestAnimationFrame(()=>{els.messages.scrollTop=els.messages.scrollHeight});
+  }
+
+  function appendAudit(name,source,status,detail=''){
+    state.audit.unshift({id:uid(),time:nowTime(),name,source,status,detail});
+    if(state.audit.length>80)state.audit.length=80;
+    renderAudit();
+  }
+
+  function renderAudit(){
+    if(!state.audit.length){els.audit.innerHTML='<div class="empty-state">工具尚未被呼叫。<br>在 Agent 分頁送出指令後，這裡會顯示完整紀錄。</div>';return}
+    els.audit.innerHTML=state.audit.map(a=>`<div class="audit-item ${a.status}"><strong>${escapeHtml(a.name)}</strong><span>${a.time} · ${escapeHtml(a.source)} · ${escapeHtml(a.status)}${a.detail?'<br>'+escapeHtml(a.detail):''}</span></div>`).join('');
+  }
+
+  function escapeHtml(v){return String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]))}
+
+  function resizeCanvas(){
+    const rect=els.canvas.getBoundingClientRect();
+    const size=Math.max(280,Math.floor(rect.width));
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    els.canvas.width=Math.round(size*dpr);els.canvas.height=Math.round(size*dpr);
+    geom={size,pad:size*.055,step:(size-size*.11)/(SIZE-1),dpr};
+    ctx.setTransform(dpr,0,0,dpr,0,0);drawBoard();
+  }
+
+  function point(r,c){return{x:geom.pad+c*geom.step,y:geom.pad+r*geom.step}}
+
+  function drawBoard(){
+    const {size,pad,step}=geom;if(!size)return;
+    ctx.clearRect(0,0,size,size);
+    const bg=ctx.createLinearGradient(0,0,size,size);bg.addColorStop(0,'#e5bd79');bg.addColorStop(.55,'#d7a660');bg.addColorStop(1,'#c98f4d');ctx.fillStyle=bg;ctx.fillRect(0,0,size,size);
+    ctx.save();ctx.strokeStyle='rgba(74,43,17,.72)';ctx.lineWidth=Math.max(1,size/680);
+    for(let i=0;i<SIZE;i++){
+      const p=pad+i*step;ctx.beginPath();ctx.moveTo(pad,p);ctx.lineTo(size-pad,p);ctx.stroke();ctx.beginPath();ctx.moveTo(p,pad);ctx.lineTo(p,size-pad);ctx.stroke();
+    }
+    [[3,3],[3,11],[7,7],[11,3],[11,11]].forEach(([r,c])=>{const p=point(r,c);ctx.beginPath();ctx.arc(p.x,p.y,Math.max(2.4,size*.0045),0,Math.PI*2);ctx.fillStyle='rgba(61,34,13,.8)';ctx.fill()});
+    ctx.restore();
+
+    state.highlights.forEach(h=>drawHighlight(h));
+    for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(state.board[r][c])drawStone(r,c,state.board[r][c],state.lastMove&&state.lastMove.row===r&&state.lastMove.col===c);
+    state.variation.forEach((m,i)=>drawVariationMark(m,i));
+    if(state.winner)drawWinLine();
+    if(keyboardFocus)drawKeyboardCursor();
+    updateBoardA11y();
+  }
+
+  function drawKeyboardCursor(){
+    const p=point(keyboardCursor.row,keyboardCursor.col);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,geom.step*.49,0,Math.PI*2);
+    ctx.lineWidth=Math.max(3,geom.size*.005);
+    ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--nw-focus').trim()||'#1877f2';
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function updateBoardA11y(){
+    const value=state.board[keyboardCursor.row][keyboardCursor.col];
+    const cellState=value===BLACK?'已有黑棋':value===WHITE?'已有白棋':'空位';
+    const gameState=state.status==='playing'?`目前輪到${playerName(state.turn)}`:state.status==='draw'?'棋局和棋':`${playerName(state.winner)}獲勝`;
+    els.canvas.setAttribute('aria-label',`十五乘十五五子棋棋盤。鍵盤游標在 ${coord(keyboardCursor.row,keyboardCursor.col)}，${cellState}。${gameState}。`);
+  }
+
+  function drawHighlight(h){
+    const p=point(h.row,h.col),rad=geom.step*.43;
+    const color=h.kind==='danger'?'#ed665e':h.kind==='variation'?'#f2b34c':'#4e91ef';
+    ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fillStyle=color+'44';ctx.fill();ctx.lineWidth=Math.max(2,geom.size*.004);ctx.strokeStyle=color;ctx.stroke();
+    if(h.label){ctx.fillStyle='#102021';ctx.font=`700 ${Math.max(8,geom.step*.2)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(h.label,p.x,p.y)}ctx.restore();
+  }
+
+  function drawStone(r,c,player,isLast){
+    const p=point(r,c),rad=geom.step*.405;ctx.save();ctx.shadowColor='rgba(31,20,10,.38)';ctx.shadowBlur=rad*.38;ctx.shadowOffsetY=rad*.13;
+    const g=ctx.createRadialGradient(p.x-rad*.28,p.y-rad*.33,rad*.08,p.x,p.y,rad);
+    if(player===BLACK){g.addColorStop(0,'#586164');g.addColorStop(.26,'#252c2e');g.addColorStop(1,'#050708')}else{g.addColorStop(0,'#ffffff');g.addColorStop(.58,'#f4f3ee');g.addColorStop(1,'#c8ceca')}
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowColor='transparent';ctx.lineWidth=1;ctx.strokeStyle=player===BLACK?'rgba(255,255,255,.16)':'rgba(50,65,62,.24)';ctx.stroke();
+    if(isLast){ctx.beginPath();ctx.arc(p.x,p.y,rad*.19,0,Math.PI*2);ctx.fillStyle=player===BLACK?'#9ee7ca':'#35695d';ctx.fill()}
+    ctx.restore();
+  }
+
+  function drawVariationMark(m,i){
+    const p=point(m.row,m.col),rad=geom.step*.22;ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fillStyle=m.player===BLACK?'#12191a':'#fff';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#f5bd62';ctx.stroke();ctx.fillStyle=m.player===BLACK?'#fff':'#102021';ctx.font=`700 ${Math.max(8,geom.step*.22)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(i+1),p.x,p.y+.5);ctx.restore();
+  }
+
+  function drawWinLine(){
+    const line=findWinningLine(state.board,state.lastMove?.row,state.lastMove?.col,state.winner);if(!line)return;
+    const a=point(line[0][0],line[0][1]),b=point(line[line.length-1][0],line[line.length-1][1]);ctx.save();ctx.strokeStyle='#5ac9a1';ctx.lineWidth=Math.max(5,geom.step*.13);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();
+  }
+
+  function canvasCell(ev){
+    const rect=els.canvas.getBoundingClientRect();const x=(ev.clientX-rect.left)*(geom.size/rect.width),y=(ev.clientY-rect.top)*(geom.size/rect.height);
+    const c=Math.round((x-geom.pad)/geom.step),r=Math.round((y-geom.pad)/geom.step);if(r<0||r>=SIZE||c<0||c>=SIZE)return null;
+    const p=point(r,c);if(Math.hypot(x-p.x,y-p.y)>geom.step*.52)return null;return{row:r,col:c};
+  }
+
+  function attemptHumanMove(cell){
+    if(state.status!=='playing'){toast('棋局已結束，請開始新棋局');return}
+    if(state.turn!==BLACK){toast('目前輪到白棋，請在 ChatGPT 對話中要求 Agent 落子');return}
+    const result=placeStoneInternal(cell.row,cell.col,BLACK,'human');
+    if(result.ok&&state.status==='playing')addMessage('agent',`棋盤已更新為 BOARD v${state.version}。輪到白棋，請在 ChatGPT 對話中要求 Agent 讀取棋盤並落子。`,'等待 get_board_state');
+    if(!result.ok)toast(result.message);
+  }
+
+  function onBoardClick(ev){
+    const cell=canvasCell(ev);if(!cell)return;
+    keyboardCursor=cell;
+    attemptHumanMove(cell);
+  }
+
+  function onBoardKeydown(ev){
+    const movement={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[ev.key];
+    if(movement){
+      ev.preventDefault();
+      keyboardCursor={
+        row:Math.max(0,Math.min(SIZE-1,keyboardCursor.row+movement[0])),
+        col:Math.max(0,Math.min(SIZE-1,keyboardCursor.col+movement[1]))
+      };
+      drawBoard();
+      return;
+    }
+    if(ev.key==='Enter'||ev.key===' '){
+      ev.preventDefault();
+      attemptHumanMove(keyboardCursor);
+    }
+  }
+
+  function placeStoneInternal(row,col,player,source,expectedVersion=null){
+    if(expectedVersion!==null&&expectedVersion!==state.version)return{ok:false,code:'STALE_BOARD_VERSION',message:`預期 BOARD v${expectedVersion}，目前已是 v${state.version}`};
+    if(state.status!=='playing')return{ok:false,code:'GAME_FINISHED',message:'棋局已結束'};
+    if(!Number.isInteger(row)||!Number.isInteger(col)||row<0||row>=SIZE||col<0||col>=SIZE)return{ok:false,code:'OUT_OF_RANGE',message:'座標超出棋盤'};
+    if(state.board[row][col]!==EMPTY)return{ok:false,code:'CELL_OCCUPIED',message:`${coord(row,col)} 已有棋子`};
+    if(player!==state.turn)return{ok:false,code:'WRONG_TURN',message:`目前輪到${playerName(state.turn)}`};
+    state.board[row][col]=player;state.history.push({row,col,player,source,version:state.version+1});state.lastMove={row,col,player};state.version++;
+    const line=findWinningLine(state.board,row,col,player);
+    if(line){state.status='finished';state.winner=player}else if(state.history.length===SIZE*SIZE){state.status='draw'}else state.turn=other(player);
+    state.highlights=[];state.variation=[];renderAll();
+    return{ok:true,boardVersion:state.version,move:{row,col,coordinate:coord(row,col),player:playerName(player)},status:state.status,winner:state.winner?playerName(state.winner):null};
+  }
+
+  function findWinningLine(board,row,col,player){
+    if(row==null||col==null||!player)return null;
+    for(const [dr,dc] of [[1,0],[0,1],[1,1],[1,-1]]){
+      const cells=[[row,col]];let r=row-dr,c=col-dc;while(r>=0&&r<SIZE&&c>=0&&c<SIZE&&board[r][c]===player){cells.unshift([r,c]);r-=dr;c-=dc}
+      r=row+dr;c=col+dc;while(r>=0&&r<SIZE&&c>=0&&c<SIZE&&board[r][c]===player){cells.push([r,c]);r+=dr;c+=dc}
+      if(cells.length>=5)return cells;
+    }return null;
+  }
+
+  function resetGameDirect(){
+    state.board=Array.from({length:SIZE},()=>Array(SIZE).fill(EMPTY));state.turn=BLACK;state.status='playing';state.winner=EMPTY;state.history=[];state.lastMove=null;state.highlights=[];state.variation=[];state.pendingDecision=null;state.approval=null;state.mode='play';keyboardCursor={row:7,col:7};state.version++;renderAll();
+  }
+
+  function startNewGame(){
+    resetGameDirect();
+    els.promptCopyNote.textContent='';
+    els.promptCopyNote.classList.remove('show');
+    appendAudit('start_new_game','human-ui','success',`BOARD v${state.version}`);
+    addMessage('agent','新棋局已開始。你執黑先行。','human_action');
+    toast('新棋局已開始');
+  }
+
+  function showNewGameApproval(reason){
+    const request={id:uid(),type:'new_game',payload:{},reason,createdVersion:state.version};state.approval=request;renderApproval();return{ok:true,status:'pending_user_approval',approvalId:request.id,boardVersion:state.version,message:'請求已顯示給使用者，尚未修改棋局'};
+  }
+
+  function renderApproval(){
+    if(!state.approval){els.approval.classList.remove('show');return}
+    const a=state.approval;els.approval.classList.add('show');els.approvalTitle.textContent='Agent 請求開始新棋局';els.approvalReason.textContent=`${a.reason} · 請求建立於 BOARD v${a.createdVersion}`;
+  }
+
+  function approveRequest(){
+    const a=state.approval;if(!a)return;
+    resetGameDirect();appendAudit('approve_new_game','human','success',`BOARD v${state.version}`);addMessage('agent','你已核准建立新棋局。你執黑先行。','human_approval');
+    state.approval=null;renderAll();
+  }
+
+  function rejectRequest(){
+    if(!state.approval)return;appendAudit('reject_'+state.approval.type,'human','rejected','No state mutation');addMessage('agent','你拒絕了這項請求；棋盤沒有任何變更。','human_approval');state.approval=null;renderApproval();
+  }
+
+  const tools=new Map();
+  function defineTool(meta,handler){tools.set(meta.name,{...meta,handler})}
+
+  async function invokeTool(name,args={},options={}){
+    const tool=tools.get(name),source=options.source||'external-agent';if(!tool){const e={ok:false,code:'TOOL_NOT_FOUND',message:`Unknown tool: ${name}`};appendAudit(name,source,'rejected',e.message);return e}
+    try{
+      const result=await tool.handler(args||{},source);appendAudit(name,source,result&&result.ok===false?'rejected':'success',summarizeResult(result));return result;
+    }catch(error){const result={ok:false,code:'TOOL_ERROR',message:error?.message||String(error)};appendAudit(name,source,'rejected',result.message);return result}
+  }
+
+  function summarizeResult(r){if(!r)return'No result';if(r.code)return r.code;if(r.status)return r.status;if(r.boardVersion!=null)return`BOARD v${r.boardVersion}`;return'completed'}
+
+  function publishAgentDecision(args){
+    if(args.expectedVersion!==state.version)return{ok:false,code:'STALE_BOARD_VERSION',message:`預期 BOARD v${args.expectedVersion}，目前已是 v${state.version}`};
+    const player=args.player==='white'?WHITE:args.player==='black'?BLACK:EMPTY;
+    if(player!==state.turn)return{ok:false,code:'WRONG_TURN',message:`目前輪到${playerName(state.turn)}`};
+    if(!Number.isInteger(args.row)||!Number.isInteger(args.col)||args.row<0||args.row>=SIZE||args.col<0||args.col>=SIZE)return{ok:false,code:'OUT_OF_RANGE',message:'座標超出棋盤'};
+    if(state.board[args.row][args.col]!==EMPTY)return{ok:false,code:'CELL_OCCUPIED',message:`${coord(args.row,args.col)} 已有棋子`};
+    const summary=String(args.summary||'').trim();
+    if(!summary)return{ok:false,code:'SUMMARY_REQUIRED',message:'請提供可供使用者審核的決策摘要'};
+    const evidence=(args.evidence||[]).map(v=>String(v).trim()).filter(Boolean).slice(0,4);
+    if(!evidence.length)return{ok:false,code:'EVIDENCE_REQUIRED',message:'請提供至少一項可審核的棋盤依據'};
+    const alternatives=(args.alternatives||[]).map(v=>String(v).trim()).filter(Boolean).slice(0,3);
+    const decisionId=`decision_${uid()}`;
+    state.pendingDecision={id:decisionId,expectedVersion:state.version,player,row:args.row,col:args.col,summary,evidence,alternatives,confidence:Math.max(0,Math.min(1,Number(args.confidence)||0))};
+    state.highlights=[{row:args.row,col:args.col,kind:'best',label:'LLM'}];
+    const details=[`決策摘要：${state.pendingDecision.summary}`,`預定落子：${coord(args.row,args.col)}（${playerName(player)}）`,`信心：${Math.round(state.pendingDecision.confidence*100)}%`,`主要依據：\n• ${evidence.join('\n• ')}`];
+    if(alternatives.length)details.push(`候選方案：\n• ${alternatives.join('\n• ')}`);
+    addMessage('agent',details.join('\n'),`publish_agent_decision · BOARD v${state.version}`);drawBoard();
+    return{ok:true,decisionId,boardVersion:state.version,selectedMove:{row:args.row,col:args.col,coordinate:coord(args.row,args.col),player:playerName(player)},visibleDecisionSummary:state.pendingDecision.summary,nextStep:'Call place_stone with this decisionId and the same board version.'};
+  }
+
+  function placeStoneFromDecision(args){
+    const decision=state.pendingDecision;
+    if(!decision||decision.id!==args.decisionId)return{ok:false,code:'DECISION_REQUIRED',message:'落子前必須先呼叫 publish_agent_decision，並使用它回傳的 decisionId'};
+    if(decision.expectedVersion!==state.version||args.expectedVersion!==state.version)return{ok:false,code:'STALE_BOARD_VERSION',message:`決策建立於 BOARD v${decision.expectedVersion}，目前已是 v${state.version}`};
+    const player=args.player==='white'?WHITE:args.player==='black'?BLACK:EMPTY;
+    if(decision.player!==player||decision.row!==args.row||decision.col!==args.col)return{ok:false,code:'DECISION_MOVE_MISMATCH',message:'place_stone 必須與已公布的決策摘要完全一致'};
+    const result=placeStoneInternal(args.row,args.col,player,'webmcp-agent',args.expectedVersion);
+    if(result.ok){addMessage('agent',`已依公布的決策落在 ${result.move.coordinate}。棋盤已更新為 BOARD v${result.boardVersion}。`,'place_stone');state.pendingDecision=null}
+    return{...result,decisionId:args.decisionId};
+  }
+
+  defineTool({name:'get_board_state',kind:'read',description:'Read the authoritative live 15×15 Gomoku board before analyzing or planning. Call this first and use the returned boardVersion for every later tool call.',annotations:{readOnlyHint:true},inputSchema:{type:'object',properties:{includeHistory:{type:'boolean',description:'Include the move history when it helps explain the position.'}},additionalProperties:false}},async(args)=>({ok:true,size:SIZE,coordinateSystem:'Columns A-H and J-P (I is omitted); row 0 is displayed as 15 and row 14 as 1.',boardVersion:state.version,turn:state.turn===BLACK?'black':'white',status:state.status,winner:state.winner?(state.winner===BLACK?'black':'white'):null,lastMove:state.lastMove?{...state.lastMove,coordinate:coord(state.lastMove.row,state.lastMove.col)}:null,board:state.board.map(row=>row.map(v=>v===BLACK?'B':v===WHITE?'W':'.').join('')),history:args.includeHistory?state.history.map(m=>({...m,player:m.player===BLACK?'black':'white',coordinate:coord(m.row,m.col)})):undefined,agentWorkflow:['Analyze the returned board with the language model.','Use highlight_cells or draw_variation for visible analysis when useful.','Before any move, call publish_agent_decision with a concise decision summary and evidence.','Call place_stone with the returned decisionId and unchanged boardVersion.']}));
+
+  defineTool({name:'highlight_cells',kind:'draft',description:'Show the language model’s key threats or candidate moves on the board without changing any stones.',inputSchema:{type:'object',required:['cells'],properties:{cells:{type:'array',maxItems:12,items:{type:'object',required:['row','col','kind'],properties:{row:{type:'integer',minimum:0,maximum:14},col:{type:'integer',minimum:0,maximum:14},kind:{type:'string',enum:['danger','best','variation']},label:{type:'string',maxLength:4}},additionalProperties:false}}},additionalProperties:false}},async(args)=>{state.highlights=(args.cells||[]).filter(c=>Number.isInteger(c.row)&&Number.isInteger(c.col)&&c.row>=0&&c.row<SIZE&&c.col>=0&&c.col<SIZE).slice(0,12);drawBoard();return{ok:true,boardVersion:state.version,highlighted:state.highlights.length}});
+
+  defineTool({name:'draw_variation',kind:'draft',description:'Overlay a hypothetical move sequence. The live stones are not changed.',inputSchema:{type:'object',required:['moves','expectedVersion'],properties:{expectedVersion:{type:'integer',minimum:0},moves:{type:'array',minItems:1,maxItems:8,items:{type:'object',required:['row','col','player'],properties:{row:{type:'integer',minimum:0,maximum:14},col:{type:'integer',minimum:0,maximum:14},player:{type:'string',enum:['black','white']}},additionalProperties:false}}},additionalProperties:false}},async(args)=>{if(args.expectedVersion!==state.version)return{ok:false,code:'STALE_BOARD_VERSION',message:`預期 BOARD v${args.expectedVersion}，目前已是 v${state.version}`};state.variation=(args.moves||[]).slice(0,8).map(m=>({...m,player:m.player==='white'?WHITE:BLACK}));drawBoard();return{ok:true,boardVersion:state.version,variationLength:state.variation.length}});
+
+  defineTool({name:'clear_analysis',kind:'draft',description:'Clear visible analysis markers and hypothetical variations without changing stones.',inputSchema:{type:'object',properties:{},additionalProperties:false}},async()=>{state.highlights=[];state.variation=[];drawBoard();return{ok:true,boardVersion:state.version}});
+
+  defineTool({name:'publish_agent_decision',kind:'trace',description:'Publish a concise, user-visible decision summary before placing a stone. Provide strategy, board evidence, alternatives, and confidence; do not reveal private chain-of-thought. Returns the decisionId required by place_stone.',inputSchema:{type:'object',required:['expectedVersion','player','row','col','summary','evidence','alternatives','confidence'],properties:{expectedVersion:{type:'integer',minimum:0},player:{type:'string',enum:['black','white']},row:{type:'integer',minimum:0,maximum:14},col:{type:'integer',minimum:0,maximum:14},summary:{type:'string',minLength:1,maxLength:240},evidence:{type:'array',minItems:1,maxItems:4,items:{type:'string',minLength:1,maxLength:180}},alternatives:{type:'array',maxItems:3,items:{type:'string',minLength:1,maxLength:180}},confidence:{type:'number',minimum:0,maximum:1}},additionalProperties:false}},async(args)=>publishAgentDecision(args));
+
+  defineTool({name:'place_stone',kind:'write',description:'Place the exact move already disclosed through publish_agent_decision. Requires its decisionId and the unchanged boardVersion; stale or mismatched moves are rejected.',inputSchema:{type:'object',required:['decisionId','row','col','player','expectedVersion'],properties:{decisionId:{type:'string',minLength:1},row:{type:'integer',minimum:0,maximum:14},col:{type:'integer',minimum:0,maximum:14},player:{type:'string',enum:['black','white']},expectedVersion:{type:'integer',minimum:0}},additionalProperties:false}},async(args)=>placeStoneFromDecision(args));
+
+  defineTool({name:'request_new_game',kind:'approval',description:'Request a new game. The existing position remains intact until human approval.',inputSchema:{type:'object',properties:{reason:{type:'string',maxLength:180}},additionalProperties:false}},async(args)=>showNewGameApproval(args.reason||'Agent 建議清空棋盤並建立新棋局'));
+
+  defineTool({name:'get_audit_log',kind:'read',description:'Read recent WebMCP calls, rejected stale actions, visible decision publications, and human approval decisions.',annotations:{readOnlyHint:true},inputSchema:{type:'object',properties:{limit:{type:'integer',minimum:1,maximum:50,default:20}},additionalProperties:false}},async(args)=>({ok:true,entries:state.audit.slice(0,args.limit||20),boardVersion:state.version}));
+
+  function renderTools(){
+    els.tools.innerHTML=`<div class="tool-summary runtime-summary"><header><code>${state.nativeMCP?'Native WebMCP active':'WebMCP unavailable in this browser'}</code><span class="tool-kind">${tools.size} tools</span></header><p>ChatGPT 外部模型直接呼叫頁面工具；頁面本身沒有模型、API Key 或後端推論。</p></div>`+
+    Array.from(tools.values()).map(t=>`<div class="tool-summary"><header><code>${escapeHtml(t.name)}</code><span class="tool-kind ${t.kind==='approval'?'approval':t.kind==='trace'?'trace':''}">${escapeHtml(t.kind)}</span></header><p>${escapeHtml(t.description)}</p></div>`).join('');
+  }
+
+  async function registerWebMCP(){
+    if(!document.modelContext||typeof document.modelContext.registerTool!=='function'){
+      state.nativeMCP=false;els.mcpStatus.textContent='WebMCP 不可用';els.runtimeLabel.textContent='Manual browser';els.mcpDot.classList.remove('native');renderTools();appendAudit('register_webmcp','browser','rejected','Native WebMCP API unavailable in this browser');return;
+    }
+    let registered=0;
+    for(const tool of tools.values()){
+      try{
+        const definition={name:tool.name,description:tool.description,inputSchema:tool.inputSchema,execute:async(input)=>invokeTool(tool.name,input,{source:'webmcp-agent'})};
+        if(tool.annotations)definition.annotations=tool.annotations;
+        const handle=await document.modelContext.registerTool(definition);
+        state.mcpRegistrations.push(handle);registered++;
+      }catch(error){appendAudit('register:'+tool.name,'browser','rejected',error?.message||String(error))}
+    }
+    state.nativeMCP=registered>0;els.mcpStatus.textContent=registered?`WebMCP · ${registered} tools`:'WebMCP 註冊失敗';els.runtimeLabel.textContent=registered?'Native WebMCP':'Unavailable';els.mcpDot.classList.toggle('native',registered>0);renderTools();appendAudit('register_webmcp','browser',registered?'success':'rejected',`${registered}/${tools.size} tools registered`);
+  }
+
+  function switchTab(name,{moveFocus=false}={}){
+    const tabs=$$('.tab');
+    tabs.forEach(t=>{
+      const selected=t.dataset.tab===name;
+      t.classList.toggle('active',selected);
+      t.setAttribute('aria-selected',String(selected));
+      t.tabIndex=selected?0:-1;
+      if(selected&&moveFocus)t.focus();
+    });
+    $$('.tab-pane').forEach(p=>{
+      const selected=p.id===name+'Pane';
+      p.classList.toggle('active',selected);
+      p.hidden=!selected;
+    });
+  }
+
+  function onTabKeydown(ev){
+    if(!['ArrowLeft','ArrowRight','Home','End'].includes(ev.key))return;
+    ev.preventDefault();
+    const tabs=$$('.tab');
+    const current=tabs.indexOf(ev.currentTarget);
+    const nextIndex=ev.key==='Home'?0:ev.key==='End'?tabs.length-1:(current+(ev.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+    switchTab(tabs[nextIndex].dataset.tab,{moveFocus:true});
+  }
+
+  function updateStatus(){
+    els.turnStone.classList.toggle('white',state.turn===WHITE);
+    if(state.status==='finished'){els.turnTitle.textContent=`${playerName(state.winner)}獲勝`;els.turnSubtitle.textContent='五連成立，棋局已鎖定'}
+    else if(state.status==='draw'){els.turnTitle.textContent='和棋';els.turnSubtitle.textContent='棋盤已滿'}
+    else{els.turnTitle.textContent=state.turn===BLACK?'輪到你：黑棋':'輪到 Agent：白棋';els.turnSubtitle.textContent=state.turn===BLACK?'點選交叉點落子':'等待 ChatGPT WebMCP 工具呼叫'}
+    els.gameMode.textContent=state.mode==='play'?'LLM 對戰':state.mode;
+    renderApproval();
+  }
+
+  function renderAll(){updateStatus();drawBoard();renderAudit();renderTools()}
+
+  async function copyPromptText(text,label){
+    let copied=false;
+    try{await navigator.clipboard.writeText(text);copied=true}catch{
+      const fallback=document.createElement('textarea');fallback.value=text;fallback.setAttribute('readonly','');fallback.style.position='fixed';fallback.style.opacity='0';document.body.appendChild(fallback);fallback.select();copied=document.execCommand('copy');fallback.remove();
+    }
+    els.promptCopyNote.textContent=copied?`已複製「${label}」提示詞。請把提示詞複製到 GPT 對話中來執行。`:`瀏覽器未允許自動複製「${label}」提示詞，請重新點擊並允許剪貼簿權限。`;
+    els.promptCopyNote.classList.add('show');
+    toast(copied?'提示詞已複製':'提示詞複製失敗');
+  }
+
+  $$('.prompt-action').forEach(button=>button.addEventListener('click',()=>copyPromptText(button.dataset.prompt,button.dataset.actionLabel)));
+  $$('.tab').forEach(t=>{t.addEventListener('click',()=>switchTab(t.dataset.tab));t.addEventListener('keydown',onTabKeydown)});
+  $('#newGameButton').addEventListener('click',startNewGame);
+  $('#clearAnalysis').addEventListener('click',()=>invokeTool('clear_analysis',{}, {source:'human-ui'}));
+  $('#approveApproval').addEventListener('click',approveRequest);$('#rejectApproval').addEventListener('click',rejectRequest);
+  els.canvas.addEventListener('click',onBoardClick);
+  els.canvas.addEventListener('keydown',onBoardKeydown);
+  els.canvas.addEventListener('focus',()=>{keyboardFocus=true;drawBoard()});
+  els.canvas.addEventListener('blur',()=>{keyboardFocus=false;drawBoard()});
+  window.addEventListener('resize',resizeCanvas,{passive:true});
+  if('ResizeObserver' in window)new ResizeObserver(resizeCanvas).observe(els.canvas);
+
+  window.gomokuWebMCP={
+    version:'2.0.0',listTools:()=>Array.from(tools.values()).map(({handler,...meta})=>meta),
+    callTool:(name,args)=>invokeTool(name,args,{source:'developer-console'}),
+    getState:()=>({boardVersion:state.version,turn:playerName(state.turn),status:state.status,board:cloneBoard(state.board)})
+  };
+
+  state.messages=[
+    {id:uid(),role:'agent',text:'你執黑先行。下一手後，請在 ChatGPT 對話中要求模型讀取棋盤、公布決策摘要並替白棋落子。',tool:'等待 WebMCP Agent'},
+    {id:uid(),role:'agent',text:'模型會依序呼叫 get_board_state → publish_agent_decision → place_stone。頁面只顯示可審核的策略、依據與候選方案，不顯示模型的私人推理內容。'}
+  ];
+  renderMessages();renderAudit();renderTools();resizeCanvas();updateStatus();
+  // Non-blocking progressive enhancement: register once, never poll or block page startup.
+  queueMicrotask(()=>registerWebMCP());
+  window.__GOMOKU_LAB_READY__=true;
+})();
+</script>
+</body>
+</html>
