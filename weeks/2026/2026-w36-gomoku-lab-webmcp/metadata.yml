@@ -1,0 +1,10 @@
+id: 2026-w36
+title: Gomoku Lab：用 WebMCP 與 ChatGPT 下五子棋
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 120
+status: preview
+published_at: 2026-09-03
+version: 0.1.0
+platform: webmcp-browser
+license: MIT

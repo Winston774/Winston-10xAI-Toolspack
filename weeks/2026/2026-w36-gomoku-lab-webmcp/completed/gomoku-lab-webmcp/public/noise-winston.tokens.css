@@ -1,0 +1,177 @@
+/* Noise Winston Design System v2.0.0 */
+:root {
+  color-scheme: light dark;
+
+  /* Primitives */
+  --nw-color-ivory: #f1efe7;
+  --nw-color-ink: #111111;
+  --nw-color-purple: #7432ff;
+  --nw-color-purple-dark: #5b20e6;
+  --nw-color-lime: #dff813;
+  --nw-color-white: #ffffff;
+  --nw-color-gray-100: #eae9e2;
+  --nw-color-gray-300: #c9c8c1;
+  --nw-color-gray-600: #6b6b68;
+  --nw-color-focus: #1877f2;
+  --nw-color-success: #18a76b;
+  --nw-color-warning: #d8b400;
+  --nw-color-error: #db1b1b;
+
+  --nw-color-dark-canvas: #0d0f12;
+  --nw-color-dark-surface: #16191e;
+  --nw-color-dark-surface-raised: #1d2128;
+  --nw-color-dark-surface-muted: #242933;
+  --nw-color-dark-border: #353b47;
+  --nw-color-dark-border-strong: #4a5261;
+  --nw-color-dark-text: #f4f1e8;
+  --nw-color-dark-text-muted: #b4b5b9;
+  --nw-color-dark-purple: #8550ff;
+  --nw-color-dark-purple-hover: #7432e8;
+  --nw-color-dark-purple-text: #b092ff;
+  --nw-color-dark-focus: #5da9ff;
+  --nw-color-dark-success: #46d6a0;
+  --nw-color-dark-warning: #f4c95d;
+  --nw-color-dark-error: #ff7272;
+
+  /* Semantic light mode */
+  --nw-canvas: var(--nw-color-ivory);
+  --nw-surface: var(--nw-color-white);
+  --nw-surface-raised: var(--nw-color-white);
+  --nw-surface-grouped: var(--nw-color-gray-100);
+  --nw-inverse: var(--nw-color-ink);
+  --nw-border: var(--nw-color-gray-300);
+  --nw-border-strong: var(--nw-color-gray-600);
+  --nw-text: var(--nw-color-ink);
+  --nw-text-muted: var(--nw-color-gray-600);
+  --nw-action: var(--nw-color-purple);
+  --nw-action-hover: var(--nw-color-purple-dark);
+  --nw-action-text: var(--nw-color-purple);
+  --nw-action-foreground: var(--nw-color-white);
+  --nw-result: var(--nw-color-lime);
+  --nw-result-foreground: var(--nw-color-ink);
+  --nw-focus: var(--nw-color-focus);
+  --nw-success: var(--nw-color-success);
+  --nw-warning: var(--nw-color-warning);
+  --nw-error: var(--nw-color-error);
+
+  /* Typography */
+  --nw-font-display: "Italiana", Georgia, serif;
+  --nw-font-body: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --nw-font-signal: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --nw-font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --nw-type-caption: 0.75rem;
+  --nw-type-body-sm: 0.875rem;
+  --nw-type-body: 1rem;
+  --nw-type-subheading: 1.25rem;
+  --nw-type-heading: 2.5rem;
+  --nw-type-display: 4.5rem;
+
+  /* Layout */
+  --nw-space-0: 0;
+  --nw-space-1: 0.125rem;
+  --nw-space-2: 0.25rem;
+  --nw-space-3: 0.5rem;
+  --nw-space-4: 0.75rem;
+  --nw-space-5: 1rem;
+  --nw-space-6: 1.5rem;
+  --nw-space-7: 2rem;
+  --nw-space-8: 3rem;
+  --nw-space-9: 4rem;
+  --nw-space-10: 6rem;
+  --nw-layout-max: 80rem;
+  --nw-content-measure: 72ch;
+  --nw-section-gap: 4.5rem;
+  --nw-card-padding: 1.5rem;
+  --nw-element-gap: 0.75rem;
+
+  /* Shape */
+  --nw-radius-navigation: 0;
+  --nw-radius-card: 0.75rem;
+  --nw-radius-control: 0.25rem;
+  --nw-radius-badge: 0.25rem;
+  --nw-radius-media: 0.5rem;
+  --nw-radius-pill: 999px;
+
+  /* Elevation and motion */
+  --nw-shadow-flat: none;
+  --nw-shadow-raised: 0 8px 24px rgb(17 17 17 / 0.12);
+  --nw-shadow-overlay: 0 24px 64px rgb(17 17 17 / 0.24);
+  --nw-motion-fast: 120ms;
+  --nw-motion-standard: 180ms;
+  --nw-motion-slow: 280ms;
+  --nw-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-nw-theme="light"]) {
+    --nw-canvas: var(--nw-color-dark-canvas);
+    --nw-surface: var(--nw-color-dark-surface);
+    --nw-surface-raised: var(--nw-color-dark-surface-raised);
+    --nw-surface-grouped: var(--nw-color-dark-surface-muted);
+    --nw-inverse: var(--nw-color-dark-text);
+    --nw-border: var(--nw-color-dark-border);
+    --nw-border-strong: var(--nw-color-dark-border-strong);
+    --nw-text: var(--nw-color-dark-text);
+    --nw-text-muted: var(--nw-color-dark-text-muted);
+    --nw-action: var(--nw-color-dark-purple);
+    --nw-action-hover: var(--nw-color-dark-purple-hover);
+    --nw-action-text: var(--nw-color-dark-purple-text);
+    --nw-action-foreground: var(--nw-color-dark-text);
+    --nw-focus: var(--nw-color-dark-focus);
+    --nw-success: var(--nw-color-dark-success);
+    --nw-warning: var(--nw-color-dark-warning);
+    --nw-error: var(--nw-color-dark-error);
+  }
+}
+
+:root[data-nw-theme="dark"],
+[data-nw-theme="dark"] {
+  color-scheme: dark;
+  --nw-canvas: var(--nw-color-dark-canvas);
+  --nw-surface: var(--nw-color-dark-surface);
+  --nw-surface-raised: var(--nw-color-dark-surface-raised);
+  --nw-surface-grouped: var(--nw-color-dark-surface-muted);
+  --nw-inverse: var(--nw-color-dark-text);
+  --nw-border: var(--nw-color-dark-border);
+  --nw-border-strong: var(--nw-color-dark-border-strong);
+  --nw-text: var(--nw-color-dark-text);
+  --nw-text-muted: var(--nw-color-dark-text-muted);
+  --nw-action: var(--nw-color-dark-purple);
+  --nw-action-hover: var(--nw-color-dark-purple-hover);
+  --nw-action-text: var(--nw-color-dark-purple-text);
+  --nw-action-foreground: var(--nw-color-dark-text);
+  --nw-focus: var(--nw-color-dark-focus);
+  --nw-success: var(--nw-color-dark-success);
+  --nw-warning: var(--nw-color-dark-warning);
+  --nw-error: var(--nw-color-dark-error);
+}
+
+:root[data-nw-theme="light"],
+[data-nw-theme="light"] {
+  color-scheme: light;
+  --nw-canvas: var(--nw-color-ivory);
+  --nw-surface: var(--nw-color-white);
+  --nw-surface-raised: var(--nw-color-white);
+  --nw-surface-grouped: var(--nw-color-gray-100);
+  --nw-inverse: var(--nw-color-ink);
+  --nw-border: var(--nw-color-gray-300);
+  --nw-border-strong: var(--nw-color-gray-600);
+  --nw-text: var(--nw-color-ink);
+  --nw-text-muted: var(--nw-color-gray-600);
+  --nw-action: var(--nw-color-purple);
+  --nw-action-hover: var(--nw-color-purple-dark);
+  --nw-action-text: var(--nw-color-purple);
+  --nw-action-foreground: var(--nw-color-white);
+  --nw-focus: var(--nw-color-focus);
+  --nw-success: var(--nw-color-success);
+  --nw-warning: var(--nw-color-warning);
+  --nw-error: var(--nw-color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nw-motion-fast: 0ms;
+    --nw-motion-standard: 0ms;
+    --nw-motion-slow: 0ms;
+  }
+}
