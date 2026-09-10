@@ -1,0 +1,26 @@
+{
+  "name": "short-tiktok-raw",
+  "label": "Short - TikTok / raw",
+  "canvas": {
+    "aspect_ratio": "9:16",
+    "width": 1080,
+    "height": 1920
+  },
+  "graphics": {
+    "primary": "hook-card-then-raw",
+    "placement": "opening-only",
+    "motion": "fast-hook",
+    "thumbnail": "skip"
+  },
+  "captions": {
+    "enabled": true,
+    "placement": "low-under-face",
+    "lock": false,
+    "style": "tiktok-raw-style"
+  },
+  "export": {
+    "container": "mp4",
+    "video_codec": "h264",
+    "audio_codec": "aac"
+  }
+}

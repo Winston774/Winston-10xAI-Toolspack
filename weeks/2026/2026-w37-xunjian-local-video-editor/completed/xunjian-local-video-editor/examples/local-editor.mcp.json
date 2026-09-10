@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "local-editor": {
+      "command": "C:\\path\\to\\xunjian-local-video-editor\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "local_editor", "mcp", "--url", "http://127.0.0.1:8321"]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "short-explainer",
+  "label": "Short - explainer",
+  "canvas": {
+    "aspect_ratio": "9:16",
+    "width": 1080,
+    "height": 1920
+  },
+  "graphics": {
+    "primary": "top-half-cards",
+    "placement": "top-half",
+    "motion": "snappy-card-reveal",
+    "thumbnail": "skip-by-default"
+  },
+  "captions": {
+    "enabled": true,
+    "placement": "centered",
+    "lock": true,
+    "style": "caption-style"
+  },
+  "export": {
+    "container": "mp4",
+    "video_codec": "h264",
+    "audio_codec": "aac"
+  }
+}

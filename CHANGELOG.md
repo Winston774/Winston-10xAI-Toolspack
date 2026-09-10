@@ -6,6 +6,13 @@
 
 - 尚無。
 
+## 2026-W37 v0.2.0 Preview — 2026-09-10
+
+- 發布迅剪 Local Studio：本機影片剪輯與 Agent MCP 工作台 Preview。
+- 加入本機專案、時間軸、字幕、提案、版本防衝突、復原與 25 個 stdio MCP 工具的學員文件。
+- 以 Git 追蹤來源 allowlist 打包，排除 `.env`、模型、媒體、SQLite、快取、驗證產物與私人專案資料。
+- 加入 MIT、第三方通知、外部傳輸、內容權利、MCP 操作、驗證證據與 Preview 限制；把長片連續聲畫、正式 MP4 與真實 MCP 宿主驗收保留為 Stable gate。
+
 ## 2026-W36 v0.1.0 Preview — 2026-09-03
 
 - 發布 Gomoku Lab WebMCP 人機五子棋 Preview。

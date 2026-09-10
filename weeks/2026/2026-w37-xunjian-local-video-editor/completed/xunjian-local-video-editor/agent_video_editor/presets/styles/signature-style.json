@@ -1,0 +1,9 @@
+{
+  "name": "signature-style",
+  "font_family": "Inter",
+  "background": "#111111",
+  "foreground": "#f5f5f5",
+  "accent": "#0f7cff",
+  "radius": 8,
+  "notes": "Default restrained style for reusable edit graphics."
+}

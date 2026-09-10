@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+outputs/*
+!outputs/.gitkeep
+projects/*
+!projects/.gitkeep
+references/*.vtt
+references/*.srt
+.local-editor/
+.editor-test-data/
+.impeccable/mocks/
+artifacts/
+output/

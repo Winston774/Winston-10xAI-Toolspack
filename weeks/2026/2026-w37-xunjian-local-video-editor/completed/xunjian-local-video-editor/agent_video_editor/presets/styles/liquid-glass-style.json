@@ -1,0 +1,8 @@
+{
+  "name": "liquid-glass-style",
+  "material": "frosted-glass",
+  "blur_px": 20,
+  "stroke": "#ffffff33",
+  "shadow": "#00000055",
+  "notes": "Long-form overlay style for zoomed UI callouts."
+}

@@ -1,0 +1,31 @@
+[project]
+name = "seedance-kie-client"
+version = "0.2.0"
+description = "Small video tooling workspace with Seedance generation and an Agent Video Editor pipeline."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+seedance = "seedance.cli:main"
+agent-video = "agent_video_editor.cli:main"
+local-editor = "local_editor.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["seedance*", "agent_video_editor*", "local_editor*"]
+
+[tool.setuptools.package-data]
+agent_video_editor = [
+  "pipeline.json",
+  "presets/formats/*.json",
+  "presets/styles/*.json",
+]
+local_editor = ["web/*.html", "web/*.css", "web/*.js"]
+
+[project.optional-dependencies]
+subtitles = ["youtube-transcript-api>=1.2.4"]
+transcription = ["whisperx==3.8.6"]
+local-asr = ["faster-whisper>=1.1,<2", "opencc-python-reimplemented==0.1.7"]

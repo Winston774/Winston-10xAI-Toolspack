@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "engine": {
+    "name": "HyperFrames toolkit",
+    "mode": "vendored-compatible",
+    "update_policy": "Update through this lock file and presets, not by ad-hoc edits in generated job folders."
+  },
+  "core_editing_skills": [
+    "rough-cut",
+    "graphics-plan",
+    "embedded-captions",
+    "background-music",
+    "thumbnail-generator",
+    "to-premiere",
+    "finalize",
+    "prune"
+  ],
+  "locked_presets": [
+    "signature-style",
+    "caption-style",
+    "tiktok-raw-style",
+    "liquid-glass-style"
+  ],
+  "format_presets": [
+    "short-explainer",
+    "short-tiktok-raw",
+    "long-form-youtube"
+  ]
+}
