@@ -1,0 +1,47 @@
+{
+  "name": "agent-video-editor",
+  "steps": [
+    {
+      "id": "intake",
+      "label": "Intake",
+      "skill": "copy",
+      "description": "Copy raw clip into projects/<job>/raw."
+    },
+    {
+      "id": "rough_cut",
+      "label": "Rough cut",
+      "skill": "rough-cut",
+      "description": "Use WhisperX and FFmpeg to remove filler, polish audio, and draft the script."
+    },
+    {
+      "id": "graphics",
+      "label": "Graphics",
+      "skill": "graphics-plan",
+      "description": "Plan beats and produce a HyperFrames-compatible graphics composition."
+    },
+    {
+      "id": "second_pass",
+      "label": "Second pass",
+      "skill": "manual-review",
+      "description": "Human review and incremental re-compose."
+    },
+    {
+      "id": "captions",
+      "label": "Captions",
+      "skill": "embedded-captions",
+      "description": "Burn short-form captions using the format preset."
+    },
+    {
+      "id": "background_music",
+      "label": "Background music",
+      "skill": "background-music",
+      "description": "Optional sidechain ducking and re-normalization."
+    },
+    {
+      "id": "export",
+      "label": "Export",
+      "skill": "finalize",
+      "description": "Promote projects/<job>/exports/<job>.final.mp4 to outputs/<job>.final.mp4."
+    }
+  ]
+}

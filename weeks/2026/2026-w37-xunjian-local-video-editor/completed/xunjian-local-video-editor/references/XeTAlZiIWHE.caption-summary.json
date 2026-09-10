@@ -1,0 +1,33 @@
+{
+  "video_id": "XeTAlZiIWHE",
+  "source": "youtube_auto_captions",
+  "languages_requested": [
+    "en"
+  ],
+  "caption_tracks": [
+    {
+      "languageCode": "en",
+      "name": "英文 (自動產生)",
+      "kind": "asr",
+      "isTranslatable": true
+    }
+  ],
+  "segments": 642,
+  "characters": 23967,
+  "keyword_hits": {
+    "rough_cut": 10,
+    "graphics": 32,
+    "captions": 27,
+    "music": 16,
+    "presets": 11,
+    "export": 11
+  },
+  "implementation_notes": [
+    "Treat the editor as a project folder that Claude Code can operate through repeatable skills.",
+    "Every job follows the same seven-step path from raw intake to final export.",
+    "Only the graphics and captions presets change materially between short and long formats.",
+    "WhisperX, FFmpeg, HyperFrames, and optional yt-dlp/youtube-transcript-api are external tools.",
+    "Store full transcripts only when the user owns the rights or explicitly needs a local working copy."
+  ],
+  "copyright_note": "Full verbatim transcript intentionally not stored by this command."
+}

@@ -1,0 +1,9 @@
+{
+  "name": "caption-style",
+  "font_family": "Inter",
+  "font_weight": 800,
+  "case": "sentence",
+  "max_lines": 2,
+  "position": "center",
+  "safe_margin_px": 96
+}

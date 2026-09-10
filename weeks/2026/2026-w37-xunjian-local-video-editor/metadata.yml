@@ -1,0 +1,10 @@
+id: 2026-w37
+title: 迅剪 Local Studio：本機影片剪輯與 Agent MCP 工作台
+type: local-ai-tool
+difficulty: advanced
+estimated_minutes: 180
+status: preview
+published_at: 2026-09-10
+version: 0.2.0
+platform: windows-localhost
+license: MIT

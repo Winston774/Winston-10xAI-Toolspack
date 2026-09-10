@@ -1,0 +1,307 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-07T08:15:51.265Z",
+  "title": "Design System: 拾剪 Local Studio",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "薄荷操作"
+      },
+      "primary-ink": {
+        "role": "primary",
+        "displayName": "薄荷上的深墨字"
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "薄荷懸停"
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "石墨底"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "面板石墨"
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "抬高面層"
+      },
+      "control": {
+        "role": "neutral",
+        "displayName": "控制項深灰"
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "分隔細線"
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "主要文字"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "次要文字"
+      },
+      "subtle": {
+        "role": "neutral",
+        "displayName": "輕提示文字"
+      },
+      "video": {
+        "role": "secondary",
+        "displayName": "影片語意紫"
+      },
+      "video-soft": {
+        "role": "secondary",
+        "displayName": "影片柔和紫"
+      },
+      "audio": {
+        "role": "secondary",
+        "displayName": "音訊語意綠"
+      },
+      "caption": {
+        "role": "secondary",
+        "displayName": "字幕語意琥珀"
+      },
+      "error": {
+        "role": "tertiary",
+        "displayName": "錯誤文字"
+      },
+      "button": {
+        "role": "neutral",
+        "displayName": "一般按鈕"
+      },
+      "button-hover": {
+        "role": "neutral",
+        "displayName": "一般按鈕懸停"
+      },
+      "video-fill": {
+        "role": "secondary",
+        "displayName": "影片片段底"
+      },
+      "video-border": {
+        "role": "secondary",
+        "displayName": "影片片段邊"
+      },
+      "audio-fill": {
+        "role": "secondary",
+        "displayName": "音訊片段底"
+      },
+      "audio-border": {
+        "role": "secondary",
+        "displayName": "音訊片段邊"
+      },
+      "caption-fill": {
+        "role": "secondary",
+        "displayName": "字幕片段底"
+      },
+      "caption-border": {
+        "role": "secondary",
+        "displayName": "字幕片段邊"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "專案首頁主標",
+        "purpose": "僅首頁介紹區；工具面板不沿用此字級。"
+      },
+      "title": {
+        "displayName": "一般標題",
+        "purpose": "一般 h2 與專案列表標題。"
+      },
+      "panel-title": {
+        "displayName": "面板標題",
+        "purpose": "工具、屬性與字幕面板。"
+      },
+      "body": {
+        "displayName": "繁中內文",
+        "purpose": "介面與逐字稿內容。"
+      },
+      "label": {
+        "displayName": "小型標籤",
+        "purpose": "欄位名稱及輔助文字。"
+      },
+      "button": {
+        "displayName": "按鈕文字",
+        "purpose": "一般與 ghost 操作的文字。"
+      },
+      "button-primary": {
+        "displayName": "主要按鈕文字",
+        "purpose": "主要動作使用字重 650。"
+      },
+      "timecode": {
+        "displayName": "等寬時間碼",
+        "purpose": "來源時間、播放時間與程式片段。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "dialog",
+        "value": "0 18px 65px #0006",
+        "purpose": "對話框浮出常駐工作區。"
+      },
+      {
+        "name": "notification",
+        "value": "0 7px 20px #0003",
+        "purpose": "底部通知。"
+      },
+      {
+        "name": "inspector-drawer",
+        "value": "-6px 8px 22px #0003",
+        "purpose": "窄畫面屬性浮出面板。"
+      },
+      {
+        "name": "title-text",
+        "value": "1px 2px 3px #0009",
+        "purpose": "預覽影片上的文字 text-shadow。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-background",
+        "value": "background .15s ease",
+        "purpose": "按鈕 hover 的背景轉場。"
+      },
+      {
+        "name": "toast-enter",
+        "value": ".18s ease-out",
+        "purpose": "通知從 translateY(8px)/opacity .2 到原位/opacity 1。"
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation:none;transition:none;scroll-behavior:auto",
+        "purpose": "prefers-reduced-motion: reduce 時關閉非必要動畫。"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-desktop-min",
+        "value": "1700px"
+      },
+      {
+        "name": "compact-desktop-max",
+        "value": "1250px"
+      },
+      {
+        "name": "inspector-drawer-max",
+        "value": "1080px"
+      },
+      {
+        "name": "stacked-workspace-max",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "主要動作",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "建立、分析、套用與匯出的薄荷主要按鈕。",
+      "html": "<button class=\"ds-button-primary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg>開始分析</button>",
+      "css": ".ds-button-primary{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:7px 13px;border:1px solid #444851;border-radius:5px;background:#30333a;color:var(--text,#eceef1);font:550 12px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif);white-space:nowrap;transition:background .15s ease;cursor:pointer}.ds-button-primary:disabled{opacity:.4;cursor:not-allowed}.ds-button-primary:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}.ds-button-primary:hover:not(:disabled){background:#3c4149;color:#fff}@media(prefers-reduced-motion:reduce){.ds-button-primary{transition:none}}.ds-button-primary{background:var(--accent,#85dfc8);border-color:var(--accent,#85dfc8);color:var(--accent-ink,#122c27);font-weight:650}.ds-button-primary:hover:not(:disabled){background:#a7ebd9;border-color:#a7ebd9;color:#0b2520}"
+    },
+    {
+      "name": "一般按鈕",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "次要操作，維持深灰底與細邊界。",
+      "html": "<button class=\"ds-button-secondary\">匯入字幕</button>",
+      "css": ".ds-button-secondary{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:7px 13px;border:1px solid #444851;border-radius:5px;background:#30333a;color:var(--text,#eceef1);font:550 12px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif);white-space:nowrap;transition:background .15s ease;cursor:pointer}.ds-button-secondary:disabled{opacity:.4;cursor:not-allowed}.ds-button-secondary:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}.ds-button-secondary:hover:not(:disabled){background:#3c4149;color:#fff}@media(prefers-reduced-motion:reduce){.ds-button-secondary{transition:none}}"
+    },
+    {
+      "name": "Ghost 按鈕",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "MCP 與輔助入口使用透明背景。",
+      "html": "<button class=\"ds-button-ghost\">MCP</button>",
+      "css": ".ds-button-ghost{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:7px 13px;border:1px solid #444851;border-radius:5px;background:#30333a;color:var(--text,#eceef1);font:550 12px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif);white-space:nowrap;transition:background .15s ease;cursor:pointer}.ds-button-ghost:disabled{opacity:.4;cursor:not-allowed}.ds-button-ghost:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}.ds-button-ghost:hover:not(:disabled){background:#3c4149;color:#fff}@media(prefers-reduced-motion:reduce){.ds-button-ghost{transition:none}}.ds-button-ghost{background:transparent;border-color:var(--line,#34373d);color:var(--muted,#a5abb4)}"
+    },
+    {
+      "name": "帶標籤的欄位",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "專案與屬性表單使用可見 label、深灰底與薄荷焦點。",
+      "html": "<label class=\"ds-field\"><span>專案名稱</span><input value=\"未命名專案\" maxlength=\"200\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;color:#b8bec8;font:11px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif)}.ds-field input{min-width:0;width:100%;border:1px solid #41454d;background:var(--raised,#25282d);color:#e2e6eb;border-radius:4px;padding:8px 10px;font:12px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif);outline:none}.ds-field input:focus{border-color:var(--accent,#85dfc8)}.ds-field input:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}"
+    },
+    {
+      "name": "工具導覽",
+      "kind": "nav",
+      "refersTo": "rail-navigation",
+      "description": "圖示、文字與選取指示線共同標示目前工具。",
+      "html": "<nav class=\"ds-rail\" aria-label=\"剪輯工具\"><button class=\"ds-rail-button ds-active\" aria-pressed=\"true\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"6\" cy=\"6\" r=\"3\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><path d=\"m8.5 7.5 12 12m-12-3 12-12\"/></svg><span>智能剪口播</span></button></nav>",
+      "css": ".ds-rail{width:66px;background:var(--surface,#1c1e22);display:flex;flex-direction:column;align-items:stretch;padding:10px 5px;gap:5px}.ds-rail-button{height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#aeb4bf;font:10px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif);border:0;border-radius:5px;background:none;cursor:pointer;position:relative}.ds-rail-button svg{stroke-width:1.5;flex-shrink:0}.ds-rail-button.ds-active{background:#29403b;color:#a5efdc}.ds-rail-button.ds-active:before{position:absolute;left:-5px;top:14px;width:2px;height:27px;background:var(--accent,#85dfc8);content:\"\"}.ds-rail-button:hover{background:#2b2e34}.ds-rail-button:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}"
+    },
+    {
+      "name": "狀態標記",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "本機分析與 MCP 的短文字標記；無額外互動。",
+      "html": "<span class=\"ds-badge\">本機分析</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;white-space:nowrap;color:var(--muted,#a5abb4);border:1px solid var(--line,#34373d);border-radius:4px;padding:2px 5px;font:10px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif)}"
+    },
+    {
+      "name": "素材卡",
+      "kind": "card",
+      "refersTo": "media-card",
+      "description": "本機縮圖、素材名稱與加入時間軸按鈕。此展示沿用無縮圖時的 SVG 佔位。",
+      "html": "<article class=\"ds-media-card\"><button class=\"ds-media-preview\" aria-label=\"預覽素材\"><svg width=\"30\" height=\"30\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M7 3v18M17 3v18M3 8h4m-4 8h4M17 8h4m-4 8h4\"/></svg><span class=\"ds-media-length\">00:10.0</span></button><div class=\"ds-media-footer\"><span>口播測試素材.mp4</span><button class=\"ds-add-media\" aria-label=\"加入時間軸\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg></button></div></article>",
+      "css": ".ds-media-card{border-radius:4px;overflow:hidden;min-width:0;font:11px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif)}.ds-media-preview{height:78px;width:100%;background:#30303b;border:0;padding:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;color:#aba0c2;cursor:pointer}.ds-media-length{position:absolute;bottom:4px;right:4px;background:#111b;border-radius:2px;font:10px var(--mono,Consolas,\"SFMono-Regular\",monospace);padding:2px 3px;color:#fff}.ds-media-footer{display:flex;align-items:center;gap:4px;padding:7px 0;font-size:11px;color:#c1c7d0}.ds-media-footer>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ds-add-media{display:grid;place-items:center;width:19px;height:19px;color:#d0d8de;background:#353c41;border:0;border-radius:4px;cursor:pointer}.ds-add-media:hover{background:var(--accent,#85dfc8);color:var(--accent-ink,#122c27)}.ds-media-preview:hover{color:#fff}.ds-media-preview:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}.ds-add-media:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}"
+    },
+    {
+      "name": "影片時間軸片段",
+      "kind": "custom",
+      "refersTo": "timeline-video",
+      "description": "主影片片段使用紫色底、選取外框及兩端修剪手把。",
+      "html": "<button class=\"ds-clip ds-selected\" aria-label=\"口播素材，長度十秒\"><span class=\"ds-trim ds-start\"></span><span class=\"ds-clip-name\">口播素材.mp4</span><span class=\"ds-clip-duration\">10.0 s</span><span class=\"ds-trim ds-end\"></span></button>",
+      "css": ".ds-clip{position:relative;display:block;height:35px;border:1px solid #8a79ba;border-radius:4px;padding:4px 6px;text-align:left;color:#efeafa;background:#4c4068;overflow:hidden;touch-action:none;cursor:grab;user-select:none;min-width:4px;font:10px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif)}.ds-clip:hover{filter:brightness(1.13)}.ds-clip.ds-selected{outline:2px solid var(--accent,#85dfc8);outline-offset:0;z-index:3}.ds-clip-name{display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:10px;position:relative;z-index:2;overflow:hidden;text-overflow:ellipsis;max-width:100%}.ds-clip-duration{display:block;color:#c4badb;font:9px var(--mono,Consolas,\"SFMono-Regular\",monospace);margin:2px 0}.ds-trim{position:absolute;top:0;bottom:0;width:5px;z-index:5;cursor:ew-resize;background:var(--accent,#85dfc8)}.ds-start{left:0}.ds-end{right:0}.ds-clip:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}"
+    },
+    {
+      "name": "口播剪輯候選",
+      "kind": "custom",
+      "description": "來源時間、原因與明確勾選，保持可檢查的剪輯決策。",
+      "html": "<article class=\"ds-candidate\"><label><input type=\"checkbox\" checked><span><b class=\"ds-kind ds-silence\">靜音</b><span class=\"ds-timecode\">00:01.1 — 00:01.9</span><small>停頓片段，保留自然銜接。</small></span></label></article>",
+      "css": ".ds-candidate{display:flex;gap:5px;align-items:center;padding:11px 0;border-top:1px solid #30343a;font:13px/1.55 var(--font,\"Segoe UI\",\"Microsoft JhengHei\",\"PingFang TC\",system-ui,sans-serif)}.ds-candidate label{display:flex;align-items:flex-start;gap:9px;flex:1;min-width:0}.ds-candidate input{appearance:auto;accent-color:var(--accent,#85dfc8);width:14px;height:14px;margin-top:5px;flex:0 0 auto}.ds-candidate label>span{flex:1;min-width:0}.ds-candidate small{display:block;font-size:11px;color:var(--muted,#a5abb4);line-height:1.6;margin-top:5px;overflow-wrap:anywhere}.ds-kind{font-size:10px;font-weight:600;color:#dbc394;background:#423a2c;border-radius:3px;padding:2px 4px;margin-right:6px}.ds-kind.ds-silence{color:#b7b2d8;background:#373449}.ds-timecode{font-family:var(--mono,Consolas,\"SFMono-Regular\",monospace);font-size:10px;color:var(--muted,#a5abb4);font-variant-numeric:tabular-nums}.ds-candidate input:focus-visible{outline:2px solid var(--accent,#85dfc8);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "石墨剪輯桌",
+    "overview": "石墨色面板包住影片、逐字稿與時間軸，薄荷色標出可執行動作與選取狀態。密集但分區清楚的控制項、系統中文字體與細邊界，構成拾剪既有的本地工作桌。\n\n本文件從已建成的 HTML、CSS 與 JavaScript 擷取；描述沿用已核准 A＋B 方向，不新增視覺世界。資料來源為 local_editor/web/style.css、index.html、app.js、panels.js，並參照 PRODUCT.md 與 docs/editor-surface.md。本次未觀看實際截圖、未取瀏覽器 computed styles，不構成視覺驗收。",
+    "keyCharacteristics": [
+      "石墨面層、薄荷操作色與可識別的軌道色。",
+      "小字級、短圓角、清楚的表單與工具列。",
+      "本機影片與真實字幕資料構成主要內容。"
+    ],
+    "rules": [
+      {
+        "name": "The Action Accent Rule",
+        "body": "薄荷色用於主要動作、選取、播放頭與成功／連線狀態；影片、音訊與字幕以各自軌道色保持辨識。",
+        "section": "colors"
+      },
+      {
+        "name": "The Numeric Alignment Rule",
+        "body": "時間碼與程式片段使用等寬字體；候選時長使用 tabular-nums，避免數字更新造成橫向跳動。",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Surface Rule",
+        "body": "常駐面板以色階與細線分隔；陰影限於對話框、浮出屬性與通知。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do 沿用現有石墨面層、薄荷操作色與三類軌道配色。",
+      "Do 用語意按鈕、label、原生 dialog 與可見焦點；動態結果同時提供文字。",
+      "Do 讓長素材名稱省略、字幕換行，時間軸可水平捲動。",
+      "Do 從本機素材取得縮圖與波形；示例與合成測試資料需明確標示。"
+    ],
+    "donts": [
+      "Don't 將專案首頁的大標題字級套用至剪輯工具面板。",
+      "Don't 用裝飾性漸層、玻璃模糊或通篇投影取代現有平面分區。",
+      "Don't 僅靠顏色表達選取、錯誤或工作完成。",
+      "Don't 把這次工作台配置提升為所有未來頁面的固定欄寬。"
+    ]
+  }
+}

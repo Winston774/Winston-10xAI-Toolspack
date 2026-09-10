@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="迅剪，本機影片剪輯、智能剪口播、繁體中文字幕與 Agent 工作台。"
+    />
+    <title>迅剪 · 本地剪輯工作台</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/noise-winston.tokens.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <!-- THESIS: A local editing desk where transcript decisions become reversible cuts.
+OWN-WORLD: Noise Winston dark surfaces, purple actions, lime completion, violet video, jade audio, amber captions; compact system type.
+STORY: Import, inspect speech suggestions, apply a versioned cut, correct captions, export a real file.
+FIRST VIEWPORT: Top project bar, left media/transcript, central preview, right properties, bottom timeline.
+FORM: User-approved A+B classic editing desk with transcript mode; explicit reference, no randomized staging. -->
+    <div id="app">
+      <div class="boot">
+        <div class="brand"><b>迅剪</b></div>
+        <p>正在連線到本機剪輯服務…</p>
+      </div>
+    </div>
+    <div id="toasts" aria-live="polite" aria-atomic="true"></div>
+    <dialog id="dialog"></dialog>
+    <input
+      id="media-input"
+      type="file"
+      accept="video/*,audio/*,image/png,image/jpeg,image/webp"
+      multiple
+      hidden
+    />
+    <input id="caption-input" type="file" accept=".srt,.vtt" hidden />
+  </body>
+</html>

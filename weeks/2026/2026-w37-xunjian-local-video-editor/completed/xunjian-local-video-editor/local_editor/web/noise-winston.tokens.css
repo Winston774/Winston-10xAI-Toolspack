@@ -1,0 +1,86 @@
+/* Noise Winston Design System v2.0.0 — dark operate-surface adapter.
+   Color ownership lives here; style.css keeps the existing component aliases.
+   The fixed-dark editor and media/track color exceptions are documented in DESIGN.md. */
+:root {
+  color-scheme: dark;
+  --nw-canvas: #0d0f12;
+  --nw-surface: #16191e;
+  --nw-surface-raised: #1d2128;
+  --nw-surface-grouped: #242933;
+  --nw-border: #353b47;
+  --nw-border-strong: #4a5261;
+  --nw-control-border: #626b7a;
+  --nw-control-hover: #353b47;
+  --nw-text: #f4f1e8;
+  --nw-text-muted: #b4b5b9;
+  --nw-action: #8550ff;
+  --nw-action-hover: #7432e8;
+  --nw-action-text: #b092ff;
+  /* White reaches 4.58:1 on the dark action purple; warm white reaches 4.05:1. */
+  --nw-action-foreground: #ffffff;
+  --nw-action-surface: #302442;
+  --nw-selection: var(--nw-action-text);
+  --nw-selection-fill: rgb(133 80 255 / 0.18);
+  --nw-result: #dff813;
+  --nw-result-foreground: #111111;
+  --nw-focus: #5da9ff;
+  --nw-success: #46d6a0;
+  --nw-success-border: #386f5e;
+  --nw-warning: #f4c95d;
+  --nw-error: #ff7272;
+  --nw-error-border: #a04d57;
+  --nw-error-surface: #38232a;
+  /* Audio data stays identifiable independently of action and success colors. */
+  --waveform-color: #85dfc8;
+  --waveform-muted: #b4b5b9;
+  /* Product data colors retain their existing meaning and values. */
+  --track-video: #7863ad;
+  --track-video-soft: #45375c;
+  --track-audio: #438b77;
+  --track-caption: #a98847;
+  --media-label-background: #111b;
+  --media-foreground: #fff;
+  --review-text: #dbc394;
+  --review-surface: #423a2c;
+  --review-silence-text: #b7b2d8;
+  --review-silence-surface: #373449;
+  --review-filler-text: #f0c497;
+  --review-filler-surface: #443a2f;
+  --filter-default: #3c454e;
+  --filter-soft: #605a58;
+  --filter-soft-text: #e6ddd6;
+  --filter-cinema: #303d43;
+  --filter-cinema-text: #d6c9a9;
+  --filter-mono: #363636;
+  --filter-mono-text: #ddd;
+  --filter-clear: #3d6268;
+  --filter-clear-text: #e0efed;
+  --filter-vivid: #64638c;
+  --filter-vivid-text: #efead6;
+  --media-stage: #0b0c0e;
+  --media-surround: #111;
+  --media-title-shadow: #0009;
+  --track-video-border: #8a79ba;
+  --track-video-text: #efeafa;
+  --track-video-fill: #4c4068;
+  --track-overlay-fill: #3b4264;
+  --track-overlay-border: #7889ba;
+  --track-audio-fill: #245344;
+  --track-audio-border: #53967f;
+  --track-audio-text: #cce9dd;
+  --track-duration-text: #c4badb;
+  --track-audio-waveform: #cae6dc;
+  --track-video-waveform: #c9bee6;
+  --waveform-border: #3a6559;
+  --waveform-surface: #1f352e;
+  --track-caption-fill: #63502d;
+  --track-caption-border: #ae925b;
+  --track-caption-text: #f5e3ba;
+  --track-title-fill: #6d5835;
+  --track-title-text: #fff0c8;
+  --shadow-overlay-color: #0006;
+  --overlay-backdrop: #05070aba;
+  --shadow-raised-color: #0003;
+  --review-flagged-surface: #40372a;
+  --review-flagged-text: #f2d7a9;
+}

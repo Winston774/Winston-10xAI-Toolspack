@@ -1,0 +1,9 @@
+{
+  "name": "tiktok-raw-style",
+  "font_family": "Inter",
+  "font_weight": 900,
+  "case": "sentence",
+  "max_lines": 2,
+  "position": "lower-third",
+  "safe_margin_px": 72
+}

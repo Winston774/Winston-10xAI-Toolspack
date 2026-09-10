@@ -51,7 +51,14 @@ jobs:
           foreach ($packageFile in $packages) {
             Push-Location $packageFile.Directory.FullName
             try {
-              npm run validate
+              $package = Get-Content -LiteralPath $packageFile.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+              $validationScript = if ($package.scripts.PSObject.Properties.Name -contains 'validate:release') {
+                'validate:release'
+              }
+              else {
+                'validate'
+              }
+              npm run $validationScript
               if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             }
             finally {

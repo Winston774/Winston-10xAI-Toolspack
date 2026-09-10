@@ -1,0 +1,26 @@
+{
+  "name": "long-form-youtube",
+  "label": "Long-form - YouTube",
+  "canvas": {
+    "aspect_ratio": "16:9",
+    "width": 1920,
+    "height": 1080
+  },
+  "graphics": {
+    "primary": "liquid-glass-plus-zoom",
+    "placement": "contextual",
+    "motion": "smooth-zoom",
+    "thumbnail": "always"
+  },
+  "captions": {
+    "enabled": false,
+    "placement": "platform-cc",
+    "lock": false,
+    "style": "none"
+  },
+  "export": {
+    "container": "mp4",
+    "video_codec": "h264",
+    "audio_codec": "aac"
+  }
+}

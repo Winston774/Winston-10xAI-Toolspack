@@ -1,0 +1,12 @@
+{
+  "name": "xunjian-local-video-editor",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Release validation wrapper for 迅剪 Local Studio v0.2 Preview.",
+  "scripts": {
+    "test": "node scripts/validate-package.mjs",
+    "validate": "node scripts/validate-package.mjs",
+    "validate:release": "node scripts/validate-package.mjs --release"
+  }
+}
