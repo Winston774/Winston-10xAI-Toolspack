@@ -1,0 +1,12 @@
+.work/
+outputs/
+analysis/
+evidence/
+transcript/
+__pycache__/
+*.py[cod]
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.wav

@@ -6,6 +6,13 @@
 
 - 尚無。
 
+## 2026-W38 v0.1.0 Preview — 2026-09-17
+
+- 新增 2026-W38「Video Understanding：附時間證據的短影音理解與生成交接」Preview。
+- 將使用者提供 ZIP 的 10 個技能檔案轉成可公開的學員包，補齊 LICENSE、NOTICE、Hypit 研究參考、30 項可重跑測試、合成 partial 範例與安裝文件。
+- 新增本機優先、逐檔外部傳輸確認、內容權利、未信任影片衍生文字與公開分享排除規則。
+- 將真實影片、畫格、WAV、逐字稿、metadata、私有測試產物與上游快取排除在公開 Release 外；維持 Preview，因跨平台與完整 FFmpeg 整合驗證仍待補足。
+
 ## 2026-W37 v0.2.0 Preview — 2026-09-10
 
 - 發布迅剪 Local Studio：本機影片剪輯與 Agent MCP 工作台 Preview。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "影片理解"
+  short_description: "拆解短影音的敘事、視聽系統與時間證據，建立下一階段影片生成所需的交接文件"
+  default_prompt: "使用 $video-understanding 分析這支短影音，產出完整的影片理解文件、時間證據與生成交接索引。"

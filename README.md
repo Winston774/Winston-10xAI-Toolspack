@@ -39,6 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W38：Video Understanding — 附時間證據的短影音理解與生成交接](weeks/2026/2026-w38-video-understanding/README.md)（`0.1.0 Preview`）— 以本機優先的證據準備、時間契約、觀察／推論分層與 `partial` handoff，讓影片分析可被下一個 Agent 接手。
 - [2026-W37：迅剪 Local Studio — 本機影片剪輯與 Agent MCP 工作台](weeks/2026/2026-w37-xunjian-local-video-editor/README.md)（`0.2.0 Preview`）— 以版本化提案、受限區間證據、人工確認與審閱範圍，建立可追溯的本機剪輯 Workflow。
 - [2026-W36：Gomoku Lab — 用 WebMCP 與 ChatGPT 下五子棋](weeks/2026/2026-w36-gomoku-lab-webmcp/README.md)（`0.1.0 Preview`）— 以頁面工具、棋盤版本、公開決策摘要與人工核准，建立可稽核的人機對弈 Workflow。
 - [2026-W35：Mastery Loop — 可驗證的點擊式精熟學習系統](weeks/2026/2026-w35-mastery-loop/README.md)（`1.0.0 Stable`）— 以批次評估、證據連結學習地圖與新情境複習建立可續跑的學習循環。
