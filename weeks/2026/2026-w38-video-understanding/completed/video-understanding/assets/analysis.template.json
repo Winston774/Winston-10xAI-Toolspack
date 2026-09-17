@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "path": "",
+    "sha256": "",
+    "duration_seconds": null,
+    "clock": "video_start",
+    "audio_present": null
+  },
+  "inspection": {"video": [], "audio": []},
+  "evidence": [],
+  "systems": [],
+  "events": [],
+  "assets": [],
+  "unknowns": [],
+  "handoff": {
+    "status": "partial",
+    "invariants": [],
+    "changeable": [],
+    "next_steps": ["填入實際來源、檢視證據、事件、系統、素材需求及未解問題。"]
+  }
+}
