@@ -10,7 +10,11 @@
 6. 建立 Pull Request，確認安裝流程與通過標準後合併。
 7. 建立標籤與 GitHub Release，例如 `2026-w31-v1.0.0`。
 
-## 命名規則
+## 個別週次的授權檔
+
+打包預設附上倉庫根目錄 LICENSE。若該週明確不附此檔案，在 metadata.yml 設定 `include_root_license: false`；CI 與本機打包都會遵循此設定。也可單次使用 `-OmitRootLicense`。這個選項只控制根目錄檔案，不會移除 completed 內的檔案，也不會授予新的授權。該週的 `license` 欄位應另清楚記錄。
+
+## 目錄與版本命名
 
 - 週次資料夾：`YYYY-wNN-kebab-case-topic`
 - 發布標籤：`YYYY-wNN-vMAJOR.MINOR.PATCH`

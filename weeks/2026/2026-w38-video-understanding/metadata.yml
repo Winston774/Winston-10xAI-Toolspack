@@ -7,4 +7,5 @@ status: preview
 published_at: 2026-09-17
 version: 0.1.1
 platform: codex-agent-skills
-license: "Hypit modified Apache-2.0; see completed/video-understanding/LICENSE"
+license: "unspecified; no license grant provided in this package"
+include_root_license: false

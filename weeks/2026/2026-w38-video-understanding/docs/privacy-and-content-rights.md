@@ -14,4 +14,4 @@ manifest 會保存來源絕對路徑、hash、工具路徑與媒體資訊；prob
 
 ## 技能授權
 
-請閱讀 [來源與授權](source-and-license.md)、技能內的 [LICENSE](../completed/video-understanding/LICENSE) 與 [NOTICE](../completed/video-understanding/NOTICE)。教材根目錄的 MIT 授權不覆蓋技能內保留的第三方條款。
+本次發布包不附授權檔，技能授權欄位為未指定；請勿將其標示為 MIT 或 Apache。來源與包裝處理見[來源紀錄](source-and-license.md)。

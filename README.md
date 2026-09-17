@@ -57,3 +57,5 @@ scripts/     驗證與打包工具
 ## 授權
 
 本倉庫自行創作的程式碼、教材與隨附素材依 [MIT License](LICENSE) 授權。個別週次若含第三方或衍生專案，以該週 `metadata.yml` 與 completed 內授權檔為準；根目錄 MIT 不會覆蓋第三方授權。
+
+W38 的 video-understanding 技能授權欄位為未指定，發布包不附 LICENSE／NOTICE，也不套用根目錄 MIT。

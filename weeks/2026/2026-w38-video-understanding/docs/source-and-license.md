@@ -14,7 +14,8 @@
 
 | RAR 檔案 | v0.1.1 處理 |
 | --- | --- |
-| SKILL.md、agents/openai.yaml | 保留功能內容 |
+| SKILL.md | 保留功能內容，移除文末對未附授權檔的引用 |
+| agents/openai.yaml | 保留內容 |
 | assets/ 下 2 個模板 | 保留內容 |
 | references/ 下 3 個方法文件 | 保留內容 |
 | scripts/ 下 2 支 Python 程式 | 保留程式 |
@@ -23,9 +24,9 @@
 | VALIDATION.md | 依本次可重跑結果重新編寫；原始歷史敘述不充當本次驗證 |
 | scripts／tests 的 4 個 .pyc | 排除可再生快取 |
 
-前述 12 個保留檔案以換行正規化後的完整文字比對 RAR，內容一致。發布過程可能將 CRLF 轉成 LF，因此原檔 byte hash 與發布 hash 可不同。
+其中 11 個檔案以換行正規化後的完整文字比對 RAR，內容一致。SKILL.md 僅移除文末授權檔引用，其餘內容一致。發布過程可能將 CRLF 轉成 LF，因此原檔 byte hash 與發布 hash 可不同。
 
-W38 的 README、lesson、metadata、docs 與技能 README 是本次重新編寫的學員文件。LICENSE 與 NOTICE 屬補齊的來源資訊。上一版額外引入的兩份 Hypit 研究文件、安全附加指令與合成示例已從目前版本移除，歷史版本仍可查閱。
+W38 的 README、lesson、metadata、docs 與技能 README 是本次重新編寫的學員文件。依使用者指定，本版刪除 LICENSE／NOTICE，下載包也不附根目錄 LICENSE。上一版額外引入的兩份 Hypit 研究文件、安全附加指令與合成示例已從目前版本移除，歷史版本仍可查閱。
 
 ## 原始文字檔 SHA-256
 
@@ -47,10 +48,10 @@ b23e24cf0e62571b8270bc8f13bbfa89429a2feec2a1ca86f126b176413a27d2  scripts/prepar
 a86617ade841d3e35c439dd9cea39473ddcc064174ad51fef0f051711aa13105  tests/test_validate_analysis.py
 ```
 
-## 授權補件的理由與界線
+## 來源紀錄與授權欄位
 
-RAR 的 SKILL.md 明確引用 LICENSE／NOTICE，但 RAR 沒有附上這兩份檔案。本次保留 W38 v0.1.0 已有的 [LICENSE](../completed/video-understanding/LICENSE)，更新 [NOTICE](../completed/video-understanding/NOTICE) 以交代修正版來源。
+RAR 未附 LICENSE／NOTICE；依使用者後續指示，本次包裝也不保留前版補入的兩個檔案，並同步清除對這些檔案的連結。
 
 既有通知記錄的方法來源為 Hypit，曾研究的 revision 為 `d68fe605c7eecbdadbfa7fa8df0a8dee59d6db66`。此資訊來自既有版本；本次未重新查核上游網站，也沒有加入上游 runtime 或生成程式。
 
-技能仍隨附 Hypit modified Apache-2.0 條款與額外條件。本倉庫根目錄 MIT 不覆蓋這些第三方條款。商業散布或服務使用請閱讀完整 LICENSE 並確認適用授權；這份發布紀錄不作為法律意見。
+本版 metadata 的 license 設為 unspecified，include_root_license 設為 false；沒有在此套用 MIT、Apache 或宣告新的使用授權。授權檔的刪除屬包裝變更，原始來源紀錄保留於上段。

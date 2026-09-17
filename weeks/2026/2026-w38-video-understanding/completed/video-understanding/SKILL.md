@@ -62,5 +62,3 @@ python <SKILL_DIR>/scripts/prepare_video.py <input.mp4> --out <analysis-dir>/evi
 5. 檢查抽樣空隙、快閃文字、切點兩側、音訊尾巴、重複片語與結尾。重大缺口以 `partial` 交付並寫 `PROGRESS.md`；有足夠檢視證據且無重大待解問題時可標 `ready`。
 
 最後提供主文件路徑、交接狀態、關鍵發現與尚未驗證項目，讓下一個 agent 從文件接手。
-
-方法來源與改寫範圍見 [NOTICE](NOTICE)，保留上游 [LICENSE](LICENSE)；本技能不包含上游生成與渲染程式。

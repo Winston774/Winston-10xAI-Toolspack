@@ -22,6 +22,7 @@
 - [工具操作](references/tooling.md)：本機準備、時間映射與索引驗證。
 - [主文件模板](assets/VIDEO_UNDERSTANDING.template.md)／[JSON 模板](assets/analysis.template.json)：填入實際影片資料後使用。
 - [驗證紀錄](VALIDATION.md)：本次測試方式及範圍。
-- [LICENSE](LICENSE)／[NOTICE](NOTICE)：保留的第三方授權與來源通知。
+
+本次發布包不附授權檔，metadata 的授權欄位為未指定。
 
 Python 3.10+；證據 helper 另需 FFmpeg／FFprobe。Python 程式只使用標準函式庫。實際觀看與聆聽由 Agent 可用工具提供，生成與渲染留給下一階段。
