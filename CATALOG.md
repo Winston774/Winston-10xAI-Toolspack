@@ -2,7 +2,7 @@
 
 | 週次 | 主題 | 類型 | 難度 | 預估時間 | 狀態 |
 |---|---|---|---|---:|---|
-| [2026-W38](weeks/2026/2026-w38-video-understanding/README.md) | Video Understanding：附時間證據的短影音理解與生成交接 | AI Skill | 進階 | 180 分鐘 | Preview |
+| [2026-W38](weeks/2026/2026-w38-video-understanding/README.md) | Video Understanding：讀懂短影音，交接下一步製作 | AI Skill | 進階 | 180 分鐘 | Preview v0.1.1 |
 | [2026-W37](weeks/2026/2026-w37-xunjian-local-video-editor/README.md) | 迅剪 Local Studio：本機影片剪輯與 Agent MCP 工作台 | Local AI Tool | 進階 | 180 分鐘 | Preview |
 | [2026-W36](weeks/2026/2026-w36-gomoku-lab-webmcp/README.md) | Gomoku Lab：用 WebMCP 與 ChatGPT 下五子棋 | Local AI Tool | 中級 | 120 分鐘 | Preview |
 | [2026-W35](weeks/2026/2026-w35-mastery-loop/README.md) | Mastery Loop：可驗證的點擊式精熟學習系統 | AI Skill | 進階 | 240 分鐘 | Stable |

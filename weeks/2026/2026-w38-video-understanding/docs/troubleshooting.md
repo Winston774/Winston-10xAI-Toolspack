@@ -1,62 +1,35 @@
 # 疑難排解
 
-## `Missing ffmpeg` 或 `Missing ffprobe`
+## 沒有顯示「影片理解」
 
-在終端機確認：
+確認技能資料夾第一層有 SKILL.md、agents、assets、references、scripts 與 tests。RAR 原始雙層目錄已在發布包整理；安裝 completed 下的 video-understanding 資料夾即可。更新前把舊版移到技能目錄外備份，再重新開啟 Agent。
 
-```text
-ffmpeg -version
-ffprobe -version
-```
+## 找不到 FFmpeg 或 FFprobe
 
-若工具未在 PATH，安裝受信任來源的版本，或把明確執行檔路徑傳給 helper：
+請 Agent 檢查 PATH 與版本。可用 `--ffmpeg <執行檔>`、`--ffprobe <執行檔>` 明確指定。路徑含空白時加引號。Python helper 不需要 pip 套件。
 
-```text
-python scripts/prepare_video.py <input.mp4> --out <new-output-dir> --ffmpeg <ffmpeg-path> --ffprobe <ffprobe-path>
-```
+## helper 拒絕輸出或抽樣
 
-路徑含空白時用 shell 的引號包住整個參數值。不要使用不明來源的可執行檔。
+輸出資料夾必須不存在；換新名稱保留舊證據。超過預設 240 張上限時，縮短區段或放大抽樣間距。來源損壞、解碼器缺失、時間戳異常或來源處理中被修改時也會失敗，先查看原始錯誤；不要把未完成檔案當成功證據。
 
-## `Output already exists`
+## 有音軌卻沒有 WAV
 
-helper 以新資料夾輸出，避免覆蓋既有 evidence。保留原資料夾，改用可辨識的新名稱，例如 `overview-v2` 或 `reveal-6.8-8.4`。不要為了重跑而直接刪除舊資料。
+檢查 manifest 的 audio.status。某區段沒有解碼到樣本仍可能是有音軌影片，需保留 audio_present=true；抽取失敗與無音軌分開記錄。
 
-## URL 或串流輸入失敗
+## 字幕或音效時間對不上
 
-`prepare_video.py` 會拒絕 URL。先確保你有取得與分析的權利，再將檔案下載到受控的本機工作目錄。不要把含 token、簽章或帳號資訊的 URL 寫進公開文件。
+使用 manifest 的實際 decoded PTS，不用平均 FPS 推測幀時間。WAV 的局部時間須加回 offset；如音訊不連續，依 audio.segments 分段映射。
 
-## `VALID (partial)` 以外的驗證錯誤
+## analysis.json 驗證失敗
 
-依順序檢查：
+依序檢查有限數值、時間範圍、重複 ID、引用存在、證據檔相對路徑、reviewed 記錄、素材依賴環，以及 ready 的全片覆蓋條件。空白模板本來就需要填入實際內容，預期無法直接通過。
 
-1. `source` 是否有非空 path、64 位 SHA-256、正確 duration、`clock: video_start` 與布林 `audio_present`。
-2. `evidence.path` 是否以 `analysis.json` 所在資料夾為根、存在且沒有離開資料夾。
-3. 每個 event 是否有已標記 `reviewed: true` 的重疊證據、有效系統 ID 與有效 anchor。
-4. `dense_frames` 是否引用至少兩個不同時間的幀，且 `max_gap_seconds` 等於實際最大間距。
-5. `ready` 是否有全片事件覆蓋、全片視覺檢視、音軌存在時全片實際聆聽、素材需求、保留規則與零個阻塞未知項。
+回傳碼：0 為結構有效、1 為契約錯誤、2 為讀取／JSON 錯誤。通過訊息不代表視聽品質驗收。
 
-先從 [`completed/video-understanding/examples/partial-analysis/`](../completed/video-understanding/examples/partial-analysis/) 的可通過 `partial` 範例開始比較。
+## 環境無法看圖或聽音
 
-## Python 測試有 `skipped`
+保存可支持的分析，標示 partial，記錄待檢視區段與所需能力。ASR 可支持轉錄文字，音樂、音效、語氣與聲畫同步仍需要相應檢視。
 
-未設定 `VIDEO_TEST_FFMPEG` 與 `VIDEO_TEST_FFPROBE` 時，媒體整合測試會跳過。此結果只代表純 Python 單元測試已跑；不能視為 FFmpeg／FFprobe 整合驗證。設定兩個環境變數後再重跑：
+## 回報問題
 
-```powershell
-$env:VIDEO_TEST_FFMPEG = '<absolute-path-to-ffmpeg>'
-$env:VIDEO_TEST_FFPROBE = '<absolute-path-to-ffprobe>'
-python -X utf8 -m unittest discover -s completed/video-understanding/tests -v
-```
-
-## 不能確認畫面或聲音
-
-沒有圖片檢視能力、播放能力或聆聽能力時，只保留可支持的 metadata 或逐字稿資訊，並列出缺口。ASR 完成、WAV 存在、幀圖被抽出都不能單獨支持「已聆聽」或「已看見」的描述。
-
-## 需要回報問題
-
-先移除影片、音訊、逐字稿、人物名稱、帳號、預簽名 URL、絕對路徑與 metadata，再提供：
-
-- Python、FFmpeg、FFprobe 版本。
-- 完整錯誤訊息。
-- 已使用的命令與參數。
-- 可公開的最小合成重現檔案。
-- 期待結果與實際結果。
+附作業系統、Python／FFmpeg 版本、最小命令、錯誤輸出與預期結果。先移除私人路徑、存取 token、影片與逐字稿等敏感資料。

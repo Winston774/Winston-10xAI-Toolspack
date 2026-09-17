@@ -1,18 +1,22 @@
-video-understanding
+video-understanding — W38 v0.1.1 distribution
 
-This skill adapts the reference-video analysis methodology and production
+This skill adapts reference-video analysis methodology and production
 concepts documented by Hypit, https://github.com/hypit-ai/hypit .
 
 Upstream copyright: © 2026 Hypit.AI
-Studied revision: d68fe605c7eecbdadbfa7fa8df0a8dee59d6db66
-Study and adaptation date: 2026-09-17
+Previously recorded studied revision: d68fe605c7eecbdadbfa7fa8df0a8dee59d6db66
+Study and adaptation date recorded by the project: 2026-09-17
 
-Modifications: Traditional Chinese analysis-only workflow; independent evidence
-preparation and index-validation scripts; source-clock and review-state
-contracts; portable Markdown/JSON handoff templates. The Hypit runtime and
-generation code are not included. Source-specific citations and adaptation
-boundaries are recorded in references/hypit-architecture.md and
-references/hypit-method.md.
+Modifications include a Traditional Chinese analysis-only workflow,
+independent evidence preparation and index-validation scripts, source-clock
+and review-state contracts, and Markdown/JSON handoff templates.
+The Hypit runtime and generation code are not included.
+
+This W38 correction uses video-understanding2.rar as the functional source.
+That archive refers to LICENSE and NOTICE but omits both files. This
+distribution retains the LICENSE from W38 v0.1.0 and updates this NOTICE
+to record packaging provenance. No new upstream research files are added.
+See ../../docs/source-and-license.md for the input inventory and boundaries.
 
 This adaptation retains the upstream modified Apache 2.0 terms in LICENSE.
 It is not an official Hypit distribution. The license contains additional

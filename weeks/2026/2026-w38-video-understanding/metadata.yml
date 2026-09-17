@@ -1,10 +1,10 @@
 id: 2026-w38
-title: Video Understanding：附時間證據的短影音理解與生成交接
+title: Video Understanding：讀懂短影音，交接下一步製作
 type: skill
 difficulty: advanced
 estimated_minutes: 180
 status: preview
 published_at: 2026-09-17
-version: 0.1.0
+version: 0.1.1
 platform: codex-agent-skills
 license: "Hypit modified Apache-2.0; see completed/video-understanding/LICENSE"
