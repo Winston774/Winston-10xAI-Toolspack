@@ -1,118 +1,98 @@
-# 2026-W38：Video Understanding — 附時間證據的短影音理解與生成交接
+# 2026-W38：Video Understanding — 讀懂短影音，交接下一步製作
 
-> 把參考短影音拆成可追溯的敘事、視聽系統、事件與素材依賴，讓下一位 Agent 能從證據接手生成規劃。
+看到一支想參考的短片，你能描述它用了哪些字幕、鏡頭與音效；真正開始製作時，還需要知道它們何時出現、如何一起推進敘事，以及更換台詞後哪些關係要重新對齊。
 
-## 本週成果
+本週分享 `video-understanding` 技能。它讓 Agent 從整體敘事回到逐段視聽證據，整理成可回看、可續跑、可交給下一個製作 Agent 的文件。
 
-完成本週練習後，你會交出一份自己的 `VIDEO_UNDERSTANDING.md` 與 `analysis.json`。它們會把原片從開頭到結尾的時間、可見與可聽證據、系統生命週期、事件、素材需求、保留規則與待解問題整理成可續跑的交接包。
+**目前版本：v0.1.1 Preview。** 本次已依使用者更正的 `video-understanding2.rar` 重建 W38；請使用本版下載包。
 
-本週提供的 `video-understanding v0.1.0` 包含：
+- [下載本週 ZIP](https://github.com/Winston774/Winston-10xAI-Toolspack/releases/download/2026-w38-v0.1.1/2026-w38-video-understanding.zip)
+- [版本說明](https://github.com/Winston774/Winston-10xAI-Toolspack/releases/tag/2026-w38-v0.1.1)
+- [完整講義](lesson.md) · [技能成品](completed/video-understanding/README.md)
 
-- 本機 FFmpeg／FFprobe 證據準備 helper，保留真實解碼時間、畫格與音訊時鐘資訊。
-- 結構驗證器，檢查交接索引的時間範圍、引用、檔案位置、覆蓋與 `partial`／`ready` 狀態。
-- 人可讀的交接模板、機器可檢查的 JSON 模板，以及可通過結構驗證的合成範例。
-- 30 項可重跑的 Python 測試；其中媒體整合案例需要本機可用的 FFmpeg 與 FFprobe。
-- 來源、授權、隱私、內容權利與限制說明。
+## 這週學會什麼
 
-成品位置：[`completed/video-understanding/`](completed/video-understanding/)
+1. 把開場、發展、注意力轉移、揭露與收束整理成時間地圖。
+2. 分開追蹤人物表演、插入畫面、口語字幕、獨立文字、動態圖形／介面、特效與聲音。
+3. 寫清楚系統的進場、持續、更新、退場，找出跨鏡頭仍然存在的狀態。
+4. 將確實看到／聽到的內容、對設計作用的解釋、下階段製作建議分開記錄。
+5. 用原片時間找證據，用語句或動作作為新版本重新對齊的依據。
 
-延伸文件：
+適合要拆解參考短片、製作前研究、建立 Agent 交接流程的創作者。預估 180 分鐘，可先交付部分分析再續跑。
 
-- [教學講義](lesson.md)
-- [驗證方式與證據邊界](docs/verification.md)
-- [隱私、內容權利與公開分享](docs/privacy-and-content-rights.md)
-- [來源與授權](docs/source-and-license.md)
-- [疑難排解](docs/troubleshooting.md)
-- [已知限制](docs/known-limitations.md)
+## 準備與安裝
 
-## 基本資料
+需要能讀取 Agent Skills 的工具、Python 3.10+，以及可用的影片／圖片檢視與音訊聆聽能力。使用本機證據準備工具時，另需 FFmpeg 和 FFprobe。兩支 Python 工具僅使用標準函式庫；ASR、雲端模型與影片生成工具可依實際環境選用。
 
-- 類型：AI Skill
-- 難度：進階
-- 預估時間：180 分鐘；可拆成「先做 `partial` 分析」與「補足為 `ready`」兩段
-- 支援平台：Windows、macOS、Linux；能讀取 Codex／Agent Skills 的 Agent
-- 需求：Python 3.10 以上；FFmpeg 與 FFprobe；可實際查看畫格與聆聽音訊的工具
-- Skill 版本：`0.1.0 Preview`
-- API Key／付費服務：核心 helper 不需要。雲端視覺、ASR、下載或生成服務屬選配，每個檔案都要先取得使用者明確同意
-- 授權：`completed/video-understanding/` 受 Hypit modified Apache-2.0 條款與額外條件約束，請先讀 [LICENSE](completed/video-understanding/LICENSE) 與 [NOTICE](completed/video-understanding/NOTICE)
-
-## 安裝與開始
-
-1. 從本週 GitHub Release 下載 `2026-w38-video-understanding.zip` 並解壓縮。
-2. 開啟 `completed/video-understanding`。
-3. 將整個資料夾複製到其中一個 Skills 位置：
+1. 下載上方 ZIP，解壓縮後開啟 `completed/video-understanding/`。
+2. 將整個 `video-understanding` 資料夾放進 Codex Skills 目錄：
    - Windows：`%USERPROFILE%\.codex\skills\video-understanding`
    - macOS／Linux：`~/.codex/skills/video-understanding`
-   - 共用 Agent Skills 目錄：`~/.agents/skills/video-understanding`
-4. 重新啟動 Agent 工具，確認 `影片理解` 出現在可用技能清單。
-5. 選一支你擁有分析與使用權利的 15–60 秒本機影片。把它與輸出資料夾放在工作目錄，避開已安裝的 skill 目錄與公開 Git 資料夾。
-6. 明確呼叫技能：
+3. 若已有舊版，先把舊資料夾移到 Skills 目錄之外備份，再放入新版，避免殘留舊參考文件。
+4. 重新開啟 Codex，確認技能清單出現「影片理解」。其他 Agent 請使用其支援的 Skills 位置。
+5. 選一支有分析與使用權利的 15–60 秒短片，放在自己的工作目錄。分析輸出也放在工作目錄，與已安裝技能分開。
+
+把這段交給 Agent，替換影片路徑：
 
 ```text
-使用 $video-understanding，以本機優先方式分析這支影片。
-先建立 analysis/<影片名稱>/，產出 partial 的 VIDEO_UNDERSTANDING.md 與 analysis.json；
-列出未檢視或未聆聽的範圍，未經我逐檔同意不得上傳任何影片、畫格、音訊或逐字稿到外部服務。
+使用 $video-understanding 分析「<我的影片路徑>」。
+先完整理解原片，還沒有改編目標，不要替我擬定新人物或新廣告。
+輸出到 analysis/<影片名稱>/，交付 VIDEO_UNDERSTANDING.md 與 analysis.json。
+請區分觀察、推論與製作建議，列出實際看過／聽過的範圍。
+若能力或證據不足，保留 partial 狀態並寫 PROGRESS.md。
 ```
 
-`prepare_video.py` 只接受本機影片檔，不會下載網址。若影片起點是 URL，先自行確認取得權利、下載安全性與保存位置，再交給 helper。
+技能會依使用者已有授權處理外部上傳或付費分析；沒有授權時保留本機工作並列出能力缺口。核心 helper 接受本機檔案，沒有 URL 下載功能。
 
-## 第一個練習
+## 你會拿到什麼
 
-1. 先用低密度概覽讀完整片，建立開場、發展、轉折、揭露與收束的暫定假說。
-2. 對字幕變化、切點兩側、快閃字、重要動作與聲畫同步區段加做密集抽樣或播放。
-3. 將真正在工具中看過或聽過的證據記入 `analysis.json`，使用與主文件相同的 `EV-*`、`SYS-*`、`ASSET-*`、`E-*` ID。
-4. 先以 `partial` 交付。只有完整覆蓋、全片視覺檢視、音軌存在時全片實際聆聽、沒有阻塞問題且素材需求完整時，才可標示 `ready`。
-5. 執行結構驗證：
+| 產物 | 用途 |
+| --- | --- |
+| `VIDEO_UNDERSTANDING.md` | 全片論述、事件表、系統生命週期、聲音、素材需求與接手指引 |
+| `analysis.json` | 來源、時間、ID、檢視範圍、證據、素材依賴、未知項與狀態 |
+| `evidence/` | 使用工具準備並實際檢視的畫格、音訊、片段或量測紀錄 |
+| `PROGRESS.md` | 部分分析的已完成內容、缺口與下一次補看順序 |
+
+本技能的交付是分析與製作交接；影片生成、剪輯與渲染由下一階段工具承接。
+
+## 本週任務與通過標準
+
+完成一支短片的初版理解，允許以 `partial` 交付：
+
+- [ ] 來源 hash、時長、音軌與第一張解碼視訊影格為零點的時間座標清楚。
+- [ ] 敘事地圖涵蓋全片；無法確認的區段明確標出。
+- [ ] 至少挑一個跨鏡頭系統，描述進場、持續／更新、退場與相關事件。
+- [ ] 重要判斷附時間及證據；說話內容、Caption 與獨立標題分開。
+- [ ] 列出三項重製時要保留或重新計算的關係。
+- [ ] 有音軌而尚未實際聆聽時，保留 `partial`。
+- [ ] 請 Agent 執行索引驗證並回報真實結果；機械檢查通過仍需視聽與語義核對。
+
+只有完整事件覆蓋、全片播放／密幀檢視、有音軌時全片聆聽，以及沒有阻塞問題、素材需求足夠，才考慮 `ready`。
+
+## 操作卡與重試
+
+請 Agent 檢查 FFmpeg／FFprobe 後準備概覽；對看不清的文字、切點或動作補抽密幀。每次使用新輸出目錄，保留前次證據。
 
 ```text
-python <SKILL_DIR>/scripts/validate_analysis.py <analysis-dir>/analysis.json
+python <SKILL_DIR>/scripts/prepare_video.py <input.mp4> --out <analysis-dir>/evidence/overview --every 1
+python <SKILL_DIR>/scripts/validate_analysis.py <analysis-dir>/analysis.json --source <input.mp4>
 ```
 
-驗證成功只表示結構、時間與引用一致；視聽事實、抽樣密度與敘事解釋仍需由實際檢視負責。
+- 找不到媒體工具：確認 `ffmpeg -version`、`ffprobe -version`，或提供明確執行檔路徑。
+- 輸出已存在：改用新的目錄名稱；helper 會拒絕覆寫。
+- 抽樣超過上限：縮短區段或調整間距，預設上限為 240 張。
+- 無法看圖／聽音：完成能支持的部分，明列尚未檢視範圍。
+- JSON 驗證失敗：依錯誤檢查 ID、時間、相對證據路徑與狀態條件。
 
-## 本週任務
+## 延伸文件
 
-選一支具備使用權利的 15–60 秒直式短片，完成一份可供下一個 Agent 接手的 `partial` 分析：
-
-1. 完整列出來源檔案的 hash、時長、尺寸、音軌存在與 source clock。
-2. 用至少一段完整概覽、兩個需補看的關鍵區段，建立時間地圖與系統生命週期。
-3. 把觀察與推論分欄；語音內容、畫面字幕與獨立 Typography 分開寫。
-4. 寫出至少三項下一階段需要保留或重新計算的關係，例如字幕安全區、揭露事件與素材依賴。
-5. 保留尚未確認的音樂、音效、鏡頭參數、文字或權利問題，並寫入 `unknowns` 與 `PROGRESS.md`。
-
-## 成果證據
-
-- `VIDEO_UNDERSTANDING.md`：全片理解、時間地圖、系統、聲音、素材需求與下一步。
-- `analysis.json`：與主文件一致的來源、檢視、證據、事件、素材、未知項與 handoff 狀態。
-- `evidence/`：只留在私有分析資料夾的 manifest、畫格、片段、音訊或逐字稿；公開分享時不得附上真實來源內容。
-- `PROGRESS.md`：`partial` 狀態下的缺口、補看位置與接手順序。
-- 一次 `validate_analysis.py` 的成功輸出或可重現的錯誤紀錄。
-
-## 通過標準
-
-- [ ] Skill 可被 Agent 辨識，或 Agent 能完整讀取 `SKILL.md`、5 份 references、`LICENSE`、`NOTICE` 與安全文件。
-- [ ] 分析輸出位於使用者工作目錄，沒有寫進已安裝的 skill、公開 Git 倉庫或本週 Release。
-- [ ] 來源時間以第一張解碼視訊影格為 0 秒，所有區段採相同時鐘。
-- [ ] 每個重要事件有對應系統、觀察、推論、時間與已檢視證據；未知項明確保留。
-- [ ] 有音軌卻尚未聆聽時，交付狀態仍是 `partial`。
-- [ ] `analysis.json` 通過結構驗證，且沒有把其成功訊息宣稱為完整的視聽或語義驗收。
-- [ ] 分享包不含原片、幀圖、WAV、逐字稿、人物資料、預簽名 URL、絕對路徑、工具路徑或原始 metadata。
-
-## 失敗時的最短路徑
-
-1. 找不到 FFmpeg／FFprobe：在終端機執行 `ffmpeg -version` 與 `ffprobe -version`；安裝受信任版本後重試，或以 `--ffmpeg`、`--ffprobe` 傳入明確路徑。
-2. 輸出資料夾已存在：保留舊證據，改用新的、有意義的資料夾名稱；helper 會拒絕覆寫。
-3. URL 無法處理：helper 不下載網址。先完成取得權利與本機下載，再用本機檔案。
-4. 結構驗證失敗：先從 `examples/partial-analysis/` 讀取可通過範例，核對 ID、時間、evidence path 與 `partial`／`ready` 條件。
-5. 無法看圖或聽音：輸出可支持的內容並維持 `partial`，不要以 metadata、ASR 或抽出的檔案取代真實檢視。
-6. 仍無法排除問題：依[疑難排解](docs/troubleshooting.md)保留錯誤訊息、命令、Python／FFmpeg 版本與最小可重現檔案資訊；先移除影片、逐字稿與任何敏感資料。
+[疑難排解](docs/troubleshooting.md) · [已知限制](docs/known-limitations.md) · [驗證紀錄](docs/verification.md) · [來源與授權](docs/source-and-license.md) · [素材與分享](docs/privacy-and-content-rights.md)
 
 ## 分享成果
 
-可自行修改以下文字，搭配去識別的文件局部截圖或合成範例分享：
-
-> 我完成了第一份可交接的短影音理解：把開場、事件、字幕系統、素材依賴與待補問題放回同一個 source clock。這次先交付 partial，下一步是補聽音訊並驗證聲畫同步。分享內容沒有包含原片、畫格、音訊、逐字稿或私人 metadata。
+可分享一段去識別的事件分析、你保留的關係，以及仍需補看的問題。例如：「我追蹤了榜單卡片從進場到更新的過程。重製時要保留累積排名的狀態，並依新台詞重新對齊揭露時機。」分享原片或衍生證據前確認權利與隱私。
 
 ## 版本紀錄
 
-- `v0.1.0 Preview`：首次學員發布；本機證據準備、結構驗證、合成範例、來源與權利說明、30 項測試與安全分享界線。
+- v0.1.1：以更正 RAR 為唯一功能來源，重新編寫 W38 教材與分享說明；補齊來源／驗證文件，移除前版額外引入的研究文件與示例。
+- v0.1.0：初次發布，已由 v0.1.1 取代。

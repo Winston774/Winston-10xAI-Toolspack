@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$WeekPath
+    [string]$WeekPath,
+
+    [switch]$OmitRootLicense
 )
 
 $ErrorActionPreference = 'Stop'
@@ -28,11 +30,12 @@ foreach ($requiredFile in @('README.md', 'lesson.md', 'metadata.yml')) {
 if (-not (Test-Path -LiteralPath (Join-Path $resolvedWeekPath 'completed') -PathType Container)) {
     throw 'WeekPath is missing completed'
 }
-if (-not (Test-Path -LiteralPath $licensePath -PathType Leaf)) {
+if (-not $OmitRootLicense -and -not (Test-Path -LiteralPath $licensePath -PathType Leaf)) {
     throw 'Repository is missing LICENSE'
 }
 
 $metadataContent = Get-Content -LiteralPath (Join-Path $resolvedWeekPath 'metadata.yml') -Raw -Encoding UTF8
+$includeRootLicense = -not $OmitRootLicense -and $metadataContent -notmatch '(?m)^include_root_license:\s*false\s*$'
 $isChromeExtension = $metadataContent -match '(?m)^type:\s*chrome-extension\s*$'
 
 $weekName = Split-Path -Leaf $resolvedWeekPath
@@ -61,16 +64,18 @@ try {
     )
 
     try {
-        $licenseEntry = $archive.CreateEntry('LICENSE', [System.IO.Compression.CompressionLevel]::Optimal)
-        $licenseEntry.LastWriteTime = (Get-Item -LiteralPath $licensePath).LastWriteTime
-        $licenseInputStream = [System.IO.File]::OpenRead($licensePath)
-        $licenseOutputStream = $licenseEntry.Open()
-        try {
-            $licenseInputStream.CopyTo($licenseOutputStream)
-        }
-        finally {
-            $licenseOutputStream.Dispose()
-            $licenseInputStream.Dispose()
+        if ($includeRootLicense) {
+            $licenseEntry = $archive.CreateEntry('LICENSE', [System.IO.Compression.CompressionLevel]::Optimal)
+            $licenseEntry.LastWriteTime = (Get-Item -LiteralPath $licensePath).LastWriteTime
+            $licenseInputStream = [System.IO.File]::OpenRead($licensePath)
+            $licenseOutputStream = $licenseEntry.Open()
+            try {
+                $licenseInputStream.CopyTo($licenseOutputStream)
+            }
+            finally {
+                $licenseOutputStream.Dispose()
+                $licenseInputStream.Dispose()
+            }
         }
 
         $files = Get-ChildItem -LiteralPath $resolvedWeekPath -Recurse -File -Force | Sort-Object FullName
@@ -99,11 +104,13 @@ try {
     try {
         $entries = @($verificationArchive.Entries | ForEach-Object { $_.FullName })
         $requiredEntries = @(
-            'LICENSE',
             'README.md',
             'lesson.md',
             'metadata.yml'
         )
+        if ($includeRootLicense) {
+            $requiredEntries += 'LICENSE'
+        }
         $missingEntries = $requiredEntries | Where-Object { $_ -notin $entries }
         $manifestEntries = @($entries | Where-Object { $_ -match '^completed/.+/manifest\.json$' })
         $invalidEntries = @($entries | Where-Object {
