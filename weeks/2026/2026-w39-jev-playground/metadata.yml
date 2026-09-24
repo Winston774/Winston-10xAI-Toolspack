@@ -1,0 +1,11 @@
+id: 2026-w39
+title: Jev 決策遊樂場：看見 AI 如何選擇下一步
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 120
+status: preview
+published_at: 2026-09-24
+version: 0.1.0
+platform: browser-nodejs
+license: "unspecified for the supplied application"
+include_root_license: false
