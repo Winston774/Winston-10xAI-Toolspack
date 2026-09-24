@@ -39,6 +39,8 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W39：Jev 決策遊樂場 — 看見 AI 如何選擇下一步](weeks/2026/2026-w39-jev-playground/README.md)（`0.1.0 Preview`）— 用俄羅斯方塊觀察三層判斷、候選落點與教練否決；提供免金鑰預演、訪客自備金鑰即時模式及可獨立執行的學員包。
+
 - [2026-W38：Video Understanding — 讀懂短影音，交接下一步製作](weeks/2026/2026-w38-video-understanding/README.md)（`0.1.1 Preview`）— 依更正 RAR 重建；從敘事與逐段視聽證據，整理系統生命週期、語義錨點和下一階段素材需求。
 - [2026-W37：迅剪 Local Studio — 本機影片剪輯與 Agent MCP 工作台](weeks/2026/2026-w37-xunjian-local-video-editor/README.md)（`0.2.0 Preview`）— 以版本化提案、受限區間證據、人工確認與審閱範圍，建立可追溯的本機剪輯 Workflow。
 - [2026-W36：Gomoku Lab — 用 WebMCP 與 ChatGPT 下五子棋](weeks/2026/2026-w36-gomoku-lab-webmcp/README.md)（`0.1.0 Preview`）— 以頁面工具、棋盤版本、公開決策摘要與人工核准，建立可稽核的人機對弈 Workflow。
@@ -59,3 +61,5 @@ scripts/     驗證與打包工具
 本倉庫自行創作的程式碼、教材與隨附素材依 [MIT License](LICENSE) 授權。個別週次若含第三方或衍生專案，以該週 `metadata.yml` 與 completed 內授權檔為準；根目錄 MIT 不會覆蓋第三方授權。
 
 W38 的 video-understanding 技能授權欄位為未指定，發布包不附 LICENSE／NOTICE，也不套用根目錄 MIT。
+
+W39 的 Jev Playground 來源應用未附授權檔，本週 metadata 記為未指定，ZIP 不加入根目錄 LICENSE。

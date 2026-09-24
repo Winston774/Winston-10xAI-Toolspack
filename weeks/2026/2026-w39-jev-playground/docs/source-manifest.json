@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "8a216c18dba0a8cef7b1dbf9d93def64f9cf8bd2",
+  "comparison": "UTF-8 normalized newlines and trailing whitespace; hashes below are original source bytes",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "50947e61755b8672178be5e67254d2ebe99c6077e3bd4cc5f94e4c045391c6b1"
+    },
+    {
+      "path": "worker.mjs",
+      "sha256": "e83a2713e9f83334c773346ceef6b7b006d75f9d94c7643511c4277228f6e718"
+    },
+    {
+      "path": "tests/privacy.test.mjs",
+      "sha256": "6cd2a066229fc63c9d20f716cf4fbaaae69d3617b07904339ce143eb1ba46948"
+    },
+    {
+      "path": "tests/relay-runtime.test.mjs",
+      "sha256": "559220bee1c70eb732483ea34ff53fb3d445225d8b1c1e40474fbf16cbe637a5"
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "45749000960a385f74abc2137ffa4a0299f03e62571fd7666ab98896912129ca"
+    },
+    {
+      "path": "public/styles.css",
+      "sha256": "19a94f9e5b2b69dc3da7e0c79dc7dbc665e89a2b6396f745866f50d95e42520a"
+    },
+    {
+      "path": "public/app.js",
+      "sha256": "189df481d2ec4c1405a7c205c68851d22d75bb733953d474b80ef401764c73dd"
+    },
+    {
+      "path": "public/session.mjs",
+      "sha256": "e838b65fcfd2c4b5bce6ee2badd6df2be1283b2764b3f8e29d28cafb60c72e48"
+    },
+    {
+      "path": "public/lib/engine.mjs",
+      "sha256": "b97bc079cb42d6abd264f6360704131abc86d1a7d639e8b746b1fe9371acc324"
+    },
+    {
+      "path": "public/lib/brain.mjs",
+      "sha256": "6b1a306f542deaa352912c7ec6e2fe1b63904ef6cb4b3dd09ed07f4b7863e9fe"
+    },
+    {
+      "path": "public/favicon.svg",
+      "sha256": "48eaad98f1602662f494bc8781c534684073457543514fe8d3b95366072a7d4b"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "w39-jev-playground",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/preview.mjs",
+    "start": "node scripts/start.mjs",
+    "test": "node --test tests/privacy.test.mjs tests/relay-runtime.test.mjs tests/package.test.mjs",
+    "validate": "node scripts/validate.mjs",
+    "validate:release": "node scripts/validate.mjs"
+  },
+  "engines": {
+    "node": ">=20.3"
+  }
+}
