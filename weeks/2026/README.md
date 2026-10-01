@@ -8,6 +8,7 @@
 
 | 週次 | 主題 | 類型 | 狀態 |
 |---|---|---|---|
+| [2026-W40](2026-w40-video-highlights/README.md) | Video Highlights：把長訪談剪成有依據的精華 | AI Skill | Preview |
 | [2026-W39](2026-w39-jev-playground/README.md) | Jev 決策遊樂場：看見 AI 如何選擇下一步 | Local AI Tool | Preview |
 | [2026-W38](2026-w38-video-understanding/README.md) | Video Understanding：讀懂短影音，交接下一步製作 | AI Skill | Preview v0.1.1 |
 | [2026-W37](2026-w37-xunjian-local-video-editor/README.md) | 迅剪 Local Studio：本機影片剪輯與 Agent MCP 工作台 | Local AI Tool | Preview |

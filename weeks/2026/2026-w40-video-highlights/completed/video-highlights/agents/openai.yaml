@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Highlights"
+  short_description: "從長訪談找出重要段落，交叉檢查視聽證據，評分並輸出直式與橫式精華片段"
+  default_prompt: "使用 $video-highlights，把這支訪談剪成多個重點片段，依我指定的片長與比例匯出，附上每段評分與入選理由。"
