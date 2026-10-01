@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "source_commit": "54549f86149954d5b66a8378a8a2180d1203c186",
+  "normalization": "UTF-8; CRLF to LF; strip trailing LF and append one LF",
+  "files": [
+    {
+      "path": ".gitignore",
+      "source_sha256": "4814559405b752ca8eac217161d2e1edc4df1685d33d28a38b8df16315000708",
+      "source_normalized_sha256": "4814559405b752ca8eac217161d2e1edc4df1685d33d28a38b8df16315000708",
+      "learner_normalized_sha256": "4814559405b752ca8eac217161d2e1edc4df1685d33d28a38b8df16315000708",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "README.md",
+      "source_sha256": "4b74cf0c48c61ded61a587194b06cde26013a3ffa5b9ba8724d14e1c3bc0006a",
+      "source_normalized_sha256": "4b74cf0c48c61ded61a587194b06cde26013a3ffa5b9ba8724d14e1c3bc0006a",
+      "learner_normalized_sha256": "4b74cf0c48c61ded61a587194b06cde26013a3ffa5b9ba8724d14e1c3bc0006a",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "SKILL.md",
+      "source_sha256": "da9860a336ec57cdf156a8e874f1d3782533a2b4249b283ef522f4773d28b35e",
+      "source_normalized_sha256": "da9860a336ec57cdf156a8e874f1d3782533a2b4249b283ef522f4773d28b35e",
+      "learner_normalized_sha256": "8eeb2ff483d0f3dc55863584dc12ddbab64bd4854ffbbe8745e005079b3c807e",
+      "change": "add existing example navigation"
+    },
+    {
+      "path": "VALIDATION.md",
+      "source_sha256": "a9041e89c8db52ae870e77a3a95e8f94ef68fe97f459cf1bb624d6039ecace20",
+      "source_normalized_sha256": "a9041e89c8db52ae870e77a3a95e8f94ef68fe97f459cf1bb624d6039ecace20",
+      "learner_normalized_sha256": "a9041e89c8db52ae870e77a3a95e8f94ef68fe97f459cf1bb624d6039ecace20",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "agents/openai.yaml",
+      "source_sha256": "46b21a0f957a1e93d91c17145292b50afda57b263bb04ab332bfffe8cc86b7e8",
+      "source_normalized_sha256": "46b21a0f957a1e93d91c17145292b50afda57b263bb04ab332bfffe8cc86b7e8",
+      "learner_normalized_sha256": "46b21a0f957a1e93d91c17145292b50afda57b263bb04ab332bfffe8cc86b7e8",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "references/contract.md",
+      "source_sha256": "ed787d3579eb7c0cffa6106caeea8c1ce1b68421089e255738f3f89645d35beb",
+      "source_normalized_sha256": "ed787d3579eb7c0cffa6106caeea8c1ce1b68421089e255738f3f89645d35beb",
+      "learner_normalized_sha256": "ed787d3579eb7c0cffa6106caeea8c1ce1b68421089e255738f3f89645d35beb",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "references/example-kevin-kelly.md",
+      "source_sha256": "381418047a5527a7f3ead4971cd11b16b9b11aacc595b1f7873738d89f6447e8",
+      "source_normalized_sha256": "381418047a5527a7f3ead4971cd11b16b9b11aacc595b1f7873738d89f6447e8",
+      "learner_normalized_sha256": "381418047a5527a7f3ead4971cd11b16b9b11aacc595b1f7873738d89f6447e8",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "references/rubric.md",
+      "source_sha256": "1e680d9ea565241b9974b5f51fdebef97b9145031f0678275589fdf4693b82b4",
+      "source_normalized_sha256": "1e680d9ea565241b9974b5f51fdebef97b9145031f0678275589fdf4693b82b4",
+      "learner_normalized_sha256": "1e680d9ea565241b9974b5f51fdebef97b9145031f0678275589fdf4693b82b4",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "references/usage.md",
+      "source_sha256": "1261a60c2bc6084b56925f650cdf396e4cf40b3a87e8236bb611b326ae83d1d1",
+      "source_normalized_sha256": "1261a60c2bc6084b56925f650cdf396e4cf40b3a87e8236bb611b326ae83d1d1",
+      "learner_normalized_sha256": "1261a60c2bc6084b56925f650cdf396e4cf40b3a87e8236bb611b326ae83d1d1",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "scripts/highlights.py",
+      "source_sha256": "7cb1482645ef80870edcbf6394a0d87f3de858fb83111aefae7aed8337b38113",
+      "source_normalized_sha256": "7cb1482645ef80870edcbf6394a0d87f3de858fb83111aefae7aed8337b38113",
+      "learner_normalized_sha256": "7cb1482645ef80870edcbf6394a0d87f3de858fb83111aefae7aed8337b38113",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "scripts/vh_evidence.py",
+      "source_sha256": "312aeac7da4f3500f232fd632aadd3275133af4c74625cc7ec2ebd61b0c4e641",
+      "source_normalized_sha256": "312aeac7da4f3500f232fd632aadd3275133af4c74625cc7ec2ebd61b0c4e641",
+      "learner_normalized_sha256": "312aeac7da4f3500f232fd632aadd3275133af4c74625cc7ec2ebd61b0c4e641",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "scripts/vh_plan.py",
+      "source_sha256": "9f659537dfdecbabe88ca4cfdfe285d9471b5d459ba4c446edbc73b885491aec",
+      "source_normalized_sha256": "9f659537dfdecbabe88ca4cfdfe285d9471b5d459ba4c446edbc73b885491aec",
+      "learner_normalized_sha256": "9f659537dfdecbabe88ca4cfdfe285d9471b5d459ba4c446edbc73b885491aec",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "scripts/vh_prepare.py",
+      "source_sha256": "841acdcd647845906e134cc07257a5baa4e5b202c872ed529cd01b37cc80e952",
+      "source_normalized_sha256": "841acdcd647845906e134cc07257a5baa4e5b202c872ed529cd01b37cc80e952",
+      "learner_normalized_sha256": "841acdcd647845906e134cc07257a5baa4e5b202c872ed529cd01b37cc80e952",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "scripts/vh_render.py",
+      "source_sha256": "6f1181cda79c49363990e2eb349d6f3d64bd3f799f16784a13a258474d4dbbd1",
+      "source_normalized_sha256": "6f1181cda79c49363990e2eb349d6f3d64bd3f799f16784a13a258474d4dbbd1",
+      "learner_normalized_sha256": "6f1181cda79c49363990e2eb349d6f3d64bd3f799f16784a13a258474d4dbbd1",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "tests/smoke_workflow.py",
+      "source_sha256": "c9acef9fc83ff410cb938ad464e8621bbe595a70c311a764d13680cf028d547e",
+      "source_normalized_sha256": "c9acef9fc83ff410cb938ad464e8621bbe595a70c311a764d13680cf028d547e",
+      "learner_normalized_sha256": "c9acef9fc83ff410cb938ad464e8621bbe595a70c311a764d13680cf028d547e",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "tests/test_plan.py",
+      "source_sha256": "c46fef631f995a99a04e308f7397bb5f30f1b41e63d09237cba7d510f7858237",
+      "source_normalized_sha256": "c46fef631f995a99a04e308f7397bb5f30f1b41e63d09237cba7d510f7858237",
+      "learner_normalized_sha256": "c46fef631f995a99a04e308f7397bb5f30f1b41e63d09237cba7d510f7858237",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "tests/test_prepare.py",
+      "source_sha256": "0ee6d7e5c5eace24a6909ca90a119a9cf77d42db60ef4eeda6b083b6003488a1",
+      "source_normalized_sha256": "0ee6d7e5c5eace24a6909ca90a119a9cf77d42db60ef4eeda6b083b6003488a1",
+      "learner_normalized_sha256": "0ee6d7e5c5eace24a6909ca90a119a9cf77d42db60ef4eeda6b083b6003488a1",
+      "change": "none except newline normalization"
+    },
+    {
+      "path": "tests/test_render.py",
+      "source_sha256": "99650b037eae26d33bc845d8141f957d0fc6cc5d5bb112157f0836441156d3d0",
+      "source_normalized_sha256": "99650b037eae26d33bc845d8141f957d0fc6cc5d5bb112157f0836441156d3d0",
+      "learner_normalized_sha256": "99650b037eae26d33bc845d8141f957d0fc6cc5d5bb112157f0836441156d3d0",
+      "change": "none except newline normalization"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+id: 2026-w40
+title: Video Highlights：把長訪談剪成有依據的精華
+type: skill
+difficulty: intermediate
+estimated_minutes: 120
+status: preview
+published_at: 2026-10-01
+version: 0.1.0
+platform: codex-agent-skills
+license: "unspecified for the supplied skill; no additional license grant"
+include_root_license: false
