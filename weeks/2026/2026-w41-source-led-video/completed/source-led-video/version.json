@@ -1,0 +1,9 @@
+{
+  "name": "source-led-video",
+  "version": "1.0.0",
+  "released": "2026-10-08",
+  "primary_language": "zh-TW",
+  "bundled_renderer": "paper-documentary",
+  "renderer_canvas": "1920x1080@30",
+  "external_runtime_bundled": false
+}

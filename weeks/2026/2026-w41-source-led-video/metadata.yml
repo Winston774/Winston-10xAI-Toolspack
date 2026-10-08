@@ -1,0 +1,11 @@
+id: 2026-w41
+title: Source-led Video：把原音精華做成可追溯的影片
+type: skill
+difficulty: advanced
+estimated_minutes: 180
+status: preview
+published_at: 2026-10-08
+version: 1.0.0
+platform: codex-agent-skills
+license: "unspecified for the supplied skill; no additional license grant"
+include_root_license: false

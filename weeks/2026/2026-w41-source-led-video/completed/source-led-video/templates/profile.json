@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "brand": "",
+  "language": "zh-TW",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "minimum_duration_seconds": 1,
+  "default_question_count": null,
+  "question_selection": "content-led; choose after whole-source review, no fixed number",
+  "visual_contract": "paper-tear-and-semantic-reframe-v1",
+  "thumbnail_style": "photographic-closeup-white-yellow-v1",
+  "source_voice_priority": true,
+  "narration_review_contract": "host-context-original-language-v1",
+  "narration": {
+    "engine": "external-audio",
+    "native_tempo_factor": 1.0,
+    "lead_seconds": 0.4,
+    "tail_seconds": 0.9,
+    "outro_tail_seconds": 2.0
+  },
+  "cta": {
+    "label": "更多主題內容",
+    "action": "訂閱頻道",
+    "source_link": "完整版連結在說明欄 ↓"
+  },
+  "caption": {
+    "source": [
+      "zh-TW",
+      "en"
+    ],
+    "narration": [
+      "zh-TW"
+    ]
+  },
+  "hyperframes_version": "0.8.119",
+  "scope_note": "通用製作起點；依本集品牌、受眾、素材與實際語速調整。最低時長須依任務設定。"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.1",
+  "python": null,
+  "python_extra_paths": [],
+  "ffmpeg": null,
+  "ffprobe": null,
+  "npx": null,
+  "gsap_js": null,
+  "sans_ttf": null,
+  "serif_ttf": null,
+  "font_licenses": [],
+  "voice_tool": null
+}

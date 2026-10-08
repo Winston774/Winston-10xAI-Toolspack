@@ -1,0 +1,2 @@
+# Preserve the supplied W41 release bytes (including mixed source line endings).
+weeks/2026/2026-w41-source-led-video/completed/source-led-video/** -text whitespace=cr-at-eol,-blank-at-eof
