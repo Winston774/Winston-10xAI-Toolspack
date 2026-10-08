@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "opening": {
+    "source_format": "interview",
+    "source_published_at": "",
+    "host": {"name": "", "program": "", "positioning": "", "credibility": "", "evidence": ""},
+    "guest": {"name": "", "role": "", "role_as_of": "", "evidence": ""},
+    "why_now": {"explanation": "", "time_basis": "source_period", "evidence": "", "verified_at": ""},
+    "coverage": {"host_excerpt": "", "guest_excerpt": "", "why_now_excerpt": "", "question_excerpt": ""}
+  },
+  "terminology_reviewed": false,
+  "terms": []
+}

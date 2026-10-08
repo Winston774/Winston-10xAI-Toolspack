@@ -39,6 +39,8 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W41：Source-led Video — 把原音精華做成可追溯的影片](weeks/2026/2026-w41-source-led-video/README.md)（`1.0.0 Preview`）— 全片理解、候選評分、首題比較、短導讀、專名核聽與紙感影片工程；提供企劃及完整建片兩條路徑。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
+
 - [2026-W40：Video Highlights — 把長訪談剪成有依據的精華](weeks/2026/2026-w40-video-highlights/README.md)（`0.1.0 Preview`）— 全片逐字稿閱讀、候選視聽核對、八項評分及本機多比例剪輯；附獨立技能、測試與學員教材。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
 
 - [2026-W39：Jev 決策遊樂場 — 看見 AI 如何選擇下一步](weeks/2026/2026-w39-jev-playground/README.md)（`0.1.0 Preview`）— 用俄羅斯方塊觀察三層判斷、候選落點與教練否決；提供免金鑰預演、訪客自備金鑰即時模式及可獨立執行的學員包。
@@ -67,3 +69,5 @@ W38 的 video-understanding 技能授權欄位為未指定，發布包不附 LIC
 W39 的 Jev Playground 來源應用未附授權檔，本週 metadata 記為未指定，ZIP 不加入根目錄 LICENSE。
 
 W40 的 Video Highlights 來源技能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。
+
+W41 的 Source-led Video 來源技能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。

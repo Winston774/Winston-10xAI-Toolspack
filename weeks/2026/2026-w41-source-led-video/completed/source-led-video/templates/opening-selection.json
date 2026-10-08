@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "packaging": {"title": "", "thumbnail_promise": "", "viewer_question": ""},
+  "coverage": {"whole_source_reviewed": false, "evidence": ""},
+  "candidates": [],
+  "selected_question_id": null,
+  "selected_source_item": null,
+  "selection_reason": ""
+}

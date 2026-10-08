@@ -1,0 +1,4 @@
+interface:
+  display_name: "原音精華影片製作"
+  short_description: "保留原音、評分選段，完成導讀、字幕、動畫與可追溯交付"
+  default_prompt: "使用 $source-led-video，分析這支長片並按我的觀眾與片長需求，完成以原音為主的精華影片。"

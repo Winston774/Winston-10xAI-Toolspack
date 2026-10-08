@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "purpose": "finished-source-led-interview-review; independent of candidate selection score",
+  "gates": {"source_faithful": null, "promise_answered_first": null, "source_voices_dominate": null, "duration_requirement_met": null, "all_assets_ready": null, "no_blocking_visual_defects": null},
+  "evidence": {"source_review": null, "audio_listening": null, "visual_sampling": null, "continuous_viewing": null, "technical_report": null, "user_signoff": null},
+  "dimensions": {"answer_clarity": null, "question_progression": null, "narration_restraint": null, "readability": null, "motion_timing": null, "voice_and_source_balance": null, "source_attribution": null},
+  "scale": "0-5 or null; no automatic total or retention prediction",
+  "status": "unreviewed",
+  "note": "成片審查與來源候選評分分開記錄；未檢查的項目保留 null，不以選段高分推定成片通過。"
+}
