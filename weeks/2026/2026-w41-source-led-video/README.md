@@ -2,7 +2,7 @@
 
 從長訪談、Podcast、演講或課程中找出值得保留的完整答案，以短導讀、繁中字幕和重點動畫串起來，交付可追溯的企劃與可編輯影片工程。
 
-本週提供 `source-led-video v1.0.0` 的完整獨立技能，共 27 個原始檔案，另附學員教材。Toolspack 狀態為 **Preview**：合成素材流程已測試，真實素材的語義、發音及連續觀看仍需每案驗收。原始版本號不代表本週所有製作情境已通過驗證。
+本週提供 `source-led-video v1.1.0`：保留原 paper 路徑，加入可選的編輯式雙語／動態 adapter、聲線設定與同來源主題 registry；另附學員教材。原始27檔案的來源快照仍可查，v1.1是明確修訂版。Toolspack 狀態為 **Preview**：合成素材流程已測試，真實素材的語義、發音及連續觀看仍需每案驗收。原始版本號不代表本週所有製作情境已通過驗證。
 
 ## 你會學到什麼
 
@@ -11,6 +11,8 @@
 - 比較所有候選問題，選出能兌現標題與縮圖承諾的首題。
 - 對齊原片時間、旁白 WAV 時間及最終影片時間。
 - 將導讀、原音、字幕、重點標記與紙感版型組成可編輯工程。
+- 保存聲線試聽與核聽範圍；同來源A/B共用色系，英文原訪談顯示繁中＋英文，中文導讀單繁中。
+- 用透明概念插畫與真實人像、短句逐點淡入、原片縮入/还原改善理解，保存修訂與技術證據。
 
 ## 選擇你的學習路徑
 
@@ -46,3 +48,15 @@
 - [來源、版本與授權邊界](docs/source-and-version.md)
 
 延伸比較：[W40 Video Highlights](../2026-w40-video-highlights/README.md) 聚焦多個候選精華及多比例剪輯；本週加入導讀、首題承諾、專名核聽、完整紙感影片工程與交付流程。兩者為獨立技能，本週不會覆蓋 W40。
+
+## v1.1 可選：編輯式動態雙語
+
+已有準備好的原音clip、旁白WAV與字幕，可讓agent依[編輯式adapter](completed/source-led-video/references/editorial-motion.md)填[計畫範本](completed/source-led-video/templates/editorial-motion.json)，建置新revision。新plan不與原rundown schema混用；輸入缺失就停下，沒有用靜音影片冒充正式配音。
+
+可以貼：
+
+> 使用 $source-led-video 的editorial motion路徑，將我已核准且有權使用的本機clip、WAV與雙語字幕建立為新revision。同來源兩支影片共用主題registry，主要論點才逐點顯示，其他保持原畫面。先核對實測媒體和計畫，使用我已安装的HyperFrames、GSAP與Chrome，完整渲染後再交付MP4/SRT/章節/QA。未核聽的疑詞與姓名保留pending，不下載或使用新配音服務。
+
+聲線／色系／字幕設定見[製作設定](completed/source-led-video/references/production-presets.md)。新adapter複用已準備媒體且不再次處理響度，`prepared_audio.status=unknown`維持未知；自錄／外部WAV不能自動標AI。
+
+此修訂從兩支完整原音精華的製作經驗提取方法；新通用adapter另以虛構合成素材forward-test。兩類證據分開記錄，不代表新片语意或發音已通過。見[驗證紀錄](docs/verification.md)。

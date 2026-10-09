@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "provider": null,
+  "cost_status": "not_selected",
+  "selected_voice_id": null,
+  "emotion": null,
+  "candidates": [],
+  "sample_approval": {
+    "status": "pending",
+    "audio_sha256": null,
+    "scope": null,
+    "user_feedback": null
+  },
+  "current_audio": {
+    "input_text_path": null,
+    "input_text_sha256": null,
+    "original_wav_path": null,
+    "original_wav_sha256": null,
+    "prepared_wav_path": null,
+    "prepared_wav_sha256": null,
+    "processing_evidence": null,
+    "pronunciation_listening": "not_performed",
+    "alignment_listening": "not_performed"
+  },
+  "external_engine_locator": null,
+  "reference_consent_locator": null,
+  "reference_audio_sha256": null,
+  "publish_authorized": false
+}
