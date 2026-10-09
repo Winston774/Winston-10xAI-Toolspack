@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "canvas": [1920, 1080],
+  "fps": 30,
+  "title": "虛構園藝教學：先觀察土壤，再澆水",
+  "source_id": "fictional-gardening-demo",
+  "brand": {"publisher": "你的出版名稱", "label": "園藝筆記・示範"},
+  "theme": {"registry_path": "source-theme-registry.json", "key": "fictional-gardening-demo"},
+  "font_path": "inputs/static-caption.ttf",
+  "gsap_path": "inputs/gsap.min.js",
+  "items": [
+    {
+      "id": "intro",
+      "kind": "narration",
+      "label": "先問一個問題",
+      "media_path": "inputs/intro.wav",
+      "disclosure": "合成測試音・不代表真實配音",
+      "prepared_audio": {"status": "unknown"},
+      "cues": [{"start": 0, "end": 6, "zh": "澆水之前，先看看土壤。"}],
+      "cards": [{"start": 0, "end": 6, "kicker": "虛構示範，請換成自己的教學", "lines": [{"at": 0, "text": "先觀察土壤"}, {"at": 2, "text": "再決定澆水", "emphasis": true}]}]
+    },
+    {
+      "id": "lesson",
+      "kind": "source",
+      "label": "觀察與行動",
+      "media_path": "inputs/lesson.mp4",
+      "source_start": 100,
+      "source_end": 112,
+      "credit": "來源：你自己的園藝教學素材",
+      "prepared_audio": {"status": "unknown"},
+      "cues": [
+        {"start": 100, "end": 104, "zh": "先看土壤的濕度。", "en": "First, check the soil moisture."},
+        {"start": 104, "end": 108, "zh": "再依植物的需要調整。", "en": "Then adjust to the plant's needs."},
+        {"start": 108, "end": 112, "zh": "記錄每次觀察。", "en": "Record each observation."}
+      ],
+      "markers": [{"start": 101, "end": 111, "title": "觀察後再行動", "kicker": "虛構教學摘要", "diagram": "sequence", "steps": [{"at": 102, "utterance_at": 100, "text": "觀察土壤"}, {"at": 105, "utterance_at": 104, "text": "調整澆水"}, {"at": 109, "utterance_at": 108, "text": "記錄結果"}]}]
+    }
+  ]
+}

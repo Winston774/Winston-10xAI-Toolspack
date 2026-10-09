@@ -17,3 +17,11 @@
 | 字幕、人物或重點卡被遮住 | 檢查實際影格與動態，修文案／素材／版型；保留未驗狀態直到重新驗收 |
 
 回報問題時附上作業系統、Python／FFmpeg／HyperFrames 版本、已遮蔽路徑的錯誤摘要與最小合成輸入。不要貼私有原片、金鑰或完整環境設定。
+
+## 編輯式修訂常見問題
+
+- 圖片遮字：把flex放在非clip的內層layout，不能依賴renderer對clip的display保持flex。先DOM，再check與最終MP4抽格，不用allow-occlusion掩蓋。
+- 三點卡超高：重新量測title、kicker、全部step/連接符/foot與padding，保護來源與字幕安全區。
+- 中文／循環箭頭方框：用已驗靜態字型；內建罕見符號可用可編輯SVG，不能假定每份CJK字型含全部箭頭。
+- localhost EPERM：這是本機browser/check權限，按執行環境取得localhost／Chrome許可；與語意或音質無關。
+- 配音來源標籤錯誤：只有顯式disclosure才顯示AI／自錄等來源文字，不能由audio副檔名推斷。

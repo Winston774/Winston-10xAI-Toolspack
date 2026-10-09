@@ -39,7 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
-- [2026-W41：Source-led Video — 把原音精華做成可追溯的影片](weeks/2026/2026-w41-source-led-video/README.md)（`1.0.0 Preview`）— 全片理解、候選評分、首題比較、短導讀、專名核聽與紙感影片工程；提供企劃及完整建片兩條路徑。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
+- [2026-W41：Source-led Video — 把原音精華做成可追溯的影片](weeks/2026/2026-w41-source-led-video/README.md)（`1.1.0 Preview`）— 全片理解、候選評分、短導讀、專名核聽、同來源色系與編輯式雙語／逐點動態工程；提供企劃及完整建片兩條路徑。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
 
 - [2026-W40：Video Highlights — 把長訪談剪成有依據的精華](weeks/2026/2026-w40-video-highlights/README.md)（`0.1.0 Preview`）— 全片逐字稿閱讀、候選視聽核對、八項評分及本機多比例剪輯；附獨立技能、測試與學員教材。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
 

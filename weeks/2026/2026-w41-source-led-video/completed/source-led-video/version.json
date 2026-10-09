@@ -1,9 +1,14 @@
 {
   "name": "source-led-video",
-  "version": "1.0.0",
-  "released": "2026-10-08",
+  "version": "1.1.0",
+  "released": "2026-10-09",
   "primary_language": "zh-TW",
   "bundled_renderer": "paper-documentary",
   "renderer_canvas": "1920x1080@30",
-  "external_runtime_bundled": false
+  "external_runtime_bundled": false,
+  "renderer_variants": [
+    "paper-documentary",
+    "editorial-motion"
+  ],
+  "editorial_motion_validation": "synthetic forward-test required; real-media full listening remains per episode"
 }

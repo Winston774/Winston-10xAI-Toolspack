@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "fictional-gardening-demo": {
+      "palette": {
+        "background": "#EAF0EE",
+        "ink": "#142C32",
+        "secondary": "#42595D",
+        "accent": "#087F8C",
+        "accent_text": "#FFFFFF"
+      }
+    }
+  }
+}

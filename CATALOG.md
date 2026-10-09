@@ -21,3 +21,5 @@
 - `Preview`：可試用，仍可能調整。
 - `Stable`：已驗證並建立正式 Release。
 - `Archived`：保留紀錄，不再維護。
+
+W41目前版本1.1.0 Preview：新增可選編輯式雙語motion adapter、聲線設定與同來源主題；详见该周README。

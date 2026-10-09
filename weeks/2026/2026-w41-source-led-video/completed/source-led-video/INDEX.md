@@ -15,6 +15,12 @@
 | 交付與修訂 | [quality-and-delivery.md](references/quality-and-delivery.md) |
 | 本機技術試跑 | [smoke_test.py](scripts/smoke_test.py)，合成靜音樣本不代表真人影片品質 |
 
+## 新增可選製作路徑
+
+- [製作設定](references/production-presets.md)：保存聲線試聽、同來源色系與雙語顯示規則。
+- [編輯式 motion adapter](references/editorial-motion.md)：已準備媒體＋author-supplied cards/cues，CLI `build_editorial_motion.py PLAN --output NEW_WORK`；固定1080p30。不要與原rundown/schema混用。
+- [聲音設定範本](templates/voice-selection.json)、[來源主題範本](templates/source-themes.json)、[編輯式計畫](templates/editorial-motion.json)。
+
 ## interview.py 子命令
 
 | 命令 | 用途 |

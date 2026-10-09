@@ -4,7 +4,9 @@
 
 ## Unreleased
 
-- 尚無。
+- W41 v1.1.0 Preview：新增editorial motion資料驅動builder、本機render wrapper、繁中/英文與來源主題registry；保留原paper路徑。
+- 提取兩個完整製作案例的聲線試聽／配置、原音復用、卡片/字型/插畫與實際驗收方法；新通用adapter另做合成forward-test。
+- 共享包排除影音、逐字稿、私有聲包、個人路徑和runtime；來源授權邊界維持。
 
 ## 2026-W41 v1.0.0 Preview — 2026-10-08
 

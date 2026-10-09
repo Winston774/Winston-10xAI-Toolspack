@@ -10,8 +10,8 @@ description: 將長訪談、Podcast、演講或教學整理成以原音為主的
 ## 選擇工作方式
 
 - **只要分析或企劃**：取得可用逐字稿／原片，完成來源整理、候選評分、問題順序、標題與縮圖 brief、旁白及 rundown。只用 Python 標準函式庫即可操作資料工具；不要求先裝渲染器或取得聲音模型。
-- **要完成影片**：沿用上述企劃，再準備原片、每段旁白 WAV、字幕與視覺資產，依[快速上手](references/quickstart.md)建置並驗證本機工程。
-- **修改既有影片**：先讀當集 brief、核准項目與 QA。只修改本次指定範圍；改稿、改音或改字幕後重新解析時間軸。
+- **要完成影片**：沿用上述企劃，再準備原片、每段旁白 WAV、字幕與視覺資產，依[快速上手](references/quickstart.md)建置並驗證本機工程。希望使用編輯式雙語與短句逐點淡入時，改讀[editorial motion](references/editorial-motion.md)。
+- **修改既有影片**：先讀當集 brief、核准項目與 QA。只修改本次指定範圍；改稿、改音或改字幕後重新解析時間軸。短樣片與完整片分開標示，核准樣片不等於完整版已重渲染。
 
 來源尚無法取得時，記下缺口與可行替代；不以標題、縮圖或來源摘要冒充全片理解。下載失敗只代表取得途徑受限。影片公開上傳依當次使用者指示處理。
 
@@ -49,11 +49,13 @@ description: 將長訪談、Podcast、演講或教學整理成以原音為主的
 - 自錄／TTS、原文專名與核聽：[聲音及術語](references/voice-and-terms.md)。
 - 字型、紙張字幕、重點卡、進度、縮圖與 CTA：[視覺系統](references/visual-system.md)。
 - 各階段工具與本機配置：[依賴與設定](references/dependencies.md)。
+- 聲線試聽、來源共用色系、雙語／字型：[製作設定](references/production-presets.md)。
+- 編輯式可配置卡片、插畫、雙語、媒體復用：[動態 adapter](references/editorial-motion.md)。
 - 最終檢查、修訂與交付：[品質與交付](references/quality-and-delivery.md)。
 - 全部入口與工具：[索引](INDEX.md)。
 
 ## 執行範圍
 
-`scripts/interview.py` 提供初始化、評分、剪輯、時間軸解析與檢查；`scripts/build_film.py` 建立可編輯的 HyperFrames 工程。內建渲染模板目前支援 1920×1080、30 fps 與繁中主字幕／可選原文副字幕；更換畫幅、字體或布局後須另行驗證。
+`scripts/interview.py` 提供初始化、評分、剪輯、時間軸解析與檢查；`scripts/build_film.py` 建立可編輯的 HyperFrames 工程。原 paper 模板與新增 editorial-motion adapter 都支援 1920×1080、30 fps。後者以已準備的媒體及明確字幕/卡片計畫建置完整或短片，提供繁中／英文雙語與逐點縮入還原；更換畫幅、字體或布局後須另行驗證。
 
 工具不會自動取得來源影片、呼叫 TTS、下載模型或安裝其他技能。學員可先完成企劃，再依環境接上剪輯與渲染能力。若使用其他剪輯器，保留同一份 rundown、字幕、來源時碼與驗收方法；不可把工程檔宣稱成已輸出的影片。
