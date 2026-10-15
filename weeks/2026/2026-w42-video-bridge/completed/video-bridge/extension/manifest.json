@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "影片接力 Video Bridge",
+  "version": "0.3.0",
+  "description": "從 X 或 Threads 下載並複製影片，貼入 Threads 或 Facebook 發文框。由你確認附件與發佈。",
+  "minimum_chrome_version": "120",
+  "icons": { "16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png" },
+  "permissions": ["contextMenus", "storage", "offscreen", "clipboardWrite", "downloads"],
+  "host_permissions": [
+    "https://*.twimg.com/*",
+    "https://*.cdninstagram.com/*",
+    "https://*.fbcdn.net/*"
+  ],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": {
+    "default_title": "影片接力",
+    "default_popup": "popup.html",
+    "default_icon": { "16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png" }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://x.com/*", "https://www.x.com/*", "https://twitter.com/*", "https://www.twitter.com/*", "https://www.threads.com/*", "https://threads.com/*", "https://www.threads.net/*", "https://threads.net/*"],
+      "js": ["theme.js", "source-content.js"],
+      "css": ["noise-winston/tokens.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://www.facebook.com/*", "https://www.threads.com/*", "https://threads.com/*", "https://www.threads.net/*", "https://threads.net/*"],
+      "js": ["theme.js", "social-content.js"],
+      "css": ["noise-winston/tokens.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

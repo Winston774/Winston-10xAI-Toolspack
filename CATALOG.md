@@ -2,6 +2,7 @@
 
 | 週次 | 主題 | 類型 | 難度 | 預估時間 | 狀態 |
 |---|---|---|---|---:|---|
+| [2026-W42](weeks/2026/2026-w42-video-bridge/README.md) | 影片接力 Video Bridge：從 X／Threads 到社群發文框 | Chrome Extension | 中級 | 90 分鐘 | Preview |
 | [2026-W41](weeks/2026/2026-w41-source-led-video/README.md) | Source-led Video：把原音精華做成可追溯的影片 | AI Skill | 進階 | 180 分鐘 | Preview |
 | [2026-W40](weeks/2026/2026-w40-video-highlights/README.md) | Video Highlights：把長訪談剪成有依據的精華 | AI Skill | 中級 | 120 分鐘 | Preview |
 | [2026-W39](weeks/2026/2026-w39-jev-playground/README.md) | Jev 決策遊樂場：看見 AI 如何選擇下一步 | Local AI Tool | 中級 | 120 分鐘 | Preview |

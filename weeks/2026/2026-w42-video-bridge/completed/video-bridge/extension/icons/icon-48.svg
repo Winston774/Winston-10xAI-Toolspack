@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <title>影片接力 Video Bridge, 48px</title>
+  <defs>
+    <mask id="gap" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
+      <rect width="48" height="48" fill="#fff"/>
+      <rect x="13" y="15" width="28" height="24" rx="6" fill="#000"/>
+    </mask>
+    <mask id="play" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
+      <rect width="48" height="48" fill="#fff"/>
+      <path d="M24.75 23V30L31.25 26.5Z" fill="#000" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <rect width="48" height="48" rx="9" fill="#DFF813"/>
+  <rect x="11.5" y="13.5" width="19" height="14" rx="3" fill="none" stroke="#111111" stroke-width="3" mask="url(#gap)"/>
+  <rect x="16" y="18" width="22" height="17" rx="4" fill="#111111" mask="url(#play)"/>
+</svg>
