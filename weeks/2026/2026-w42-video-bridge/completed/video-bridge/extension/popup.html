@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>影片接力 Video Bridge</title>
+    <link rel="stylesheet" href="noise-winston/tokens.css">
+    <link rel="stylesheet" href="noise-winston/components.css">
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="popup.css">
+    <script src="popup.js" defer></script>
+  </head>
+  <body>
+    <main class="app">
+      <header class="nw-appbar">
+        <div class="nw-appbar__brand">
+          <img src="icons/icon-48.png" alt="" class="nw-appbar__icon">
+          <div>
+            <h1 class="nw-appbar__title">影片接力</h1>
+            <p class="nw-appbar__meta">Video Bridge</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="status" role="status" aria-live="polite">
+        <span id="status-dot" class="status-dot" aria-hidden="true"></span>
+        <span id="status-text">正在讀取狀態…</span>
+      </div>
+
+      <section id="empty-state" class="empty" hidden>
+        <h2>下載，也能貼上影片</h2>
+        <p>在 X 或 Threads 的影片上按右鍵，選擇「下載並複製影片・影片接力」。</p>
+        <ol class="steps">
+          <li>等待影片備妥並交給 Chrome 下載。</li>
+          <li>打開 Threads 新串文或 Facebook 一般發文框。</li>
+          <li>按 <kbd class="nw-kbd">Ctrl</kbd>＋<kbd class="nw-kbd">V</kbd>，或點「插入已複製影片」。</li>
+        </ol>
+      </section>
+
+      <section id="clip-panel" class="clip" aria-label="目前暫存影片" hidden>
+        <div class="clip__head">
+          <p class="clip__label">目前暫存</p>
+          <time id="clip-time" class="clip__time nw-signal"></time>
+        </div>
+        <h2 id="clip-name" class="clip__name"></h2>
+        <p id="clip-details" class="clip__details nw-signal"></p>
+        <a id="source-link" class="clip__source nw-link" target="_blank" rel="noopener noreferrer">查看來源貼文 ↗</a>
+        <button id="copy-button" class="nw-btn nw-btn--primary nw-btn--lg nw-btn--block" type="button">準備再次貼上</button>
+        <p class="paste-help">到 Threads 新串文或 Facebook 一般發文框按 <kbd class="nw-kbd">Ctrl</kbd>＋<kbd class="nw-kbd">V</kbd>，或點「插入已複製影片」。</p>
+        <div class="clip__actions">
+          <button id="download-button" class="nw-btn nw-btn--secondary" type="button">另存影片</button>
+          <button id="clear-button" class="nw-btn nw-btn--ghost" type="button">清除暫存</button>
+        </div>
+      </section>
+
+      <p id="error-message" class="message nw-callout nw-callout--error" role="alert" hidden></p>
+      <p id="action-message" class="message nw-message is-success" role="status" aria-live="polite" hidden></p>
+
+      <section class="notes" aria-label="使用須知">
+        <p>一次暫存一支影片，上限 150 MiB。</p>
+        <p>僅需貼上時，可選右鍵「複製影片」。其他平台可用下載的 MP4 手動選檔上傳。</p>
+        <p>X 影片上的右鍵改顯示 Chrome 選單；按住 Shift 再按右鍵可用 X 原本的選單。</p>
+      </section>
+
+      <div class="appearance">
+        <label for="theme-mode">外觀模式</label>
+        <select id="theme-mode" class="nw-select">
+          <option value="system">跟隨系統</option>
+          <option value="light">亮色</option>
+          <option value="dark">暗色</option>
+        </select>
+      </div>
+
+      <footer class="nw-signature">
+        <span class="nw-signature__mark">Noise Winston · Lab 003</span>
+        <span>Created by Winston.</span>
+      </footer>
+    </main>
+  </body>
+</html>

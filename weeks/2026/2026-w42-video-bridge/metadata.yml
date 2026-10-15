@@ -1,0 +1,11 @@
+id: 2026-w42
+title: 影片接力 Video Bridge：從 X／Threads 到社群發文框
+type: chrome-extension
+difficulty: intermediate
+estimated_minutes: 90
+status: preview
+published_at: 2026-10-15
+version: 0.3.0
+platform: chrome-manifest-v3
+license: "unspecified for the supplied extension; no additional license grant"
+include_root_license: false

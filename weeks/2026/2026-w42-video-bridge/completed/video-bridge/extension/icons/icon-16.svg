@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <title>影片接力 Video Bridge, 16px</title>
+  <!-- Drawn pixel by pixel: the back frame shrinks to the visible L, the play mark to four pixels plus two half pixels. -->
+  <defs>
+    <mask id="play" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+      <rect width="16" height="16" fill="#fff"/>
+      <path d="M9 8H10V9H11V10H10V11H9Z" fill="#000"/>
+      <path d="M10 8H11V9H10ZM10 10H11V11H10Z" fill="#808080"/>
+    </mask>
+  </defs>
+  <rect width="16" height="16" rx="3" fill="#DFF813"/>
+  <path d="M3 4H10V6H9V5H4V8H5V9H3Z" fill="#111111"/>
+  <rect x="6" y="7" width="7" height="5" rx="1" fill="#111111" mask="url(#play)"/>
+</svg>

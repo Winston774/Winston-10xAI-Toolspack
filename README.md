@@ -39,6 +39,8 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W42：影片接力 Video Bridge — 從 X／Threads 到社群發文框](weeks/2026/2026-w42-video-bridge/README.md)（`0.3.0 Preview`）— 右鍵下載與複製、單支本機快取、Threads／Facebook 附件插入、亮暗色介面與可重跑的模擬測試。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
+
 - [2026-W41：Source-led Video — 把原音精華做成可追溯的影片](weeks/2026/2026-w41-source-led-video/README.md)（`1.0.0 Preview`）— 全片理解、候選評分、首題比較、短導讀、專名核聽與紙感影片工程；提供企劃及完整建片兩條路徑。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
 
 - [2026-W40：Video Highlights — 把長訪談剪成有依據的精華](weeks/2026/2026-w40-video-highlights/README.md)（`0.1.0 Preview`）— 全片逐字稿閱讀、候選視聽核對、八項評分及本機多比例剪輯；附獨立技能、測試與學員教材。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
@@ -71,3 +73,5 @@ W39 的 Jev Playground 來源應用未附授權檔，本週 metadata 記為未�
 W40 的 Video Highlights 來源技能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。
 
 W41 的 Source-led Video 來源技能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。
+
+W42 的 Video Bridge 來源擴充功能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。

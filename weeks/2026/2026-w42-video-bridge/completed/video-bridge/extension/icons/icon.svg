@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <title>影片接力 Video Bridge</title>
+  <!-- Noise Winston Extension Kit 2.1.0: Signal Lime tile, ink mark. Master drawing on the 128 grid.
+       icon-16/32/48.svg are the same mark refitted to whole pixels at those sizes. -->
+  <defs>
+    <mask id="gap" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128">
+      <rect width="128" height="128" fill="#fff"/>
+      <rect x="37" y="42" width="70" height="58" rx="18" fill="#000"/>
+    </mask>
+    <mask id="play" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128">
+      <rect width="128" height="128" fill="#fff"/>
+      <path d="M64 60V82L83 71Z" fill="#000" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="#DFF813"/>
+  <rect x="32.5" y="37.5" width="47" height="35" rx="6.5" fill="none" stroke="#111111" stroke-width="9" mask="url(#gap)"/>
+  <rect x="44" y="49" width="56" height="44" rx="11" fill="#111111" mask="url(#play)"/>
+</svg>
