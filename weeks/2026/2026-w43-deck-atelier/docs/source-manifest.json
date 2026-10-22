@@ -1,0 +1,111 @@
+{
+  "source": "user-supplied skill snapshot",
+  "snapshot_date": "2026-10-22",
+  "files": [
+    {
+      "path": "assets/engine/atelier.css",
+      "bytes": 86438,
+      "sha256": "b1e9e817bd28df44eb0d34ce6b2d5c4b33976a4b28d3b0b1c879b11b0213540c"
+    },
+    {
+      "path": "assets/engine/atelier.js",
+      "bytes": 44644,
+      "sha256": "4b863e4af928eba47a9572823b3d2422955b2e363447fb64919ad93810f532ac"
+    },
+    {
+      "path": "assets/templates/starter.html",
+      "bytes": 5955,
+      "sha256": "baa95c26835921c4e11a812b41fac3ded61c468af6500e4010295713eccb0307"
+    },
+    {
+      "path": "examples/attention/deck.html",
+      "bytes": 150383,
+      "sha256": "4e68fad9065a23cfe786f5e4ed122a6ad8e766a5f446ec45e865b54a99418c19"
+    },
+    {
+      "path": "examples/attention/gen_figs.py",
+      "bytes": 15441,
+      "sha256": "6bdef4c231a6d290f12b1bbf4c1a0baf39472f6eafc99ff6e797aef4d292d7d4"
+    },
+    {
+      "path": "examples/attention/storyline.md",
+      "bytes": 3753,
+      "sha256": "956a24cae96f0786cc9815d0e476ccdc1d4762e05db1a58ae8e8d1cd79af3afd"
+    },
+    {
+      "path": "references/diagrams.md",
+      "bytes": 9181,
+      "sha256": "bd8f23ff420eb27a9df87058b025162bd008baa8b3bf310f11e1aaebb3edddf8"
+    },
+    {
+      "path": "references/ingest.md",
+      "bytes": 8711,
+      "sha256": "d2415143ba2bff94da158c76d09a54d7fc9019f1370073bf6154a266a14d894d"
+    },
+    {
+      "path": "references/layouts.md",
+      "bytes": 22969,
+      "sha256": "921fba840b8d521eca19fd755d6806ee68d9d3005c35ba792b915b6316eff91e"
+    },
+    {
+      "path": "references/motion.md",
+      "bytes": 8039,
+      "sha256": "62a9678aa95265d4c3b1fc6ac5dfb455c472141ea1c74730e5aed8f2e21f9d35"
+    },
+    {
+      "path": "references/narrative.md",
+      "bytes": 10167,
+      "sha256": "696c35e18d115c16fef821ad21c925b03dc1477e91ad46f25c7cae9abc0e656c"
+    },
+    {
+      "path": "references/qa.md",
+      "bytes": 5260,
+      "sha256": "c1df2420d13357774374d3a061d2350b351db8c493dffa2bcf7bb76497ddfcda"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "bytes": 13486,
+      "sha256": "38a8d7481b8a662ecb3c82f8df6de112311f4e57f3bbfc29496b4d0cf20f87bc"
+    },
+    {
+      "path": "scripts/ingest.py",
+      "bytes": 41944,
+      "sha256": "c5bf9ac32d062e4e489be67d52cdccd6b9dd0f5d272179105c49532cf4e5f701"
+    },
+    {
+      "path": "scripts/new_deck.mjs",
+      "bytes": 5042,
+      "sha256": "9a570ccd305c0fc52d456834ad66c04f348b8a0af957f8fc996ad2800f0bd40f"
+    },
+    {
+      "path": "scripts/phrase.mjs",
+      "bytes": 10782,
+      "sha256": "9042b534097e087b30ae12638d17921561fabcf624afbcbe36c6d11d8caea8f3"
+    },
+    {
+      "path": "scripts/phrase.py",
+      "bytes": 1664,
+      "sha256": "fbbd076f0c8a24305751dc91bb54a6b13801c5c890372f6a0ab36f6d851fe8c9"
+    },
+    {
+      "path": "scripts/set_style.mjs",
+      "bytes": 4134,
+      "sha256": "de18f908464ca82a9a7ecc758d4bdb8efc4ec493d49cb20ba565765891bcd67c"
+    },
+    {
+      "path": "scripts/snapshot.mjs",
+      "bytes": 21444,
+      "sha256": "2ea2355d10ef2c10c423237e3d81e86dee8e90f4969e33d0cd97bd4e95dcc4ba"
+    },
+    {
+      "path": "scripts/styles.mjs",
+      "bytes": 1533,
+      "sha256": "90993a85bcbbeeeef8a7817108bb0060c24f82193733e6c62ce6e79df99473b0"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 18723,
+      "sha256": "7ddc5d55bba6eeeb430d48e7d22e2d3e003c5147f8cf5e42bb5e042c8783e920"
+    }
+  ]
+}
