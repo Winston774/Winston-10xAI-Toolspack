@@ -1,8 +1,6 @@
 {
-  "source_repository": "Winston774/deck-atelier",
-  "source_commit": "1ade43b4709445af8965a2db24eacc70ddb489b0",
+  "source": "user-supplied skill snapshot",
   "snapshot_date": "2026-10-22",
-  "repository_files": 282,
   "files": [
     {
       "path": "assets/engine/atelier.css",

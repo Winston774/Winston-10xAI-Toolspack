@@ -1,6 +1,6 @@
 # W43 驗證紀錄
 
-日期：2026-10-22。來源 commit：`1ade43b4709445af8965a2db24eacc70ddb489b0`。驗證對象為本週 `completed/deck-atelier/`，使用 Windows、Node.js 24 系列、Python 3.12、uv 與獨立無頭 Edge；中文分詞設定 `PYTHONUTF8=1`。
+日期：2026-10-22。驗證對象為本週 `completed/deck-atelier/`，使用 Windows、Node.js 24 系列、Python 3.12、uv 與獨立無頭 Edge；中文分詞設定 `PYTHONUTF8=1`。
 
 ## 本機已執行
 
