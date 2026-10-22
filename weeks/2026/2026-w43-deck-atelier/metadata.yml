@@ -1,0 +1,11 @@
+id: 2026-w43
+title: Deck Atelier：把資料做成可講、可編輯的 HTML 簡報
+type: skill
+difficulty: intermediate
+estimated_minutes: 120
+status: preview
+published_at: 2026-10-22
+version: 0.1.0
+platform: codex-claude-code-node-python-browser
+license: "unspecified for the supplied skill; no additional license grant"
+include_root_license: false

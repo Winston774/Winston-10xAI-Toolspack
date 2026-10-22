@@ -1,0 +1,1503 @@
+<!doctype html>
+<html lang="zh-Hant-TW" data-style="swiss" data-theme="light" data-motion="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attention Is All You Need — 論文導讀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" data-fonts href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&amp;family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Noto+Sans+TC:wght@100..900&amp;display=swap">
+<link rel="stylesheet" href="../../assets/engine/atelier.css">
+<style>
+/* ── Attention Is All You Need · deck-specific styles ─────────────────── */
+/* role tokens only (var(--f-head), var(--w-fig), var(--accent)…): the deck renders in every style */
+
+/* 01 · cover */
+.cover-art { position: absolute; left: 1052px; top: 128px; width: 740px; height: 292px; }
+
+/* 04 · RNN chain */
+.formula-line { font: 400 italic 46px/1.2 var(--f-math); color: var(--ink); letter-spacing: 0; }
+.formula-line sub { font-size: 0.56em; }
+.formula-line .up { font-style: normal; }
+:root[data-motion="on"] .slide.is-active .seq {
+  animation: seq-lit 5.6s var(--ease-in-out) infinite both;
+  animation-delay: calc(var(--i) * 0.55s + 2.2s);
+}
+@keyframes seq-lit {
+  0%, 16%, 100% { stroke: var(--ink-2); fill: var(--paper); }
+  3%, 10% { stroke: var(--accent); fill: var(--accent-soft); }
+}
+
+/* 05 · two bottlenecks */
+.exhibit__h { display: flex; align-items: baseline; gap: 18px; padding-bottom: 20px; margin-bottom: 18px; border-bottom: var(--bar) solid var(--ink); }
+.exhibit__h .n { font: var(--w-fig) 32px/1 var(--f-fig); font-stretch: var(--x-fig); color: var(--accent); }
+.exhibit__h h3 { font: var(--w-sub) 36px/1.2 var(--f-head); letter-spacing: var(--tr-head); color: var(--ink); }
+.exhibit__h .o { margin-left: auto; font: 400 21px/1 var(--f-text); color: var(--ink-3); letter-spacing: 0.01em; white-space: nowrap; }
+.exhibit__h .o b { font: var(--w-fig) 32px/1 var(--f-fig); color: var(--ink); }
+.exhibit__h .o b i { font-style: italic; font-size: 1em; }
+.exhibit__h .o .arrow { margin: 0 10px; color: var(--ink-3); }
+
+/* 07 · its → Law */
+.sentence { position: relative; height: 440px; }
+.sentence > svg { position: absolute; left: 0; top: 0; width: 1664px; height: 440px; overflow: visible; }
+.sentence .slot { position: absolute; top: 232px; width: 220px; margin-left: -110px; text-align: center; }
+.sentence .token { font-size: 44px; font-stretch: 80%; letter-spacing: -0.02em; }
+:root[data-style="lab"] .sentence .token { font-size: 31px; letter-spacing: -0.04em; }
+
+/* 08 · Q K V */
+.qkv { display: grid; grid-template-columns: 300px minmax(0, 1fr) 440px; column-gap: 72px; align-items: start; height: 100%; }
+.qkv__h .en { display: block; font: var(--w-fig) 48px/1 var(--f-fig); letter-spacing: -0.02em; text-transform: none; color: var(--ink); }
+.qkv__h .zh { display: block; margin-top: 14px; font: var(--w-label) 17px/1.4 var(--f-label); letter-spacing: var(--tr-label); color: var(--ink-3); }
+.qkv__q { display: flex; flex-direction: column; align-items: flex-start; }
+.qkv__chip { margin-top: 64px; font-size: 80px; padding: 18px 44px 28px; border: 2px solid var(--accent); border-radius: var(--r-chip); color: var(--accent-ink); background: var(--accent-wash); }
+.qkv__q .note { margin-top: 30px; max-width: 300px; }
+.qkv__cols, .qkv__row { display: grid; grid-template-columns: 200px minmax(0, 1fr) 132px; column-gap: 24px; align-items: center; }
+.qkv__cols { white-space: nowrap; margin-top: 28px; padding-bottom: 12px; border-bottom: var(--bar) solid var(--ink); font: var(--w-label) 14px/1.3 var(--f-label); letter-spacing: var(--tr-label); text-transform: var(--case-label); color: var(--ink-3); }
+.qkv__cols span:first-child { text-align: right; }
+.qkv__cols span:last-child { text-align: right; }
+.qkv__row { height: 60px; border-bottom: 1px solid var(--rule); }
+.qkv__row .token { font-size: 40px; justify-self: end; }
+.qkv__row .rest { justify-self: end; font: 400 20px/1 var(--f-text); color: var(--ink-3); letter-spacing: 0.01em; }
+.qkv__vals { display: grid; grid-template-columns: minmax(0, 1fr) 72px; column-gap: 16px; align-items: center; }
+.qkv__bar { height: 10px; border-radius: 0 var(--r-chip) var(--r-chip) 0; background: var(--rule-2); width: calc(var(--v) * 100%); }
+.qkv__row.is-top .qkv__bar { background: var(--ink-2); }
+.qkv__score { white-space: nowrap; font: 400 21px/1 var(--f-text); color: var(--ink-2); font-variant-numeric: tabular-nums; text-align: right; }
+.qkv__w { font: var(--w-fig) 34px/1 var(--f-fig); font-stretch: var(--x-fig); letter-spacing: var(--tr-fig); color: var(--ink-2); text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+.qkv__row.is-top .qkv__w { color: var(--ink); }
+.qkv__out .mix { display: flex; height: 30px; margin-top: 44px; }
+.qkv__out .mix i { display: block; height: 100%; flex: 0 0 auto; width: calc(var(--w) * 1%); background: var(--rule-2); border-right: 2px solid var(--paper); }
+.qkv__out .mix i:first-child { background: var(--accent); border-radius: var(--r-chip) 0 0 var(--r-chip); }
+.qkv__out .mix i:nth-child(2) { background: var(--ink-2); }
+.qkv__out .mix i:last-child { border-right: 0; border-radius: 0 var(--r-chip) var(--r-chip) 0; }
+.qkv__out .mix-key { display: flex; gap: 28px; margin-top: 16px; font: 400 18px/1.4 var(--f-text); color: var(--ink-2); }
+.qkv__out .mix-key span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: var(--r-dot); background: var(--c); vertical-align: 1px; }
+.qkv__out .eq { margin-top: 30px !important; font: 400 italic 30px/1.5 var(--f-math) !important; color: var(--ink) !important; }
+.qkv__out .eq .up { font-style: normal; font-family: var(--f-text); font-size: 0.72em; color: var(--ink-3); }
+
+/* 09 · the formula */
+.formula { display: flex; align-items: center; justify-content: center; gap: 0.14em; font: 400 96px/1 var(--f-math); color: var(--ink); white-space: nowrap; }
+.formula i { font-style: italic; }
+.f-group { position: relative; display: inline-flex; align-items: center; transition: color 0.7s var(--ease-out); }
+.f-frac { display: inline-flex; flex-direction: column; align-items: center; font-size: 0.8em; margin: 0 0.04em; }
+.f-num { padding: 0 0.14em 0.1em; border-bottom: 2px solid var(--ink); }
+.f-num sup { font-size: 0.42em; vertical-align: 1.25em; margin-left: 0.07em; font-style: normal; }
+.f-den { display: inline-flex; align-items: stretch; padding-top: 0.1em; }
+.f-rad { width: 0.46em; height: 1.06em; overflow: visible; margin-right: -1px; }
+.f-rad path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.f-radicand { border-top: 2px solid currentColor; padding: 0.06em 0.04em 0 0.04em; }
+.f-radicand sub { font-size: 0.55em; vertical-align: -0.2em; font-style: italic; }
+.f-paren { font-size: 1.6em; line-height: 0.8; color: var(--ink-3); transform: translateY(-0.02em); }
+.f-mark { position: absolute; font: var(--w-label) 19px/1 var(--f-label); color: var(--accent-ink); }
+.annots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 52px; margin-top: 72px; }
+.annot { padding-top: 24px; border-top: var(--bar) solid var(--ink); }
+.annot .n { font: var(--w-fig) 30px/1 var(--f-fig); font-stretch: var(--x-fig); color: var(--accent); }
+.annot h3 { margin-top: 16px !important; font: var(--w-sub) 30px/1.3 var(--f-head); letter-spacing: var(--tr-head); color: var(--ink); }
+.annot h3 .m { margin-right: 12px; font: italic 400 36px/1 var(--f-math); }
+.annot p { margin-top: 14px !important; font-size: 22px !important; line-height: 1.68 !important; }
+:root[data-motion="on"] .slide[data-at="1"] .f-group[data-term="qk"],
+:root[data-motion="on"] .slide[data-at="2"] .f-group[data-term="scale"],
+:root[data-motion="on"] .slide[data-at="3"] .f-group[data-term="softmax"],
+:root[data-motion="on"] .slide[data-at="4"] .f-group[data-term="v"] { color: var(--accent); }
+
+/* 11 · positional encoding */
+.pe-formula { font: 400 italic 34px/1.7 var(--f-math); color: var(--ink); }
+.pe-formula .up { font-style: normal; }
+.pe-formula sup { font-size: 0.56em; vertical-align: 0.85em; margin-left: 0.08em; }
+.pe-formula sub { font-size: 0.56em; margin-right: 0.1em; }
+
+/* 12 · architecture */
+.arch-note h3 { font: var(--w-sub) 36px/1.25 var(--f-head); letter-spacing: var(--tr-head); color: var(--ink); }
+.arch-note h3 .en { display: block; margin-top: 10px; font-size: 18px; line-height: 1.2; }
+.arch-note p { margin-top: 18px !important; font-size: 22px !important; line-height: 1.72 !important; }
+.arch-note .spec { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--rule); font: 400 19px/1.75 var(--f-text); color: var(--ink-3); letter-spacing: 0.01em; }
+.arch-note .spec i { font-family: var(--f-math); color: var(--ink-2); }
+.arch-note--right { text-align: left; }
+.arch .blk { transition: opacity 0.8s var(--ease-out); }
+.arch .x-path { transition: stroke 0.8s var(--ease-out), stroke-width 0.8s var(--ease-out); }
+:root[data-motion="on"] .slide[data-at="1"] .arch .g-dec,
+:root[data-motion="on"] .slide[data-at="1"] .arch .g-cross { opacity: 0.22; }
+:root[data-motion="on"] .slide[data-at="2"] .arch .g-enc { opacity: 0.22; }
+:root[data-motion="on"] .slide[data-at="3"] .arch .x-path { stroke: var(--accent); stroke-width: 2.5; }
+
+/* 13 · results chart */
+.chart text { font-family: var(--f-text); }
+.chart .tick { font-size: 19px; fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+.chart .ax-label { font-family: var(--f-label); font-size: 16px; font-weight: var(--w-label); fill: var(--ink-3); letter-spacing: var(--tr-label); }
+.chart .lbl { font-size: 20px; fill: var(--ink-2); }
+.chart .lbl-key { font-size: 22px; fill: var(--ink); font-weight: var(--w-strong); }
+.chart .lbl-val { font-size: 19px; fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+.chart .pt { fill: var(--ink-3); stroke: var(--paper); stroke-width: 2.5; }
+.chart .pt-key { fill: var(--accent); stroke: var(--paper); stroke-width: 2.5; }
+.chart .halo { fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
+:root[data-motion="on"] .slide.is-active .chart .halo { animation: halo 4.2s var(--ease-out) infinite; animation-delay: 2.6s; }
+.chart .halo + .halo { animation-delay: 3.4s !important; }
+@keyframes halo { 0% { transform: scale(0.7); opacity: 0.65; } 70%, 100% { transform: scale(2.6); opacity: 0; } }
+
+/* 15 · closing */
+[data-layout="closing"] .closing__line { margin-top: 0; font-size: 124px; }
+.thanks { display: flex; justify-content: space-between; align-items: baseline; margin-top: 64px; padding-top: 26px; border-top: var(--bar) solid var(--ink); font: var(--w-label) var(--t-label)/1.3 var(--f-label); letter-spacing: var(--tr-label); text-transform: var(--case-label); color: var(--ink-2); }
+</style>
+</head>
+<body>
+<main class="deck" data-title="Attention Is All You Need">
+
+<!-- ═════════════════════════════ 01 · COVER ═════════════════════════════ -->
+<section class="slide" data-layout="cover" data-chrome="none">
+  <div class="cover__meta"><span>NeurIPS 2017</span><span class="dot"></span><span>論文導讀</span><span class="dot"></span><span>Paper Reading</span></div>
+  <figure class="cover-art" aria-hidden="true" data-depth="0.35">
+    <svg class="dg" viewBox="0 0 812 320"><!--gen:cover-->
+<g class="line-faint">
+<path d="M16 288 A 97.5 76 0 0 1 211 288" data-draw="0" data-ambient="breathe" style="animation-delay:-0.0s; --breathe-from:.25"/>
+<path d="M16 288 A 195 152.1 0 0 1 406 288" data-draw="45" data-ambient="breathe" style="animation-delay:-1.3s; --breathe-from:.25"/>
+<path d="M211 288 A 146.2 114.1 0 0 1 503.5 288" data-draw="90" data-ambient="breathe" style="animation-delay:-2.6s; --breathe-from:.25"/>
+<path d="M308.5 288 A 243.8 190.1 0 0 1 796 288" data-draw="135" data-ambient="breathe" style="animation-delay:-3.9s; --breathe-from:.25"/>
+<path d="M113.5 288 A 146.2 114.1 0 0 1 406 288" data-draw="180" data-ambient="breathe" style="animation-delay:-5.2s; --breathe-from:.25"/>
+<path d="M406 288 A 195 152.1 0 0 1 796 288" data-draw="225" data-ambient="breathe" style="animation-delay:-6.5s; --breathe-from:.25"/>
+<path d="M211 288 A 292.5 228.2 0 0 1 796 288" data-draw="270" data-ambient="breathe" style="animation-delay:-7.8s; --breathe-from:.25"/>
+<path d="M16 288 A 341.2 262 0 0 1 698.5 288" data-draw="315" data-ambient="breathe" style="animation-delay:-9.1s; --breathe-from:.25"/>
+<path d="M308.5 288 A 97.5 76 0 0 1 503.5 288" data-draw="360" data-ambient="breathe" style="animation-delay:-10.4s; --breathe-from:.25"/>
+<path d="M503.5 288 A 146.2 114.1 0 0 1 796 288" data-draw="405" data-ambient="breathe" style="animation-delay:-11.7s; --breathe-from:.25"/>
+<path d="M113.5 288 A 97.5 76 0 0 1 308.5 288" data-draw="450" data-ambient="breathe" style="animation-delay:-13.0s; --breathe-from:.25"/>
+<path d="M601 288 A 97.5 76 0 0 1 796 288" data-draw="495" data-ambient="breathe" style="animation-delay:-14.3s; --breathe-from:.25"/>
+</g>
+<path class="line-soft" d="M406 288 A 97.5 97.5 0 0 1 601 288" style="stroke-width:1; opacity:0.7" data-draw="600"/>
+<path class="line-soft" d="M211 288 A 195 195 0 0 1 601 288" style="stroke-width:1; opacity:0.7" data-draw="690"/>
+<path class="line-soft" d="M308.5 288 A 146.2 146.2 0 0 1 601 288" style="stroke-width:1; opacity:0.7" data-draw="780"/>
+<path class="line-soft" d="M601 288 A 97.5 97.5 0 0 1 796 288" style="stroke-width:1; opacity:0.7" data-draw="870"/>
+<path class="line-soft" d="M16 288 A 292.5 268 0 0 1 601 288" style="stroke-width:1; opacity:0.7" data-draw="960"/>
+<path class="line-soft" d="M503.5 288 A 48.8 48.8 0 0 1 601 288" style="stroke-width:1; opacity:0.7" data-draw="1050"/>
+<path class="line" d="M601 288 A 48.8 48.8 0 0 1 698.5 288" style="stroke-width:1.4; opacity:0.8" data-draw="1140"/>
+<path class="line-accent" d="M113.5 288 A 243.8 243.8 0 0 1 601 288" style="stroke-width:2.4; opacity:1" data-draw="1230"/>
+<circle class="fill-ink2" cx="16" cy="288" r="3.6" data-pop="0"/>
+<circle class="fill-ink" cx="113.5" cy="288" r="6.5" data-pop="1400"/>
+<circle class="fill-ink2" cx="211" cy="288" r="3.6" data-pop="160"/>
+<circle class="fill-ink2" cx="308.5" cy="288" r="3.6" data-pop="240"/>
+<circle class="fill-ink2" cx="406" cy="288" r="3.6" data-pop="320"/>
+<circle class="fill-ink2" cx="503.5" cy="288" r="3.6" data-pop="400"/>
+<circle class="fill-accent" cx="601" cy="288" r="6.5" data-pop="500"/>
+<circle class="fill-ink2" cx="698.5" cy="288" r="3.6" data-pop="560"/>
+<circle class="fill-ink2" cx="796" cy="288" r="3.6" data-pop="640"/>
+<text x="113.5" y="318" text-anchor="middle" class="t-display t-muted" font-size="22" font-style="italic" data-fade="1600">Law</text>
+<text x="601" y="318" text-anchor="middle" class="t-display t-accent" font-size="22" font-style="italic" data-fade="700">its</text>
+<!--/gen--></svg>
+  </figure>
+  <h1 class="cover__title" lang="en"><span class="line">Attention</span><span class="line">Is All You <em>Need</em></span></h1>
+  <p class="cover__subtitle">拿掉循環，只留注意力——Transformer 如何成為現代 AI 的地基</p>
+  <div class="cover__foot">
+    <span>Ashish Vaswani · Noam Shazeer · Niki Parmar · Jakob Uszkoreit · Llion Jones · Aidan N. Gomez · Łukasz Kaiser · Illia Polosukhin</span>
+    <span>Google Brain · Google Research</span>
+  </div>
+  <aside class="notes">
+    <p>今天要介紹的是 2017 年 Google 團隊發表的〈Attention Is All You Need〉。這篇論文提出了 Transformer——也就是 ChatGPT、Claude 這些大型語言模型共同的骨架。</p>
+    <p>先給大家一個預告：它最關鍵的一步，其實是一個「減法」。（約 30 秒）</p>
+    <p>小知識：論文的八位作者標註「貢獻相同、排名隨機」。</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 02 · EXECUTIVE SUMMARY ═════════════════════ -->
+<section class="slide" data-tracker="摘要 · Summary">
+  <div class="head">
+    <p class="kicker">一句話看懂這篇論文</p>
+    <h2 class="title">只靠注意力，Transformer 做到了<em>更快、更準，也更能擴展</em></h2>
+  </div>
+  <div class="body body--center">
+    <ol class="points">
+      <li><span class="n">01</span><h3>更快<span class="en">Parallel</span></h3><p>整句一次平行計算，不必逐字排隊。<span class="nw">基礎版只訓練 12 小時，</span><span class="nw">英德翻譯就超越</span><span class="nw">所有既有模型。</span></p></li>
+      <li><span class="n">02</span><h3>更準<span class="en">Better</span></h3><p><span class="nw">英→德翻譯 BLEU 28.4，</span><span class="nw">比先前最佳成績</span><span class="nw">（含集成模型）</span><span class="nw">高出 2 分以上；</span><span class="nw">英→法 41.8，</span><span class="nw">單一模型最佳。</span></p></li>
+      <li><span class="n">03</span><h3>更能擴展<span class="en">Scalable</span></h3><p><span class="nw">同一種積木層層堆疊、</span><span class="nw">結構簡單，</span><span class="nw">後來成為 BERT、GPT</span><span class="nw">到今日大型語言模型的</span><span class="nw">共同骨架。</span></p></li>
+    </ol>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), Attention Is All You Need — Abstract、§6.1、Table 2。</p>
+  <aside class="notes">
+    <p>先講結論。這篇論文只做了一件大膽的事：把當時主流的「循環」結構拿掉，只留下「注意力」。</p>
+    <p>結果有三：更快——可以平行計算；更準——英德翻譯 BLEU 28.4，比過去最好的成績高出 2 分以上；更能擴展——後來的 BERT、GPT 都建立在它上面。</p>
+    <p>接下來用四個問題，一步步拆解這三點。（約 1 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════════ 03 · AGENDA ════════════════════════════ -->
+<section class="slide" data-tracker="目錄 · Contents">
+  <div class="head">
+    <p class="kicker">接下來的 15 分鐘</p>
+    <h2 class="title">四個問題，帶你讀懂這篇論文</h2>
+  </div>
+  <div class="body body--center">
+    <ol class="agenda">
+      <li><span class="n">01</span><div><h3>困境<span class="en">The bottleneck</span></h3><p>為什麼 2017 年的語言模型，又慢又健忘？</p></div></li>
+      <li><span class="n">02</span><div><h3>機制<span class="en">The mechanism</span></h3><p>「注意力」到底在計算什麼？</p></div></li>
+      <li><span class="n">03</span><div><h3>成果<span class="en">The evidence</span></h3><p>它真的比較好，還是只是比較新？</p></div></li>
+      <li><span class="n">04</span><div><h3>影響<span class="en">The legacy</span></h3><p>為什麼今天的 AI，幾乎都長這個樣子？</p></div></li>
+    </ol>
+  </div>
+  <aside class="notes">
+    <p>我們會依序回答四個問題：當時的模型卡在哪裡、注意力怎麼運作、成果有多好，以及它為什麼改變了整個領域。</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 04 · RNN READS WORD BY WORD ════════════════ -->
+<section class="slide" data-chapter="01" data-chapter-title="困境 · The Bottleneck">
+  <div class="head">
+    <p class="kicker">循環神經網路 · RNN / LSTM</p>
+    <h2 class="title">2017 年的主流模型，必須一個字、一個字地讀</h2>
+  </div>
+  <div class="body">
+    <div class="grid">
+      <div class="span-4 stack stack--lg self-center">
+        <p><span class="nw">RNN 把句子當成一條隊伍：</span><span class="nw">第 <i>t</i> 個字，</span><span class="nw">要等第 <i>t</i> − 1 個字算完，</span><span class="nw">才能開始。</span></p>
+        <p><span class="nw">句子越長、排隊越久；</span><span class="nw">GPU 上成千上萬的運算單元，</span><span class="nw">大多只能閒置等待。</span></p>
+        <div>
+          <p class="formula-line">h<sub>t</sub> = <span class="up">f</span>( h<sub>t−1</sub> , x<sub>t</sub> )</p>
+          <p class="note">每一步都依賴上一步的結果</p>
+        </div>
+      </div>
+      <figure class="figure span-8 self-center">
+        <svg class="dg" viewBox="0 0 1096 470" role="img" aria-label="RNN 依序處理六個字的示意圖">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="currentColor" stroke-width="1.4"/></marker>
+          </defs>
+          <g class="t-display t-muted" font-size="26" font-style="italic" text-anchor="middle" data-fade="0">
+            <text x="88" y="52">t = 1</text>
+            <text x="272" y="52">t = 2</text>
+            <text x="456" y="52">t = 3</text>
+            <text x="640" y="52">t = 4</text>
+            <text x="824" y="52">t = 5</text>
+            <text x="1008" y="52">t = 6</text>
+          </g>
+          <g style="color: var(--ink-2)">
+            <path class="line" d="M88 352 V214" marker-end="url(#ah)" data-draw="200"/>
+            <path class="line" d="M272 352 V214" marker-end="url(#ah)" data-draw="300"/>
+            <path class="line" d="M456 352 V214" marker-end="url(#ah)" data-draw="400"/>
+            <path class="line" d="M640 352 V214" marker-end="url(#ah)" data-draw="500"/>
+            <path class="line" d="M824 352 V214" marker-end="url(#ah)" data-draw="600"/>
+            <path class="line" d="M1008 352 V214" marker-end="url(#ah)" data-draw="700"/>
+            <path class="line" d="M156 158 H200" marker-end="url(#ah)" data-draw="500"/>
+            <path class="line" d="M340 158 H384" marker-end="url(#ah)" data-draw="650"/>
+            <path class="line" d="M524 158 H568" marker-end="url(#ah)" data-draw="800"/>
+            <path class="line" d="M708 158 H752" marker-end="url(#ah)" data-draw="950"/>
+            <path class="line" d="M892 158 H936" marker-end="url(#ah)" data-draw="1100"/>
+          </g>
+          <g>
+            <rect class="box seq" style="--i:0" x="24" y="120" width="128" height="76" rx="10" data-pop="100"/>
+            <rect class="box seq" style="--i:1" x="208" y="120" width="128" height="76" rx="10" data-pop="250"/>
+            <rect class="box seq" style="--i:2" x="392" y="120" width="128" height="76" rx="10" data-pop="400"/>
+            <rect class="box seq" style="--i:3" x="576" y="120" width="128" height="76" rx="10" data-pop="550"/>
+            <rect class="box seq" style="--i:4" x="760" y="120" width="128" height="76" rx="10" data-pop="700"/>
+            <rect class="box seq" style="--i:5" x="944" y="120" width="128" height="76" rx="10" data-pop="850"/>
+          </g>
+          <g class="t-display t-ink" font-size="38" font-style="italic" text-anchor="middle">
+            <text x="88" y="170">h<tspan font-size="22" dy="8">1</tspan></text>
+            <text x="272" y="170">h<tspan font-size="22" dy="8">2</tspan></text>
+            <text x="456" y="170">h<tspan font-size="22" dy="8">3</tspan></text>
+            <text x="640" y="170">h<tspan font-size="22" dy="8">4</tspan></text>
+            <text x="824" y="170">h<tspan font-size="22" dy="8">5</tspan></text>
+            <text x="1008" y="170">h<tspan font-size="22" dy="8">6</tspan></text>
+          </g>
+          <g class="t-display t-ink" font-size="42" text-anchor="middle">
+            <text x="88" y="404">The</text>
+            <text x="272" y="404">Law</text>
+            <text x="456" y="404">will</text>
+            <text x="640" y="404">never</text>
+            <text x="824" y="404">be</text>
+            <text x="1008" y="404">perfect</text>
+          </g>
+          <g data-fade="1200">
+            <path class="line-soft" d="M24 452 H1072"/>
+            <path class="line-soft" d="M24 446 V458 M1072 446 V458"/>
+            <text x="548" y="444" text-anchor="middle" class="t-label" style="letter-spacing:.12em">6 個字 · 6 個必須依序完成的步驟</text>
+          </g>
+        </svg>
+      </figure>
+    </div>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), §1 Introduction；示意圖。</p>
+  <aside class="notes">
+    <p>先回到 2017 年。當時處理語言的主流是 RNN 和 LSTM。它們像排隊一樣，一次只處理一個字：要算第六個字，得先算完前五個。</p>
+    <p>（指著圖）這個 h 就是模型的「記憶」，一路往右傳。問題是：句子越長、排隊越久，而 GPU 最擅長的是「同時做很多事」——在 RNN 裡，這個能力幾乎用不上。（約 1 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 05 · TWO BOTTLENECKS ═══════════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">為什麼要改</p>
+    <h2 class="title">逐字計算帶來兩個瓶頸：<em>慢</em>，而且<em>健忘</em></h2>
+  </div>
+  <div class="body">
+    <div class="grid" style="grid-template-rows: auto auto; align-content: center; row-gap: 80px;">
+      <div class="span-6">
+        <div class="exhibit__h"><span class="n">01</span><h3>無法平行</h3><span class="o">循序運算 RNN <b>O(<i>n</i>)</b><span class="arrow">→</span>自注意力 <b>O(1)</b></span></div>
+        <svg class="dg" viewBox="0 0 812 340" role="img" aria-label="RNN 需要八個依序步驟，自注意力一步完成">
+          <text x="0" y="86" class="t-label">RNN</text>
+          <g class="fill-paper2">
+            <rect class="box" x="110" y="62" width="62" height="36" rx="6" data-pop="100"/>
+            <rect class="box" x="190" y="62" width="62" height="36" rx="6" data-pop="160"/>
+            <rect class="box" x="270" y="62" width="62" height="36" rx="6" data-pop="220"/>
+            <rect class="box" x="350" y="62" width="62" height="36" rx="6" data-pop="280"/>
+            <rect class="box" x="430" y="62" width="62" height="36" rx="6" data-pop="340"/>
+            <rect class="box" x="510" y="62" width="62" height="36" rx="6" data-pop="400"/>
+            <rect class="box" x="590" y="62" width="62" height="36" rx="6" data-pop="460"/>
+            <rect class="box" x="670" y="62" width="62" height="36" rx="6" data-pop="520"/>
+          </g>
+          <text x="752" y="90" class="t-display t-ink" font-size="30">8 步</text>
+          <text x="0" y="266" class="t-label">自注意力</text>
+          <g>
+            <rect class="box-accent" x="110" y="200" width="62" height="11" rx="3" data-pop="700"/>
+            <rect class="box-accent" x="110" y="215" width="62" height="11" rx="3" data-pop="720"/>
+            <rect class="box-accent" x="110" y="230" width="62" height="11" rx="3" data-pop="740"/>
+            <rect class="box-accent" x="110" y="245" width="62" height="11" rx="3" data-pop="760"/>
+            <rect class="box-accent" x="110" y="260" width="62" height="11" rx="3" data-pop="780"/>
+            <rect class="box-accent" x="110" y="275" width="62" height="11" rx="3" data-pop="800"/>
+            <rect class="box-accent" x="110" y="290" width="62" height="11" rx="3" data-pop="820"/>
+            <rect class="box-accent" x="110" y="305" width="62" height="11" rx="3" data-pop="840"/>
+          </g>
+          <text x="194" y="270" class="t-display t-ink" font-size="30">1 步</text>
+          <path class="axis" d="M110 334 H732" data-draw="900"/>
+          <text x="732" y="326" text-anchor="end" class="t-label" data-fade="1200">時間 →</text>
+        </svg>
+      </div>
+      <div class="span-6" data-step="1">
+        <div class="exhibit__h"><span class="n">02</span><h3>越遠越模糊</h3><span class="o">最長路徑 RNN <b>O(<i>n</i>)</b><span class="arrow">→</span>自注意力 <b>O(1)</b></span></div>
+        <svg class="dg" viewBox="0 0 812 340" role="img" aria-label="RNN 要經過七次轉手，自注意力一步直達">
+          <text x="0" y="86" class="t-label">RNN</text>
+          <g class="line"><path d="M130 80 Q173 48 216 80" data-draw="200"/><path d="M216 80 Q259 48 302 80" data-draw="300"/><path d="M302 80 Q345 48 388 80" data-draw="400"/><path d="M388 80 Q431 48 474 80" data-draw="500"/><path d="M474 80 Q517 48 560 80" data-draw="600"/><path d="M560 80 Q603 48 646 80" data-draw="700"/><path d="M646 80 Q689 48 732 80" data-draw="800"/></g>
+          <g class="fill-ink2"><circle cx="130" cy="80" r="6" data-pop="100"/><circle cx="216" cy="80" r="5" data-pop="150"/><circle cx="302" cy="80" r="5" data-pop="200"/><circle cx="388" cy="80" r="5" data-pop="250"/><circle cx="474" cy="80" r="5" data-pop="300"/><circle cx="560" cy="80" r="5" data-pop="350"/><circle cx="646" cy="80" r="5" data-pop="400"/><circle cx="732" cy="80" r="6" data-pop="450"/></g>
+          <text x="431" y="30" text-anchor="middle" class="t-display t-ink" font-size="30" data-fade="900">轉手 7 次</text>
+          <text x="130" y="114" text-anchor="middle" class="t-muted" font-size="17">第 1 個字</text>
+          <text x="732" y="114" text-anchor="middle" class="t-muted" font-size="17">第 8 個字</text>
+          <text x="0" y="286" class="t-label">自注意力</text>
+          <g class="line-faint">
+            <path d="M216 280 A 129 56 0 0 1 474 280"/><path d="M302 280 A 172 70 0 0 1 646 280"/><path d="M388 280 A 43 24 0 0 1 474 280"/>
+          </g>
+          <path class="line-accent" d="M130 280 A 301 94 0 0 1 732 280" data-draw="700"/>
+          <g class="fill-ink2"><circle cx="216" cy="280" r="5"/><circle cx="302" cy="280" r="5"/><circle cx="388" cy="280" r="5"/><circle cx="474" cy="280" r="5"/><circle cx="560" cy="280" r="5"/><circle cx="646" cy="280" r="5"/></g>
+          <circle class="fill-accent" cx="130" cy="280" r="7" data-pop="600"/><circle class="fill-accent" cx="732" cy="280" r="7" data-pop="1300"/>
+          <text x="431" y="170" text-anchor="middle" class="t-display t-ink" font-size="30" data-fade="1300">直達 1 次</text>
+          <text x="130" y="316" text-anchor="middle" class="t-muted" font-size="17">第 1 個字</text>
+          <text x="732" y="316" text-anchor="middle" class="t-muted" font-size="17">第 8 個字</text>
+        </svg>
+      </div>
+      <p class="takeaway span-12" data-step="2">Transformer 的設計目標：讓所有字同時計算，而且任兩個字之間，只隔一步。</p>
+    </div>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), Table 1（<i>n</i> 為句子長度）；示意圖。</p>
+  <aside class="notes">
+    <p>這帶來兩個瓶頸。第一，慢：<i>n</i> 個字就要 <i>n</i> 個依序完成的步驟，沒辦法平行。（下一步）第二，健忘：第一個字的資訊要傳到第八個字，得經過七次轉手，每轉一次就模糊一點。</p>
+    <p>論文表 1 用兩個指標描述這件事：循序運算次數、最長路徑長度——RNN 都是 O(n)，自注意力都是 O(1)。（下一步）所以 Transformer 的目標很清楚。（約 1.5 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 06 · THE IDEA (statement) ══════════════════ -->
+<section class="slide" data-layout="statement" data-tone="invert" data-chapter="02" data-chapter-title="機制 · The Mechanism">
+  <div class="body">
+    <p class="kicker">核心想法 · The Idea</p>
+    <p class="statement">如果每個字，都能直接看見句子裡的<em>每一個字</em>？</p>
+    <p class="lead">這就是自注意力（Self-Attention）：不排隊、不轉述，任兩個字直接建立關係。</p>
+  </div>
+  <figure class="art" aria-hidden="true" style="position:absolute; left:128px; top:742px; width:1664px; height:220px;">
+    <svg class="dg" viewBox="0 0 1664 220"><!--gen:network-->
+<g class="line-soft">
+<path d="M32 206 A 100 42 0 0 1 232 206" style="opacity:0.56; animation-delay:-0.0s; --breathe-from:.35" data-ambient="breathe" data-draw="0"/>
+<path d="M32 206 A 200 84 0 0 1 432 206" style="opacity:0.51; animation-delay:-0.9s; --breathe-from:.35" data-ambient="breathe" data-draw="28"/>
+<path d="M32 206 A 300 126 0 0 1 632 206" style="opacity:0.45; animation-delay:-1.8s; --breathe-from:.35" data-ambient="breathe" data-draw="56"/>
+<path d="M32 206 A 400 168 0 0 1 832 206" style="opacity:0.40; animation-delay:-2.7s; --breathe-from:.35" data-ambient="breathe" data-draw="84"/>
+<path d="M32 206 A 500 196 0 0 1 1032 206" style="opacity:0.34; animation-delay:-3.6s; --breathe-from:.35" data-ambient="breathe" data-draw="112"/>
+<path d="M32 206 A 600 196 0 0 1 1232 206" style="opacity:0.29; animation-delay:-4.5s; --breathe-from:.35" data-ambient="breathe" data-draw="140"/>
+<path d="M32 206 A 700 196 0 0 1 1432 206" style="opacity:0.23; animation-delay:-5.4s; --breathe-from:.35" data-ambient="breathe" data-draw="168"/>
+<path d="M32 206 A 800 196 0 0 1 1632 206" style="opacity:0.18; animation-delay:-6.3s; --breathe-from:.35" data-ambient="breathe" data-draw="196"/>
+<path d="M232 206 A 100 42 0 0 1 432 206" style="opacity:0.56; animation-delay:-0.2s; --breathe-from:.35" data-ambient="breathe" data-draw="224"/>
+<path d="M232 206 A 200 84 0 0 1 632 206" style="opacity:0.51; animation-delay:-1.1s; --breathe-from:.35" data-ambient="breathe" data-draw="252"/>
+<path d="M232 206 A 300 126 0 0 1 832 206" style="opacity:0.45; animation-delay:-2.0s; --breathe-from:.35" data-ambient="breathe" data-draw="280"/>
+<path d="M232 206 A 400 168 0 0 1 1032 206" style="opacity:0.40; animation-delay:-2.9s; --breathe-from:.35" data-ambient="breathe" data-draw="308"/>
+<path d="M232 206 A 500 196 0 0 1 1232 206" style="opacity:0.34; animation-delay:-3.8s; --breathe-from:.35" data-ambient="breathe" data-draw="336"/>
+<path d="M232 206 A 600 196 0 0 1 1432 206" style="opacity:0.29; animation-delay:-4.7s; --breathe-from:.35" data-ambient="breathe" data-draw="364"/>
+<path d="M232 206 A 700 196 0 0 1 1632 206" style="opacity:0.23; animation-delay:-5.6s; --breathe-from:.35" data-ambient="breathe" data-draw="392"/>
+<path d="M432 206 A 100 42 0 0 1 632 206" style="opacity:0.56; animation-delay:-6.5s; --breathe-from:.35" data-ambient="breathe" data-draw="420"/>
+<path d="M432 206 A 200 84 0 0 1 832 206" style="opacity:0.51; animation-delay:-0.4s; --breathe-from:.35" data-ambient="breathe" data-draw="448"/>
+<path d="M432 206 A 300 126 0 0 1 1032 206" style="opacity:0.45; animation-delay:-1.3s; --breathe-from:.35" data-ambient="breathe" data-draw="476"/>
+<path d="M432 206 A 400 168 0 0 1 1232 206" style="opacity:0.40; animation-delay:-2.2s; --breathe-from:.35" data-ambient="breathe" data-draw="504"/>
+<path d="M432 206 A 500 196 0 0 1 1432 206" style="opacity:0.34; animation-delay:-3.1s; --breathe-from:.35" data-ambient="breathe" data-draw="532"/>
+<path d="M432 206 A 600 196 0 0 1 1632 206" style="opacity:0.29; animation-delay:-4.0s; --breathe-from:.35" data-ambient="breathe" data-draw="560"/>
+<path d="M632 206 A 100 42 0 0 1 832 206" style="opacity:0.56; animation-delay:-4.9s; --breathe-from:.35" data-ambient="breathe" data-draw="588"/>
+<path d="M632 206 A 200 84 0 0 1 1032 206" style="opacity:0.51; animation-delay:-5.8s; --breathe-from:.35" data-ambient="breathe" data-draw="616"/>
+<path d="M632 206 A 300 126 0 0 1 1232 206" style="opacity:0.45; animation-delay:-6.7s; --breathe-from:.35" data-ambient="breathe" data-draw="644"/>
+<path d="M632 206 A 400 168 0 0 1 1432 206" style="opacity:0.40; animation-delay:-0.6s; --breathe-from:.35" data-ambient="breathe" data-draw="672"/>
+<path d="M632 206 A 500 196 0 0 1 1632 206" style="opacity:0.34; animation-delay:-1.5s; --breathe-from:.35" data-ambient="breathe" data-draw="700"/>
+<path d="M832 206 A 100 42 0 0 1 1032 206" style="opacity:0.56; animation-delay:-2.4s; --breathe-from:.35" data-ambient="breathe" data-draw="728"/>
+<path d="M832 206 A 200 84 0 0 1 1232 206" style="opacity:0.51; animation-delay:-3.3s; --breathe-from:.35" data-ambient="breathe" data-draw="756"/>
+<path d="M832 206 A 300 126 0 0 1 1432 206" style="opacity:0.45; animation-delay:-4.2s; --breathe-from:.35" data-ambient="breathe" data-draw="784"/>
+<path d="M832 206 A 400 168 0 0 1 1632 206" style="opacity:0.40; animation-delay:-5.1s; --breathe-from:.35" data-ambient="breathe" data-draw="812"/>
+<path d="M1032 206 A 100 42 0 0 1 1232 206" style="opacity:0.56; animation-delay:-6.0s; --breathe-from:.35" data-ambient="breathe" data-draw="840"/>
+<path d="M1032 206 A 200 84 0 0 1 1432 206" style="opacity:0.51; animation-delay:-6.9s; --breathe-from:.35" data-ambient="breathe" data-draw="868"/>
+<path d="M1032 206 A 300 126 0 0 1 1632 206" style="opacity:0.45; animation-delay:-0.8s; --breathe-from:.35" data-ambient="breathe" data-draw="896"/>
+<path d="M1232 206 A 100 42 0 0 1 1432 206" style="opacity:0.56; animation-delay:-1.7s; --breathe-from:.35" data-ambient="breathe" data-draw="924"/>
+<path d="M1232 206 A 200 84 0 0 1 1632 206" style="opacity:0.51; animation-delay:-2.6s; --breathe-from:.35" data-ambient="breathe" data-draw="952"/>
+<path d="M1432 206 A 100 42 0 0 1 1632 206" style="opacity:0.56; animation-delay:-3.5s; --breathe-from:.35" data-ambient="breathe" data-draw="980"/>
+</g>
+<path class="line-accent" d="M232 206 A 600 196 0 0 1 1432 206" data-draw="1150"/>
+<circle class="fill-ink2" cx="32" cy="206" r="4" data-pop="0"/>
+<circle class="fill-accent" cx="232" cy="206" r="5.5" data-pop="60"/>
+<circle class="fill-ink2" cx="432" cy="206" r="4" data-pop="120"/>
+<circle class="fill-ink2" cx="632" cy="206" r="4" data-pop="180"/>
+<circle class="fill-ink2" cx="832" cy="206" r="4" data-pop="240"/>
+<circle class="fill-ink2" cx="1032" cy="206" r="4" data-pop="300"/>
+<circle class="fill-ink2" cx="1232" cy="206" r="4" data-pop="360"/>
+<circle class="fill-accent" cx="1432" cy="206" r="5.5" data-pop="420"/>
+<circle class="fill-ink2" cx="1632" cy="206" r="4" data-pop="480"/>
+<!--/gen--></svg>
+  </figure>
+  <aside class="notes">
+    <p>於是作者問了一個問題：如果每個字，都能直接看見句子裡的每一個字呢？</p>
+    <p>這就是自注意力——不排隊、不轉述，直接建立關係。（停頓兩秒）接下來看看它實際長什麼樣子。（約 30 秒）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 07 · ITS → LAW ═════════════════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">論文附錄裡的真實例子</p>
+    <h2 class="title">模型讀到 <i>its</i> 時，會自己回頭看向 <i>Law</i></h2>
+  </div>
+  <div class="body">
+    <div class="sentence">
+      <svg class="dg" viewBox="0 0 1664 430" aria-hidden="true"><!--gen:its-->
+<path class="axis" d="M40 322 H1624" data-draw="0"/>
+<path class="line-soft" d="M967 220 A 258.5 155.1 0 0 1 1484 220" style="stroke-width:1.1; opacity:0.56" data-draw="700"/>
+<path class="line-soft" d="M329 220 A 319 191.4 0 0 1 967 220" style="stroke-width:1.1; opacity:0.56" data-draw="380"/>
+<path class="line-soft" d="M580 220 A 193.5 116.1 0 0 1 967 220" style="stroke-width:1.1; opacity:0.56" data-draw="460"/>
+<path class="line-soft" d="M863 220 A 52 31.2 0 0 1 967 220" style="stroke-width:1.1; opacity:0.56" data-draw="540"/>
+<path class="line-soft" d="M459 220 A 254 152.4 0 0 1 967 220" style="stroke-width:1.2; opacity:0.56" data-draw="420"/>
+<path class="line-soft" d="M967 220 A 311 186.6 0 0 1 1589 220" style="stroke-width:1.2; opacity:0.56" data-draw="740"/>
+<path class="line-soft" d="M967 220 A 193 115.8 0 0 1 1353 220" style="stroke-width:1.2; opacity:0.57" data-draw="660"/>
+<path class="line-soft" d="M95 220 A 436 196 0 0 1 967 220" style="stroke-width:1.2; opacity:0.58" data-draw="300"/>
+<path class="line-soft" d="M712 220 A 127.5 76.5 0 0 1 967 220" style="stroke-width:1.2; opacity:0.58" data-draw="500"/>
+<path class="line" d="M967 220 A 87.5 52.5 0 0 1 1142 220" style="stroke-width:2.2; opacity:1.00" data-draw="820"/>
+<path class="line-accent" d="M214 220 A 376.5 196 0 0 1 967 220" style="stroke-width:5.2; opacity:1.00" data-draw="1000"/>
+<path class="fill-muted" d="M89 323 H101 V323.2 Q101 327.2 97 327.2 H93 Q89 327.2 89 323.2 Z" data-pop="1300"><title>The · 4%</title></path>
+<path class="fill-accent" d="M208 323 H220 V394.0 Q220 398.0 216 398.0 H212 Q208 398.0 208 394.0 Z" data-pop="1330"><title>Law · 59%</title></path>
+<path class="fill-muted" d="M323 323 H335 V321.0 Q335 325.0 331 325.0 H327 Q323 325.0 323 321.0 Z" data-pop="1360"><title>will · 2%</title></path>
+<path class="fill-muted" d="M453 323 H465 V321.0 Q465 325.0 461 325.0 H457 Q453 325.0 453 321.0 Z" data-pop="1390"><title>never · 2%</title></path>
+<path class="fill-muted" d="M574 323 H586 V321.0 Q586 325.0 582 325.0 H578 Q574 325.0 574 321.0 Z" data-pop="1420"><title>be · 2%</title></path>
+<path class="fill-muted" d="M706 323 H718 V324.4 Q718 328.4 714 328.4 H710 Q706 328.4 706 324.4 Z" data-pop="1450"><title>perfect, · 5%</title></path>
+<path class="fill-muted" d="M857 323 H869 V321.0 Q869 325.0 865 325.0 H861 Q857 325.0 857 321.0 Z" data-pop="1480"><title>but · 2%</title></path>
+<path class="fill-ink2" d="M1136 323 H1148 V339.9 Q1148 343.9 1144 343.9 H1140 Q1136 343.9 1136 339.9 Z" data-pop="1540"><title>application · 17%</title></path>
+<path class="fill-muted" d="M1347 323 H1359 V321.9 Q1359 325.9 1355 325.9 H1351 Q1347 325.9 1347 321.9 Z" data-pop="1570"><title>should · 3%</title></path>
+<path class="fill-muted" d="M1478 323 H1490 V321.0 Q1490 325.0 1486 325.0 H1482 Q1478 325.0 1478 321.0 Z" data-pop="1600"><title>be · 1%</title></path>
+<path class="fill-muted" d="M1583 323 H1595 V321.0 Q1595 325.0 1591 325.0 H1587 Q1583 325.0 1583 321.0 Z" data-pop="1630"><title>just · 2%</title></path>
+<text x="214" y="432" text-anchor="middle" class="t-display t-ink" font-size="34" data-fade="1700">59%</text>
+<text x="1142" y="378" text-anchor="middle" class="t-display t-ink" font-size="30" data-fade="1700">17%</text>
+<circle class="fill-accent" cx="967" cy="220" r="5" data-pop="250"/>
+<!--/gen--></svg>
+      <span class="slot" style="left:95px"><span class="token is-dim">The</span></span>
+      <span class="slot" style="left:214px"><span class="token is-key" data-morph="tok-law">Law</span></span>
+      <span class="slot" style="left:329px"><span class="token is-dim">will</span></span>
+      <span class="slot" style="left:459px"><span class="token is-dim">never</span></span>
+      <span class="slot" style="left:580px"><span class="token is-dim">be</span></span>
+      <span class="slot" style="left:712px"><span class="token is-dim">perfect,</span></span>
+      <span class="slot" style="left:863px"><span class="token is-dim">but</span></span>
+      <span class="slot" style="left:967px"><span class="token is-focus" data-morph="tok-its">its</span></span>
+      <span class="slot" style="left:1142px"><span class="token" data-morph="tok-app">application</span></span>
+      <span class="slot" style="left:1353px"><span class="token is-dim">should</span></span>
+      <span class="slot" style="left:1484px"><span class="token is-dim">be</span></span>
+      <span class="slot" style="left:1589px"><span class="token is-dim">just</span></span>
+    </div>
+    <div class="grid" style="height:auto; margin-top: 36px;">
+      <p class="span-6"><span class="nw">每個字都會對句中所有字「打分數」：</span><span class="nw">分數越高，</span><span class="nw">就從那個字取用越多資訊；</span><span class="nw">線條越粗，注意力越集中。</span></p>
+      <p class="takeaway span-6"><span class="nw">沒有人教過它文法——</span><span class="nw">「<i>its</i> 指的是 <i>Law</i>」</span><span class="nw">是它自己從資料中學會的。</span></p>
+    </div>
+  </div>
+  <p class="source">示意圖：依論文 Figure 4（第 5 層、注意力頭 5 與 6）重繪；百分比為說明用的示意值。</p>
+  <aside class="notes">
+    <p>這是論文附錄裡的真實例子。讀到 its 的時候，模型應該知道 its 指的是 Law。</p>
+    <p>（指向最粗的線）注意力幾乎全集中在 Law，其次是 application。重點是：沒有人教它文法，這是它從大量資料中自己學會的。圖上的百分比是示意值，形態依論文圖 4 重繪。（約 1 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 08 · Q · K · V ═════════════════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">分數怎麼算</p>
+    <h2 class="title">注意力是一次檢索：用 <i>Query</i> 比對每個 <i>Key</i>，取回 <i>Value</i></h2>
+  </div>
+  <div class="body">
+    <div class="qkv">
+      <div class="qkv__q">
+        <p class="qkv__h"><span class="en">Query</span><span class="zh">查詢 · 我在找什麼？</span></p>
+        <span class="token qkv__chip" data-morph="tok-its">its</span>
+        <p class="note">its 想知道：我指的是誰？</p>
+      </div>
+      <div class="qkv__k">
+        <p class="qkv__h"><span class="en">Key</span><span class="zh">鍵 · 每個字的標籤</span></p>
+        <div class="qkv__cols"><span>字</span><span>Q · K 相似度分數</span><span data-step="1">softmax 權重</span></div>
+        <div class="qkv__row is-top"><span class="token" data-morph="tok-law">Law</span><span class="qkv__vals"><span class="qkv__bar" style="--v:1"></span><span class="qkv__score">9.5</span></span><span class="qkv__w" data-step="1">59%</span></div>
+        <div class="qkv__row is-top"><span class="token" data-morph="tok-app">application</span><span class="qkv__vals"><span class="qkv__bar" style="--v:.87"></span><span class="qkv__score">8.3</span></span><span class="qkv__w" data-step="1">17%</span></div>
+        <div class="qkv__row"><span class="token">perfect</span><span class="qkv__vals"><span class="qkv__bar" style="--v:.74"></span><span class="qkv__score">7.0</span></span><span class="qkv__w" data-step="1">5%</span></div>
+        <div class="qkv__row"><span class="token">The</span><span class="qkv__vals"><span class="qkv__bar" style="--v:.72"></span><span class="qkv__score">6.8</span></span><span class="qkv__w" data-step="1">4%</span></div>
+        <div class="qkv__row"><span class="token">should</span><span class="qkv__vals"><span class="qkv__bar" style="--v:.69"></span><span class="qkv__score">6.5</span></span><span class="qkv__w" data-step="1">3%</span></div>
+        <div class="qkv__row"><span class="rest">其餘 7 個字</span><span class="qkv__vals"><span class="qkv__bar" style="--v:.66"></span><span class="qkv__score">≤ 6.3</span></span><span class="qkv__w" data-step="1">12%</span></div>
+      </div>
+      <div class="qkv__out" data-step="2">
+        <p class="qkv__h"><span class="en">Value</span><span class="zh">值 · 依權重取回內容</span></p>
+        <div class="mix" role="img" aria-label="its 的新表示：59% 來自 Law，17% 來自 application">
+          <i style="--w:59"></i><i style="--w:17"></i><i style="--w:5"></i><i style="--w:4"></i><i style="--w:3"></i><i style="--w:12"></i>
+        </div>
+        <div class="mix-key"><span style="--c: var(--accent)">Law 59%</span><span style="--c: var(--ink-2)">application 17%</span><span style="--c: var(--rule-2)">其他 24%</span></div>
+        <p class="eq">its′ = 0.59 · v<sub>Law</sub> + 0.17 · v<sub>application</sub> + <span class="up">⋯</span></p>
+        <p class="note" style="margin-top:18px">分數只差一點，softmax 卻把差距放大：注意力因此能「聚焦」。</p>
+      </div>
+    </div>
+  </div>
+  <p class="source">示意數值：為說明而設定，非論文實測；計算方式依論文 §3.2.1。</p>
+  <aside class="notes">
+    <p>那這些分數怎麼算？可以把注意力想成一次「檢索」。its 提出一個問題，叫 Query；句子裡每個字都有一個標籤，叫 Key；拿 Query 跟每個 Key 比對，得到相似度分數。</p>
+    <p>（下一步）接著用 softmax 把分數變成總和 100% 的權重——注意，分數其實差不多，softmax 會把差距放大。（下一步）最後依權重把每個字的內容 Value 混合起來，就成了 its 的新表示：它現在「知道」自己指的是 Law。（約 1.5 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 09 · THE FORMULA ══════════════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">Scaled Dot-Product Attention</p>
+    <h2 class="title">整個機制，濃縮成一行公式</h2>
+  </div>
+  <div class="body">
+    <div class="formula" role="math" aria-label="Attention of Q K V equals softmax of Q K transpose over square root of d k, times V">
+      <span class="f-group">Attention(<i>Q</i>, <i>K</i>, <i>V</i>)</span>
+      <span class="f-group" style="margin: 0 0.12em; color: var(--ink-3)">=</span>
+      <span class="f-group" data-term="softmax">softmax</span>
+      <span class="f-paren">(</span>
+      <span class="f-frac">
+        <span class="f-group f-num" data-term="qk"><i>Q</i><i>K</i><sup>T</sup></span>
+        <span class="f-group f-den" data-term="scale"><svg class="f-rad" viewBox="0 0 46 106" preserveAspectRatio="none"><path d="M1 64 L11 56 L24 102 L45 1"/></svg><span class="f-radicand"><i>d</i><sub>k</sub></span></span>
+      </span>
+      <span class="f-paren">)</span>
+      <span class="f-group" data-term="v"><i>V</i></span>
+    </div>
+    <div class="annots">
+      <div class="annot" data-step="1"><span class="n">01</span><h3><span class="m">QK<sup>T</sup></span>相似度</h3><p>每個 Query 和所有 Key 做內積，一次算出整張「誰該看誰」的分數表。</p></div>
+      <div class="annot" data-step="2"><span class="n">02</span><h3><span class="m">÷ √d<sub>k</sub></span>縮放</h3><p><i>d</i><sub>k</sub> = 64。不縮放時內積會隨維度變大，softmax 過於尖銳，梯度幾乎消失。</p></div>
+      <div class="annot" data-step="3"><span class="n">03</span><h3><span class="m">softmax</span>正規化</h3><p>把每一列分數，變成總和為 1 的權重。</p></div>
+      <div class="annot" data-step="4"><span class="n">04</span><h3><span class="m">× V</span>加權混合</h3><p>依權重混合各字的 Value，得到每個字的新表示。</p></div>
+    </div>
+    <p class="takeaway" data-step="4" style="margin-top: 48px">從頭到尾都是矩陣乘法——正是 GPU 最擅長、也最能平行的計算。</p>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), §3.2.1, Equation (1)。</p>
+  <aside class="notes">
+    <p>這整個過程，論文用一行公式就寫完了。（逐步）第一，QK 轉置：一次算出所有字兩兩之間的分數；第二，除以根號 d_k：避免數值太大讓 softmax 太極端、訓練不動；第三，softmax 變成權重；第四，乘上 V 做加權混合。</p>
+    <p>最關鍵的是：這全部都是矩陣乘法，正好是 GPU 最擅長、最能平行的事。（約 1.5 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 10 · MULTI-HEAD ═══════════════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">Multi-Head Attention</p>
+    <h2 class="title">八個注意力頭，同時從八個角度閱讀同一句話</h2>
+  </div>
+  <div class="body">
+    <div class="grid">
+      <div class="span-4 stack stack--lg self-center">
+        <p><span class="nw">單一注意力，</span><span class="nw">只能用一種方式分配注意。</span><span class="nw">論文把 512 維拆成</span><span class="nw">8 個 64 維的「頭」，</span><span class="nw">各學一種關係，</span><span class="nw">再串接起來。</span></p>
+        <p><span class="nw">頭變小了，</span><span class="nw">總計算量仍與單頭相當。</span></p>
+        <div class="stat stat--sm">
+          <div class="stat__value">−<span data-count="0.9">0.9</span><small>BLEU</small></div>
+          <div class="stat__label"><span class="nw">若只用 1 個頭，</span><span class="nw">英→德翻譯品質下降</span><span class="nw">（開發集）</span></div>
+        </div>
+      </div>
+      <figure class="figure span-8 self-center">
+        <svg class="dg" viewBox="0 0 1096 520" role="img" aria-label="八個注意力頭的示意熱圖，串接後經過線性轉換"><!--gen:heads-->
+<g data-pop="0">
+<text x="65" y="50" text-anchor="middle" class="t-label">頭 1</text>
+<rect x="6" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="10" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="24" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="24" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="24" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="38" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="24" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="52" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="24" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="66" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="24" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="80" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="24" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="94" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="108" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="10" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="24" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="38" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="52" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="66" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="80" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="94" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="108" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<text x="65" y="212" text-anchor="middle" font-size="18" class="t-muted">前一個字</text>
+</g>
+<g data-pop="80">
+<text x="203" y="50" text-anchor="middle" class="t-label">頭 2</text>
+<rect x="144" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="148" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="176" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="148" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="190" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="148" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="204" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="148" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="218" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="148" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="232" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="148" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="246" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="148" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<rect x="148" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="162" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="176" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="190" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="204" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="218" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="232" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="246" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.89"/>
+<text x="203" y="212" text-anchor="middle" font-size="18" class="t-muted">後一個字</text>
+</g>
+<g data-pop="160">
+<text x="341" y="50" text-anchor="middle" class="t-label">頭 3</text>
+<rect x="282" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="286" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="300" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="314" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="328" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="342" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="356" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="370" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<rect x="384" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="286" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="300" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="314" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="328" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="342" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="356" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="370" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.12"/>
+<rect x="384" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.91"/>
+<text x="341" y="212" text-anchor="middle" font-size="18" class="t-muted">自己</text>
+</g>
+<g data-pop="240">
+<text x="479" y="50" text-anchor="middle" class="t-label">頭 4</text>
+<rect x="420" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="424" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="452" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="466" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="480" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="494" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="508" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="522" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="424" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="452" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="466" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="480" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="494" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="508" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="522" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="424" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="452" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="466" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="480" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="494" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="508" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="522" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="424" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="452" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="466" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="480" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="494" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="508" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="522" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="424" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="452" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="466" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="480" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="494" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="508" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="522" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="424" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="452" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="466" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="480" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="494" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="508" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="522" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="424" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="452" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="466" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="480" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="494" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="508" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="522" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="424" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.76"/>
+<rect x="438" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="452" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.16"/>
+<rect x="466" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="480" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<rect x="494" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.15"/>
+<rect x="508" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.13"/>
+<rect x="522" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.14"/>
+<text x="479" y="212" text-anchor="middle" font-size="18" class="t-muted">句首</text>
+</g>
+<g data-pop="320">
+<text x="617" y="50" text-anchor="middle" class="t-label">頭 5</text>
+<rect x="558" y="66" width="118" height="118" rx="6" class="box-accent" style="fill:none"/>
+<rect x="562" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<rect x="576" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="590" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="70" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<rect x="590" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="84" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="590" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<rect x="604" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="98" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="590" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<rect x="618" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="112" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="590" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<rect x="632" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="126" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="590" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<rect x="646" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="140" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.95"/>
+<rect x="590" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.15"/>
+<rect x="660" y="154" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="562" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="576" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.53"/>
+<rect x="590" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="604" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="618" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="632" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="646" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.10"/>
+<rect x="660" y="168" width="12" height="12" rx="2" class="fill-accent" style="opacity:0.27"/>
+<text x="617" y="212" text-anchor="middle" font-size="18" class="t-accent">指代</text>
+</g>
+<g data-pop="400">
+<text x="755" y="50" text-anchor="middle" class="t-label">頭 6</text>
+<rect x="696" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="700" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.22"/>
+<rect x="714" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.35"/>
+<rect x="728" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.37"/>
+<rect x="742" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.33"/>
+<rect x="756" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.39"/>
+<rect x="770" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.28"/>
+<rect x="784" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.35"/>
+<rect x="798" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.33"/>
+<rect x="700" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.33"/>
+<rect x="714" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.30"/>
+<rect x="728" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.38"/>
+<rect x="742" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.41"/>
+<rect x="756" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.31"/>
+<rect x="770" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.35"/>
+<rect x="784" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.22"/>
+<rect x="798" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.36"/>
+<rect x="700" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.34"/>
+<rect x="714" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.42"/>
+<rect x="728" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.38"/>
+<rect x="742" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.27"/>
+<rect x="756" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.29"/>
+<rect x="770" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.35"/>
+<rect x="784" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.22"/>
+<rect x="798" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.31"/>
+<rect x="700" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.25"/>
+<rect x="714" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.23"/>
+<rect x="728" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.22"/>
+<rect x="742" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.37"/>
+<rect x="756" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.24"/>
+<rect x="770" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.26"/>
+<rect x="784" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.29"/>
+<rect x="798" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.39"/>
+<rect x="700" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.23"/>
+<rect x="714" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.30"/>
+<rect x="728" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.32"/>
+<rect x="742" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.39"/>
+<rect x="756" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.38"/>
+<rect x="770" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.39"/>
+<rect x="784" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.27"/>
+<rect x="798" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.30"/>
+<rect x="700" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.28"/>
+<rect x="714" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.39"/>
+<rect x="728" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.41"/>
+<rect x="742" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.24"/>
+<rect x="756" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.25"/>
+<rect x="770" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.26"/>
+<rect x="784" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.26"/>
+<rect x="798" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.31"/>
+<rect x="700" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.33"/>
+<rect x="714" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.26"/>
+<rect x="728" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.21"/>
+<rect x="742" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.30"/>
+<rect x="756" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.29"/>
+<rect x="770" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.33"/>
+<rect x="784" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.41"/>
+<rect x="798" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.35"/>
+<rect x="700" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.32"/>
+<rect x="714" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.34"/>
+<rect x="728" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.35"/>
+<rect x="742" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.22"/>
+<rect x="756" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.40"/>
+<rect x="770" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.37"/>
+<rect x="784" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.39"/>
+<rect x="798" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.38"/>
+<text x="755" y="212" text-anchor="middle" font-size="18" class="t-muted">廣泛</text>
+</g>
+<g data-pop="480">
+<text x="893" y="50" text-anchor="middle" class="t-label">頭 7</text>
+<rect x="834" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="838" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="852" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="866" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="880" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="894" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="908" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="922" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="936" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="838" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="852" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="866" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="880" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="894" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="908" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="922" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="936" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="838" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="852" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="866" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="880" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="894" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="908" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="922" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="936" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="838" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="852" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="866" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="880" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="894" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="908" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="922" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="936" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="838" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="852" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="866" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="880" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="894" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="908" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="922" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="936" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="838" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="852" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="866" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="880" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="894" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="908" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="922" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="936" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="838" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="852" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="866" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="880" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="894" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="908" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="922" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="936" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="838" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="852" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="866" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="880" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="894" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="908" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.10"/>
+<rect x="922" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="936" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<text x="893" y="212" text-anchor="middle" font-size="18" class="t-muted">鄰近</text>
+</g>
+<g data-pop="560">
+<text x="1031" y="50" text-anchor="middle" class="t-label">頭 8</text>
+<rect x="972" y="66" width="118" height="118" rx="6" class="box-soft" style="fill:none"/>
+<rect x="976" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="990" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1004" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.63"/>
+<rect x="1060" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.63"/>
+<rect x="1074" y="70" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.52"/>
+<rect x="976" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="990" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1004" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.72"/>
+<rect x="1074" y="84" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.51"/>
+<rect x="976" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="990" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1004" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1074" y="98" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.51"/>
+<rect x="976" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="990" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1004" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1074" y="112" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="976" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="990" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1004" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1074" y="126" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="976" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.56"/>
+<rect x="990" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1004" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1074" y="140" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="976" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.54"/>
+<rect x="990" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.61"/>
+<rect x="1004" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1018" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1074" y="154" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="976" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.50"/>
+<rect x="990" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.48"/>
+<rect x="1004" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.54"/>
+<rect x="1018" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1032" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1046" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1060" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<rect x="1074" y="168" width="12" height="12" rx="2" class="fill-ink" style="opacity:0.11"/>
+<text x="1031" y="212" text-anchor="middle" font-size="18" class="t-muted">遠距</text>
+</g>
+<path class="line-soft" d="M65 232 C 65 262, 197 262, 197 290" data-draw="800"/>
+<path class="line-soft" d="M203 232 C 203 262, 297 262, 297 290" data-draw="840"/>
+<path class="line-soft" d="M341 232 C 341 262, 397 262, 397 290" data-draw="880"/>
+<path class="line-soft" d="M479 232 C 479 262, 497 262, 497 290" data-draw="920"/>
+<path class="line-soft" d="M617 232 C 617 262, 597 262, 597 290" data-draw="960"/>
+<path class="line-soft" d="M755 232 C 755 262, 697 262, 697 290" data-draw="1000"/>
+<path class="line-soft" d="M893 232 C 893 262, 797 262, 797 290" data-draw="1040"/>
+<path class="line-soft" d="M1031 232 C 1031 262, 897 262, 897 290" data-draw="1080"/>
+<rect class="box-soft" x="148" y="294" width="98" height="30" rx="4" data-pop="1150"/>
+<rect class="box-soft" x="248" y="294" width="98" height="30" rx="4" data-pop="1180"/>
+<rect class="box-soft" x="348" y="294" width="98" height="30" rx="4" data-pop="1210"/>
+<rect class="box-soft" x="448" y="294" width="98" height="30" rx="4" data-pop="1240"/>
+<rect class="box-accent" x="548" y="294" width="98" height="30" rx="4" data-pop="1270"/>
+<rect class="box-soft" x="648" y="294" width="98" height="30" rx="4" data-pop="1300"/>
+<rect class="box-soft" x="748" y="294" width="98" height="30" rx="4" data-pop="1330"/>
+<rect class="box-soft" x="848" y="294" width="98" height="30" rx="4" data-pop="1360"/>
+<text x="964" y="315" font-size="18" class="t-muted" data-fade="1300">串接 Concat</text>
+<text x="548" y="352" text-anchor="middle" font-size="16" class="t-muted" data-fade="1350">8 × 64 = 512 維</text>
+<path class="line" d="M548 362 V384" data-draw="1400"/><path class="head" d="M543 380 L548 390 L553 380 Z" data-fade="1650"/>
+<rect class="box" x="438" y="394" width="220" height="46" rx="8" data-pop="1500"/>
+<text x="548" y="424" text-anchor="middle" font-size="19" class="t-ink" data-fade="1550">線性轉換 Linear</text>
+<path class="line" d="M548 444 V470" data-draw="1650"/><path class="head" d="M543 466 L548 476 L553 466 Z" data-fade="1900"/>
+<text x="548" y="506" text-anchor="middle" font-size="20" class="t-ink" data-fade="1900">多頭注意力的輸出</text>
+<!--/gen--></svg>
+        <figcaption>示意：不同的頭學到不同的關係（論文附錄圖 3–5 的觀察）；熱圖為說明用。</figcaption>
+      </figure>
+    </div>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), §3.2.2；Table 3 (A)：h = 1 時 BLEU 24.9，基礎設定 25.8。</p>
+  <aside class="notes">
+    <p>但一個注意力只能用一種方式分配注意。所以作者把它拆成八個頭，每個頭各自學一種關係：有的看前一個字、有的看指代、有的看句子結構。</p>
+    <p>論文的實驗顯示，只用一個頭，品質會掉 0.9 BLEU；而八個頭的總計算量，和一個大頭差不多。（約 1 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 11 · POSITIONAL ENCODING ══════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">Positional Encoding</p>
+    <h2 class="title">沒有循環就沒有順序，於是用波形替每個位置蓋上印記</h2>
+  </div>
+  <div class="body">
+    <div class="grid">
+      <div class="span-5 stack self-center">
+        <p><span class="nw">自注意力不在乎順序：</span><span class="nw">句子打亂，關係也不變。</span><span class="nw">所以要在每個字的向量上，</span><span class="nw">加一組「位置印記」。</span></p>
+        <div class="pe-formula">
+          <div><span class="up">PE</span><sub>(pos, 2i)</sub> <span class="up">= sin(</span> pos / 10000<sup>2i/d</sup> <span class="up">)</span></div>
+          <div><span class="up">PE</span><sub>(pos, 2i+1)</sub> <span class="up">= cos(</span> pos / 10000<sup>2i/d</sup> <span class="up">)</span></div>
+        </div>
+        <p class="note"><span class="nw">不同維度用不同頻率，</span><span class="nw">波長從 2π 到 10000·2π；</span><span class="nw">任何固定位移 <i>k</i>，</span><span class="nw">都能用線性變換表示——</span><span class="nw">方便模型學習「相對位置」。</span></p>
+      </div>
+      <figure class="figure span-7 self-center">
+        <svg class="dg" viewBox="0 0 954 520" role="img" aria-label="五個不同頻率的正弦波，在同一位置讀出一組數值"><!--gen:waves-->
+<path class="line-faint" d="M112 62 H920"/>
+<path class="line" d="M112.0 62.0 L115.0 51.8 L118.0 42.6 L121.0 35.5 L124.0 31.2 L127.0 30.0 L130.0 32.3 L133.0 37.6 L136.0 45.5 L139.0 55.1 L142.0 65.5 L145.0 75.4 L148.0 84.0 L151.0 90.3 L154.0 93.6 L157.0 93.6 L160.0 90.3 L163.0 84.0 L166.0 75.4 L169.0 65.5 L172.0 55.1 L175.0 45.5 L178.0 37.6 L181.0 32.3 L184.0 30.0 L187.0 31.2 L190.0 35.5 L193.0 42.6 L196.0 51.8 L199.0 62.0 L202.0 72.2 L205.0 81.4 L208.0 88.5 L211.0 92.8 L214.0 94.0 L217.0 91.7 L220.0 86.4 L223.0 78.5 L226.0 68.9 L229.0 58.5 L232.0 48.6 L235.0 40.0 L238.0 33.7 L241.0 30.4 L244.0 30.4 L247.0 33.7 L250.0 40.0 L253.0 48.6 L256.0 58.5 L259.0 68.9 L262.0 78.5 L265.0 86.4 L268.0 91.7 L271.0 94.0 L274.0 92.8 L277.0 88.5 L280.0 81.4 L283.0 72.2 L286.0 62.0 L289.0 51.8 L292.0 42.6 L295.0 35.5 L298.0 31.2 L301.0 30.0 L304.0 32.3 L307.0 37.6 L310.0 45.5 L313.0 55.1 L316.0 65.5 L319.0 75.4 L322.0 84.0 L325.0 90.3 L328.0 93.6 L331.0 93.6 L334.0 90.3 L337.0 84.0 L340.0 75.4 L343.0 65.5 L346.0 55.1 L349.0 45.5 L352.0 37.6 L355.0 32.3 L358.0 30.0 L361.0 31.2 L364.0 35.5 L367.0 42.6 L370.0 51.8 L373.0 62.0 L376.0 72.2 L379.0 81.4 L382.0 88.5 L385.0 92.8 L388.0 94.0 L391.0 91.7 L394.0 86.4 L397.0 78.5 L400.0 68.9 L403.0 58.5 L406.0 48.6 L409.0 40.0 L412.0 33.7 L415.0 30.4 L418.0 30.4 L421.0 33.7 L424.0 40.0 L427.0 48.6 L430.0 58.5 L433.0 68.9 L436.0 78.5 L439.0 86.4 L442.0 91.7 L445.0 94.0 L448.0 92.8 L451.0 88.5 L454.0 81.4 L457.0 72.2 L460.0 62.0 L463.0 51.8 L466.0 42.6 L469.0 35.5 L472.0 31.2 L475.0 30.0 L478.0 32.3 L481.0 37.6 L484.0 45.5 L487.0 55.1 L490.0 65.5 L493.0 75.4 L496.0 84.0 L499.0 90.3 L502.0 93.6 L505.0 93.6 L508.0 90.3 L511.0 84.0 L514.0 75.4 L517.0 65.5 L520.0 55.1 L523.0 45.5 L526.0 37.6 L529.0 32.3 L532.0 30.0 L535.0 31.2 L538.0 35.5 L541.0 42.6 L544.0 51.8 L547.0 62.0 L550.0 72.2 L553.0 81.4 L556.0 88.5 L559.0 92.8 L562.0 94.0 L565.0 91.7 L568.0 86.4 L571.0 78.5 L574.0 68.9 L577.0 58.5 L580.0 48.6 L583.0 40.0 L586.0 33.7 L589.0 30.4 L592.0 30.4 L595.0 33.7 L598.0 40.0 L601.0 48.6 L604.0 58.5 L607.0 68.9 L610.0 78.5 L613.0 86.4 L616.0 91.7 L619.0 94.0 L622.0 92.8 L625.0 88.5 L628.0 81.4 L631.0 72.2 L634.0 62.0 L637.0 51.8 L640.0 42.6 L643.0 35.5 L646.0 31.2 L649.0 30.0 L652.0 32.3 L655.0 37.6 L658.0 45.5 L661.0 55.1 L664.0 65.5 L667.0 75.4 L670.0 84.0 L673.0 90.3 L676.0 93.6 L679.0 93.6 L682.0 90.3 L685.0 84.0 L688.0 75.4 L691.0 65.5 L694.0 55.1 L697.0 45.5 L700.0 37.6 L703.0 32.3 L706.0 30.0 L709.0 31.2 L712.0 35.5 L715.0 42.6 L718.0 51.8 L721.0 62.0 L724.0 72.2 L727.0 81.4 L730.0 88.5 L733.0 92.8 L736.0 94.0 L739.0 91.7 L742.0 86.4 L745.0 78.5 L748.0 68.9 L751.0 58.5 L754.0 48.6 L757.0 40.0 L760.0 33.7 L763.0 30.4 L766.0 30.4 L769.0 33.7 L772.0 40.0 L775.0 48.6 L778.0 58.5 L781.0 68.9 L784.0 78.5 L787.0 86.4 L790.0 91.7 L793.0 94.0 L796.0 92.8 L799.0 88.5 L802.0 81.4 L805.0 72.2 L808.0 62.0 L811.0 51.8 L814.0 42.6 L817.0 35.5 L820.0 31.2 L823.0 30.0 L826.0 32.3 L829.0 37.6 L832.0 45.5 L835.0 55.1 L838.0 65.5 L841.0 75.4 L844.0 84.0 L847.0 90.3 L850.0 93.6 L853.0 93.6 L856.0 90.3 L859.0 84.0 L862.0 75.4 L865.0 65.5 L868.0 55.1 L871.0 45.5 L874.0 37.6 L877.0 32.3 L880.0 30.0 L883.0 31.2 L886.0 35.5 L889.0 42.6 L892.0 51.8 L895.0 62.0 L898.0 72.2 L901.0 81.4 L904.0 88.5 L907.0 92.8 L910.0 94.0 L913.0 91.7 L916.0 86.4 L919.0 78.5" data-draw="0" data-dur="1700" style="stroke-width:1.6"/>
+<text x="0" y="70" class="t-display t-muted" font-size="24" font-style="italic">sin<tspan font-size="16" dy="5">0</tspan></text>
+<path class="line-faint" d="M112 160 H920"/>
+<path class="line" d="M112.0 128.0 L115.0 128.5 L118.0 129.9 L121.0 132.3 L124.0 135.5 L127.0 139.5 L130.0 144.0 L133.0 149.1 L136.0 154.5 L139.0 160.1 L142.0 165.6 L145.0 171.0 L148.0 176.1 L151.0 180.6 L154.0 184.6 L157.0 187.8 L160.0 190.1 L163.0 191.5 L166.0 192.0 L169.0 191.5 L172.0 190.0 L175.0 187.6 L178.0 184.4 L181.0 180.5 L184.0 175.9 L187.0 170.8 L190.0 165.4 L193.0 159.8 L196.0 154.3 L199.0 148.9 L202.0 143.8 L205.0 139.3 L208.0 135.4 L211.0 132.2 L214.0 129.9 L217.0 128.4 L220.0 128.0 L223.0 128.5 L226.0 130.0 L229.0 132.4 L232.0 135.6 L235.0 139.6 L238.0 144.2 L241.0 149.3 L244.0 154.7 L247.0 160.3 L250.0 165.8 L253.0 171.2 L256.0 176.3 L259.0 180.8 L262.0 184.7 L265.0 187.9 L268.0 190.2 L271.0 191.6 L274.0 192.0 L277.0 191.5 L280.0 189.9 L283.0 187.5 L286.0 184.3 L289.0 180.3 L292.0 175.7 L295.0 170.6 L298.0 165.2 L301.0 159.6 L304.0 154.1 L307.0 148.7 L310.0 143.6 L313.0 139.1 L316.0 135.2 L319.0 132.1 L322.0 129.8 L325.0 128.4 L328.0 128.0 L331.0 128.6 L334.0 130.1 L337.0 132.5 L340.0 135.8 L343.0 139.8 L346.0 144.4 L349.0 149.5 L352.0 154.9 L355.0 160.5 L358.0 166.1 L361.0 171.4 L364.0 176.4 L367.0 181.0 L370.0 184.9 L373.0 188.0 L376.0 190.3 L379.0 191.6 L382.0 192.0 L385.0 191.4 L388.0 189.9 L391.0 187.4 L394.0 184.1 L397.0 180.1 L400.0 175.5 L403.0 170.4 L406.0 165.0 L409.0 159.4 L412.0 153.8 L415.0 148.5 L418.0 143.5 L421.0 138.9 L424.0 135.1 L427.0 132.0 L430.0 129.7 L433.0 128.4 L436.0 128.0 L439.0 128.6 L442.0 130.2 L445.0 132.6 L448.0 135.9 L451.0 140.0 L454.0 144.6 L457.0 149.7 L460.0 155.2 L463.0 160.7 L466.0 166.3 L469.0 171.6 L472.0 176.6 L475.0 181.1 L478.0 185.0 L481.0 188.1 L484.0 190.3 L487.0 191.6 L490.0 192.0 L493.0 191.4 L496.0 189.8 L499.0 187.3 L502.0 184.0 L505.0 179.9 L508.0 175.3 L511.0 170.2 L514.0 164.7 L517.0 159.2 L520.0 153.6 L523.0 148.3 L526.0 143.3 L529.0 138.8 L532.0 134.9 L535.0 131.9 L538.0 129.6 L541.0 128.3 L544.0 128.0 L547.0 128.7 L550.0 130.3 L553.0 132.8 L556.0 136.1 L559.0 140.1 L562.0 144.8 L565.0 149.9 L568.0 155.4 L571.0 161.0 L574.0 166.5 L577.0 171.8 L580.0 176.8 L583.0 181.3 L586.0 185.1 L589.0 188.2 L592.0 190.4 L595.0 191.7 L598.0 192.0 L601.0 191.3 L604.0 189.7 L607.0 187.2 L610.0 183.8 L613.0 179.8 L616.0 175.1 L619.0 170.0 L622.0 164.5 L625.0 158.9 L628.0 153.4 L631.0 148.1 L634.0 143.1 L637.0 138.6 L640.0 134.8 L643.0 131.8 L646.0 129.6 L649.0 128.3 L652.0 128.0 L655.0 128.7 L658.0 130.3 L661.0 132.9 L664.0 136.2 L667.0 140.3 L670.0 145.0 L673.0 150.2 L676.0 155.6 L679.0 161.2 L682.0 166.7 L685.0 172.1 L688.0 177.0 L691.0 181.5 L694.0 185.3 L697.0 188.3 L700.0 190.5 L703.0 191.7 L706.0 192.0 L709.0 191.3 L712.0 189.6 L715.0 187.1 L718.0 183.7 L721.0 179.6 L724.0 174.9 L727.0 169.7 L730.0 164.3 L733.0 158.7 L736.0 153.2 L739.0 147.8 L742.0 142.9 L745.0 138.4 L748.0 134.7 L751.0 131.6 L754.0 129.5 L757.0 128.3 L760.0 128.0 L763.0 128.7 L766.0 130.4 L769.0 133.0 L772.0 136.4 L775.0 140.5 L778.0 145.2 L781.0 150.4 L784.0 155.8 L787.0 161.4 L790.0 166.9 L793.0 172.3 L796.0 177.2 L799.0 181.6 L802.0 185.4 L805.0 188.4 L808.0 190.5 L811.0 191.7 L814.0 192.0 L817.0 191.2 L820.0 189.5 L823.0 186.9 L826.0 183.5 L829.0 179.4 L832.0 174.7 L835.0 169.5 L838.0 164.1 L841.0 158.5 L844.0 153.0 L847.0 147.6 L850.0 142.7 L853.0 138.3 L856.0 134.5 L859.0 131.5 L862.0 129.4 L865.0 128.3 L868.0 128.0 L871.0 128.8 L874.0 130.5 L877.0 133.1 L880.0 136.5 L883.0 140.7 L886.0 145.4 L889.0 150.6 L892.0 156.0 L895.0 161.6 L898.0 167.2 L901.0 172.5 L904.0 177.4 L907.0 181.8 L910.0 185.5 L913.0 188.5 L916.0 190.6 L919.0 191.8" data-draw="160" data-dur="1700" style="stroke-width:1.6"/>
+<text x="0" y="168" class="t-display t-muted" font-size="24" font-style="italic">cos<tspan font-size="16" dy="5">1</tspan></text>
+<path class="line-faint" d="M112 258 H920"/>
+<path class="line" d="M112.0 258.0 L115.0 255.0 L118.0 252.0 L121.0 249.1 L124.0 246.3 L127.0 243.5 L130.0 240.9 L133.0 238.4 L136.0 236.2 L139.0 234.1 L142.0 232.2 L145.0 230.5 L148.0 229.1 L151.0 227.9 L154.0 227.0 L157.0 226.4 L160.0 226.1 L163.0 226.0 L166.0 226.2 L169.0 226.7 L172.0 227.5 L175.0 228.6 L178.0 229.9 L181.0 231.4 L184.0 233.2 L187.0 235.2 L190.0 237.4 L193.0 239.8 L196.0 242.3 L199.0 245.0 L202.0 247.8 L205.0 250.7 L208.0 253.7 L211.0 256.7 L214.0 259.7 L217.0 262.7 L220.0 265.6 L223.0 268.5 L226.0 271.3 L229.0 274.0 L232.0 276.5 L235.0 278.9 L238.0 281.0 L241.0 283.0 L244.0 284.8 L247.0 286.3 L250.0 287.6 L253.0 288.6 L256.0 289.3 L259.0 289.8 L262.0 290.0 L265.0 289.9 L268.0 289.5 L271.0 288.9 L274.0 287.9 L277.0 286.8 L280.0 285.3 L283.0 283.6 L286.0 281.7 L289.0 279.6 L292.0 277.3 L295.0 274.8 L298.0 272.2 L301.0 269.4 L304.0 266.6 L307.0 263.6 L310.0 260.7 L313.0 257.7 L316.0 254.7 L319.0 251.7 L322.0 248.8 L325.0 245.9 L328.0 243.2 L331.0 240.6 L334.0 238.2 L337.0 235.9 L340.0 233.8 L343.0 232.0 L346.0 230.3 L349.0 229.0 L352.0 227.8 L355.0 227.0 L358.0 226.4 L361.0 226.1 L364.0 226.0 L367.0 226.3 L370.0 226.8 L373.0 227.6 L376.0 228.7 L379.0 230.0 L382.0 231.6 L385.0 233.4 L388.0 235.4 L391.0 237.7 L394.0 240.1 L397.0 242.6 L400.0 245.3 L403.0 248.2 L406.0 251.1 L409.0 254.0 L412.0 257.0 L415.0 260.0 L418.0 263.0 L421.0 265.9 L424.0 268.8 L427.0 271.6 L430.0 274.3 L433.0 276.8 L436.0 279.1 L439.0 281.3 L442.0 283.2 L445.0 285.0 L448.0 286.5 L451.0 287.7 L454.0 288.7 L457.0 289.4 L460.0 289.8 L463.0 290.0 L466.0 289.9 L469.0 289.5 L472.0 288.8 L475.0 287.8 L478.0 286.6 L481.0 285.1 L484.0 283.4 L487.0 281.5 L490.0 279.3 L493.0 277.0 L496.0 274.5 L499.0 271.9 L502.0 269.1 L505.0 266.2 L508.0 263.3 L511.0 260.3 L514.0 257.3 L517.0 254.3 L520.0 251.3 L523.0 248.4 L526.0 245.6 L529.0 242.9 L532.0 240.3 L535.0 237.9 L538.0 235.7 L541.0 233.6 L544.0 231.8 L547.0 230.2 L550.0 228.8 L553.0 227.7 L556.0 226.9 L559.0 226.3 L562.0 226.0 L565.0 226.0 L568.0 226.3 L571.0 226.9 L574.0 227.7 L577.0 228.8 L580.0 230.2 L583.0 231.8 L586.0 233.6 L589.0 235.7 L592.0 237.9 L595.0 240.4 L598.0 242.9 L601.0 245.7 L604.0 248.5 L607.0 251.4 L610.0 254.4 L613.0 257.4 L616.0 260.4 L619.0 263.3 L622.0 266.3 L625.0 269.1 L628.0 271.9 L631.0 274.5 L634.0 277.0 L637.0 279.4 L640.0 281.5 L643.0 283.4 L646.0 285.2 L649.0 286.6 L652.0 287.8 L655.0 288.8 L658.0 289.5 L661.0 289.9 L664.0 290.0 L667.0 289.8 L670.0 289.4 L673.0 288.7 L676.0 287.7 L679.0 286.4 L682.0 284.9 L685.0 283.2 L688.0 281.2 L691.0 279.1 L694.0 276.7 L697.0 274.2 L700.0 271.6 L703.0 268.8 L706.0 265.9 L709.0 263.0 L712.0 260.0 L715.0 257.0 L718.0 254.0 L721.0 251.0 L724.0 248.1 L727.0 245.3 L730.0 242.6 L733.0 240.0 L736.0 237.6 L739.0 235.4 L742.0 233.4 L745.0 231.6 L748.0 230.0 L751.0 228.7 L754.0 227.6 L757.0 226.8 L760.0 226.3 L763.0 226.0 L766.0 226.1 L769.0 226.4 L772.0 227.0 L775.0 227.8 L778.0 229.0 L781.0 230.4 L784.0 232.0 L787.0 233.9 L790.0 235.9 L793.0 238.2 L796.0 240.7 L799.0 243.2 L802.0 246.0 L805.0 248.8 L808.0 251.7 L811.0 254.7 L814.0 257.7 L817.0 260.7 L820.0 263.7 L823.0 266.6 L826.0 269.5 L829.0 272.2 L832.0 274.8 L835.0 277.3 L838.0 279.6 L841.0 281.7 L844.0 283.7 L847.0 285.3 L850.0 286.8 L853.0 288.0 L856.0 288.9 L859.0 289.5 L862.0 289.9 L865.0 290.0 L868.0 289.8 L871.0 289.3 L874.0 288.6 L877.0 287.6 L880.0 286.3 L883.0 284.8 L886.0 283.0 L889.0 281.0 L892.0 278.8 L895.0 276.5 L898.0 273.9 L901.0 271.2 L904.0 268.5 L907.0 265.6 L910.0 262.6 L913.0 259.6 L916.0 256.6 L919.0 253.6" data-draw="320" data-dur="1700" style="stroke-width:1.6"/>
+<text x="0" y="266" class="t-display t-muted" font-size="24" font-style="italic">sin<tspan font-size="16" dy="5">2</tspan></text>
+<path class="line-faint" d="M112 356 H920"/>
+<path class="line" d="M112.0 324.0 L115.0 324.0 L118.0 324.2 L121.0 324.4 L124.0 324.7 L127.0 325.0 L130.0 325.5 L133.0 326.0 L136.0 326.6 L139.0 327.2 L142.0 328.0 L145.0 328.8 L148.0 329.7 L151.0 330.7 L154.0 331.7 L157.0 332.8 L160.0 333.9 L163.0 335.1 L166.0 336.3 L169.0 337.6 L172.0 339.0 L175.0 340.4 L178.0 341.8 L181.0 343.3 L184.0 344.8 L187.0 346.3 L190.0 347.8 L193.0 349.4 L196.0 351.0 L199.0 352.6 L202.0 354.2 L205.0 355.8 L208.0 357.5 L211.0 359.1 L214.0 360.7 L217.0 362.3 L220.0 363.8 L223.0 365.4 L226.0 366.9 L229.0 368.4 L232.0 369.9 L235.0 371.3 L238.0 372.7 L241.0 374.1 L244.0 375.4 L247.0 376.7 L250.0 377.9 L253.0 379.0 L256.0 380.1 L259.0 381.1 L262.0 382.1 L265.0 383.0 L268.0 383.8 L271.0 384.6 L274.0 385.3 L277.0 385.9 L280.0 386.4 L283.0 386.9 L286.0 387.3 L289.0 387.6 L292.0 387.8 L295.0 387.9 L298.0 388.0 L301.0 388.0 L304.0 387.9 L307.0 387.7 L310.0 387.4 L313.0 387.1 L316.0 386.6 L319.0 386.1 L322.0 385.6 L325.0 384.9 L328.0 384.2 L331.0 383.4 L334.0 382.5 L337.0 381.5 L340.0 380.5 L343.0 379.5 L346.0 378.3 L349.0 377.2 L352.0 375.9 L355.0 374.6 L358.0 373.3 L361.0 371.9 L364.0 370.5 L367.0 369.0 L370.0 367.5 L373.0 366.0 L376.0 364.5 L379.0 362.9 L382.0 361.3 L385.0 359.7 L388.0 358.1 L391.0 356.5 L394.0 354.9 L397.0 353.3 L400.0 351.7 L403.0 350.1 L406.0 348.5 L409.0 346.9 L412.0 345.4 L415.0 343.9 L418.0 342.4 L421.0 341.0 L424.0 339.5 L427.0 338.2 L430.0 336.9 L433.0 335.6 L436.0 334.4 L439.0 333.2 L442.0 332.1 L445.0 331.1 L448.0 330.1 L451.0 329.2 L454.0 328.3 L457.0 327.5 L460.0 326.8 L463.0 326.2 L466.0 325.7 L469.0 325.2 L472.0 324.8 L475.0 324.5 L478.0 324.2 L481.0 324.1 L484.0 324.0 L487.0 324.0 L490.0 324.1 L493.0 324.3 L496.0 324.5 L499.0 324.9 L502.0 325.3 L505.0 325.8 L508.0 326.3 L511.0 327.0 L514.0 327.7 L517.0 328.5 L520.0 329.3 L523.0 330.3 L526.0 331.2 L529.0 332.3 L532.0 333.4 L535.0 334.6 L538.0 335.8 L541.0 337.1 L544.0 338.4 L547.0 339.8 L550.0 341.2 L553.0 342.7 L556.0 344.2 L559.0 345.7 L562.0 347.2 L565.0 348.8 L568.0 350.4 L571.0 352.0 L574.0 353.6 L577.0 355.2 L580.0 356.8 L583.0 358.4 L586.0 360.0 L589.0 361.6 L592.0 363.2 L595.0 364.8 L598.0 366.3 L601.0 367.8 L604.0 369.3 L607.0 370.8 L610.0 372.2 L613.0 373.5 L616.0 374.9 L619.0 376.2 L622.0 377.4 L625.0 378.6 L628.0 379.7 L631.0 380.7 L634.0 381.7 L637.0 382.7 L640.0 383.5 L643.0 384.3 L646.0 385.0 L649.0 385.7 L652.0 386.2 L655.0 386.7 L658.0 387.1 L661.0 387.5 L664.0 387.7 L667.0 387.9 L670.0 388.0 L673.0 388.0 L676.0 387.9 L679.0 387.8 L682.0 387.5 L685.0 387.2 L688.0 386.8 L691.0 386.3 L694.0 385.8 L697.0 385.2 L700.0 384.5 L703.0 383.7 L706.0 382.9 L709.0 381.9 L712.0 381.0 L715.0 379.9 L718.0 378.8 L721.0 377.6 L724.0 376.4 L727.0 375.2 L730.0 373.8 L733.0 372.5 L736.0 371.1 L739.0 369.6 L742.0 368.2 L745.0 366.6 L748.0 365.1 L751.0 363.5 L754.0 362.0 L757.0 360.4 L760.0 358.8 L763.0 357.2 L766.0 355.5 L769.0 353.9 L772.0 352.3 L775.0 350.7 L778.0 349.1 L781.0 347.6 L784.0 346.0 L787.0 344.5 L790.0 343.0 L793.0 341.5 L796.0 340.1 L799.0 338.7 L802.0 337.4 L805.0 336.1 L808.0 334.9 L811.0 333.7 L814.0 332.5 L817.0 331.5 L820.0 330.5 L823.0 329.5 L826.0 328.7 L829.0 327.9 L832.0 327.1 L835.0 326.5 L838.0 325.9 L841.0 325.4 L844.0 324.9 L847.0 324.6 L850.0 324.3 L853.0 324.1 L856.0 324.0 L859.0 324.0 L862.0 324.1 L865.0 324.2 L868.0 324.4 L871.0 324.7 L874.0 325.1 L877.0 325.5 L880.0 326.1 L883.0 326.7 L886.0 327.4 L889.0 328.1 L892.0 329.0 L895.0 329.9 L898.0 330.8 L901.0 331.9 L904.0 333.0 L907.0 334.1 L910.0 335.3 L913.0 336.6 L916.0 337.9 L919.0 339.2" data-draw="480" data-dur="1700" style="stroke-width:1.6"/>
+<text x="0" y="364" class="t-display t-muted" font-size="24" font-style="italic">cos<tspan font-size="16" dy="5">3</tspan></text>
+<path class="line-faint" d="M112 454 H920"/>
+<path class="line" d="M112.0 454.0 L115.0 453.1 L118.0 452.3 L121.0 451.4 L124.0 450.5 L127.0 449.7 L130.0 448.8 L133.0 448.0 L136.0 447.1 L139.0 446.3 L142.0 445.4 L145.0 444.6 L148.0 443.8 L151.0 442.9 L154.0 442.1 L157.0 441.3 L160.0 440.5 L163.0 439.7 L166.0 439.0 L169.0 438.2 L172.0 437.5 L175.0 436.7 L178.0 436.0 L181.0 435.3 L184.0 434.6 L187.0 433.9 L190.0 433.2 L193.0 432.6 L196.0 431.9 L199.0 431.3 L202.0 430.7 L205.0 430.1 L208.0 429.6 L211.0 429.0 L214.0 428.5 L217.0 428.0 L220.0 427.5 L223.0 427.0 L226.0 426.5 L229.0 426.1 L232.0 425.7 L235.0 425.3 L238.0 424.9 L241.0 424.6 L244.0 424.2 L247.0 423.9 L250.0 423.6 L253.0 423.4 L256.0 423.1 L259.0 422.9 L262.0 422.7 L265.0 422.6 L268.0 422.4 L271.0 422.3 L274.0 422.2 L277.0 422.1 L280.0 422.0 L283.0 422.0 L286.0 422.0 L289.0 422.0 L292.0 422.1 L295.0 422.1 L298.0 422.2 L301.0 422.3 L304.0 422.4 L307.0 422.6 L310.0 422.8 L313.0 423.0 L316.0 423.2 L319.0 423.5 L322.0 423.7 L325.0 424.0 L328.0 424.3 L331.0 424.7 L334.0 425.0 L337.0 425.4 L340.0 425.8 L343.0 426.2 L346.0 426.7 L349.0 427.1 L352.0 427.6 L355.0 428.1 L358.0 428.6 L361.0 429.2 L364.0 429.7 L367.0 430.3 L370.0 430.9 L373.0 431.5 L376.0 432.1 L379.0 432.8 L382.0 433.4 L385.0 434.1 L388.0 434.8 L391.0 435.5 L394.0 436.2 L397.0 436.9 L400.0 437.7 L403.0 438.4 L406.0 439.2 L409.0 440.0 L412.0 440.8 L415.0 441.6 L418.0 442.4 L421.0 443.2 L424.0 444.0 L427.0 444.8 L430.0 445.7 L433.0 446.5 L436.0 447.4 L439.0 448.2 L442.0 449.1 L445.0 449.9 L448.0 450.8 L451.0 451.7 L454.0 452.5 L457.0 453.4 L460.0 454.3 L463.0 455.1 L466.0 456.0 L469.0 456.9 L472.0 457.7 L475.0 458.6 L478.0 459.4 L481.0 460.3 L484.0 461.2 L487.0 462.0 L490.0 462.8 L493.0 463.7 L496.0 464.5 L499.0 465.3 L502.0 466.1 L505.0 466.9 L508.0 467.7 L511.0 468.5 L514.0 469.3 L517.0 470.0 L520.0 470.8 L523.0 471.5 L526.0 472.2 L529.0 472.9 L532.0 473.6 L535.0 474.3 L538.0 475.0 L541.0 475.6 L544.0 476.2 L547.0 476.9 L550.0 477.5 L553.0 478.0 L556.0 478.6 L559.0 479.2 L562.0 479.7 L565.0 480.2 L568.0 480.7 L571.0 481.1 L574.0 481.6 L577.0 482.0 L580.0 482.4 L583.0 482.8 L586.0 483.2 L589.0 483.5 L592.0 483.9 L595.0 484.2 L598.0 484.4 L601.0 484.7 L604.0 484.9 L607.0 485.1 L610.0 485.3 L613.0 485.5 L616.0 485.6 L619.0 485.8 L622.0 485.9 L625.0 485.9 L628.0 486.0 L631.0 486.0 L634.0 486.0 L637.0 486.0 L640.0 485.9 L643.0 485.9 L646.0 485.8 L649.0 485.6 L652.0 485.5 L655.0 485.3 L658.0 485.2 L661.0 485.0 L664.0 484.7 L667.0 484.5 L670.0 484.2 L673.0 483.9 L676.0 483.6 L679.0 483.2 L682.0 482.9 L685.0 482.5 L688.0 482.1 L691.0 481.6 L694.0 481.2 L697.0 480.7 L700.0 480.2 L703.0 479.7 L706.0 479.2 L709.0 478.7 L712.0 478.1 L715.0 477.5 L718.0 476.9 L721.0 476.3 L724.0 475.7 L727.0 475.0 L730.0 474.4 L733.0 473.7 L736.0 473.0 L739.0 472.3 L742.0 471.6 L745.0 470.8 L748.0 470.1 L751.0 469.3 L754.0 468.6 L757.0 467.8 L760.0 467.0 L763.0 466.2 L766.0 465.4 L769.0 464.6 L772.0 463.7 L775.0 462.9 L778.0 462.1 L781.0 461.2 L784.0 460.4 L787.0 459.5 L790.0 458.7 L793.0 457.8 L796.0 456.9 L799.0 456.1 L802.0 455.2 L805.0 454.3 L808.0 453.5 L811.0 452.6 L814.0 451.7 L817.0 450.9 L820.0 450.0 L823.0 449.2 L826.0 448.3 L829.0 447.4 L832.0 446.6 L835.0 445.8 L838.0 444.9 L841.0 444.1 L844.0 443.3 L847.0 442.4 L850.0 441.6 L853.0 440.8 L856.0 440.1 L859.0 439.3 L862.0 438.5 L865.0 437.8 L868.0 437.0 L871.0 436.3 L874.0 435.6 L877.0 434.9 L880.0 434.2 L883.0 433.5 L886.0 432.8 L889.0 432.2 L892.0 431.6 L895.0 431.0 L898.0 430.4 L901.0 429.8 L904.0 429.2 L907.0 428.7 L910.0 428.2 L913.0 427.7 L916.0 427.2 L919.0 426.7" data-draw="640" data-dur="1700" style="stroke-width:1.6"/>
+<text x="0" y="462" class="t-display t-muted" font-size="24" font-style="italic">sin<tspan font-size="16" dy="5">4</tspan></text>
+<path class="line-accent" d="M532.2 14 V500" data-draw="1100"/>
+<text x="544.2" y="22" class="t-display t-accent" font-size="26" font-style="italic" data-fade="1300">pos = 26</text>
+<circle class="fill-accent" cx="532.2" cy="30.0" r="6.5" style="stroke:var(--paper); stroke-width:2.5" data-pop="1350"/>
+<text x="548.2" y="18.0" font-size="18" class="t-ink halo-text" style="font-variant-numeric:tabular-nums" data-fade="1450">+1.00</text>
+<circle class="fill-accent" cx="532.2" cy="134.8" r="6.5" style="stroke:var(--paper); stroke-width:2.5" data-pop="1420"/>
+<text x="548.2" y="122.8" font-size="18" class="t-ink halo-text" style="font-variant-numeric:tabular-nums" data-fade="1520">+0.79</text>
+<circle class="fill-accent" cx="532.2" cy="240.2" r="6.5" style="stroke:var(--paper); stroke-width:2.5" data-pop="1490"/>
+<text x="548.2" y="228.2" font-size="18" class="t-ink halo-text" style="font-variant-numeric:tabular-nums" data-fade="1590">+0.56</text>
+<circle class="fill-accent" cx="532.2" cy="333.5" r="6.5" style="stroke:var(--paper); stroke-width:2.5" data-pop="1560"/>
+<text x="548.2" y="321.5" font-size="18" class="t-ink halo-text" style="font-variant-numeric:tabular-nums" data-fade="1660">+0.70</text>
+<circle class="fill-accent" cx="532.2" cy="473.7" r="6.5" style="stroke:var(--paper); stroke-width:2.5" data-pop="1630"/>
+<text x="548.2" y="461.7" font-size="18" class="t-ink halo-text" style="font-variant-numeric:tabular-nums" data-fade="1730">−0.61</text>
+<path class="axis" d="M112 508 H920"/>
+<path class="axis" d="M112.0 508 V516"/><text x="112.0" y="540" text-anchor="middle" font-size="16" class="t-muted">0</text>
+<path class="axis" d="M273.6 508 V516"/><text x="273.6" y="540" text-anchor="middle" font-size="16" class="t-muted">10</text>
+<path class="axis" d="M435.2 508 V516"/><text x="435.2" y="540" text-anchor="middle" font-size="16" class="t-muted">20</text>
+<path class="axis" d="M596.8 508 V516"/><text x="596.8" y="540" text-anchor="middle" font-size="16" class="t-muted">30</text>
+<path class="axis" d="M758.4 508 V516"/><text x="758.4" y="540" text-anchor="middle" font-size="16" class="t-muted">40</text>
+<path class="axis" d="M920.0 508 V516"/><text x="920.0" y="540" text-anchor="middle" font-size="16" class="t-muted">50</text>
+<text x="112" y="540" text-anchor="end" dx="-14" font-size="16" class="t-muted">pos</text>
+<!--/gen--></svg>
+      </figure>
+    </div>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), §3.5；波形為示意（d = 512 中的 5 個維度）。</p>
+  <aside class="notes">
+    <p>還有一個問題：自注意力本身不在乎順序——把句子打亂，算出來的分數一模一樣。所以要額外告訴模型每個字的位置。</p>
+    <p>作者的做法很優雅：用不同頻率的正弦波，替每個位置產生一組獨一無二的「指紋」，加到字的向量上。（指向紅線）在同一個位置往下讀，就得到這組數字。任何固定距離的位移，都可以用線性變換表示，方便模型學相對位置。（約 1 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 12 · ARCHITECTURE ═════════════════════════ -->
+<section class="slide">
+  <div class="head">
+    <p class="kicker">The Transformer</p>
+    <h2 class="title">把積木疊起來：6 層編碼器，加上 6 層解碼器</h2>
+  </div>
+  <div class="body">
+    <div class="grid">
+      <div class="span-3 arch-note self-center" data-step="1">
+        <h3>編碼器<span class="en">Encoder</span></h3>
+        <p>讀懂整句原文。每一層先做自注意力、再做前饋網路，每個子層都有殘差連接與正規化。</p>
+        <p class="spec">6 層 · <i>d</i><sub>model</sub> = 512 · 8 個頭</p>
+      </div>
+      <figure class="figure span-6 self-center arch">
+        <svg class="dg" viewBox="0 -40 812 650" role="img" aria-label="Transformer 架構圖：左側編碼器、右側解碼器，各堆疊六層">
+          <defs>
+            <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="var(--ink-2)" stroke-width="1.4"/></marker>
+          </defs>
+          <!-- encoder -->
+          <g class="blk g-enc">
+            <rect class="box-soft" x="140" y="196" width="220" height="248" rx="16" data-fade="0"/>
+            <text x="112" y="326" text-anchor="end" class="t-display t-ink" font-size="30">6×</text>
+            <rect class="box-accent" x="165" y="366" width="170" height="58" rx="8" data-pop="200"/>
+            <text x="250" y="391" text-anchor="middle" font-size="16" class="t-ink">Multi-Head</text>
+            <text x="250" y="411" text-anchor="middle" font-size="16" class="t-ink">Attention</text>
+            <rect class="box" x="165" y="330" width="170" height="22" rx="5" data-pop="300"/>
+            <text x="250" y="346" text-anchor="middle" font-size="13" class="t-muted">Add &amp; Norm</text>
+            <rect class="box" x="165" y="258" width="170" height="58" rx="8" data-pop="400"/>
+            <text x="250" y="292" text-anchor="middle" font-size="16" class="t-ink">Feed Forward</text>
+            <rect class="box" x="165" y="222" width="170" height="22" rx="5" data-pop="500"/>
+            <text x="250" y="238" text-anchor="middle" font-size="13" class="t-muted">Add &amp; Norm</text>
+            <g class="line" marker-end="url(#ah2)">
+              <path d="M250 454 V430" data-draw="150"/>
+              <path d="M250 366 V356" data-draw="250"/>
+              <path d="M250 330 V320" data-draw="350"/>
+              <path d="M250 258 V248" data-draw="450"/>
+            </g>
+            <path class="line-soft" d="M250 440 H150 V341 H161" data-draw="300"/>
+            <path class="line-soft" d="M250 324 H150 V233 H161" data-draw="500"/>
+            <rect class="box" x="155" y="506" width="190" height="42" rx="8" data-pop="0"/>
+            <text x="250" y="533" text-anchor="middle" font-size="16" class="t-ink">Input Embedding</text>
+            <circle class="box" cx="250" cy="474" r="12" data-pop="100"/>
+            <path class="line" d="M244 474 H256 M250 468 V480"/>
+            <path class="line" d="M250 506 V488" marker-end="url(#ah2)" data-draw="60"/>
+            <circle class="box" cx="176" cy="474" r="17"/>
+            <path class="line" d="M165 474 C 169 464, 173 464, 176 474 S 183 484, 187 474"/>
+            <path class="line-soft" d="M193 474 H236"/>
+            <text x="150" y="468" text-anchor="end" font-size="14" class="t-muted">Positional</text>
+            <text x="150" y="486" text-anchor="end" font-size="14" class="t-muted">Encoding</text>
+            <text x="250" y="590" text-anchor="middle" font-size="16" class="t-muted">Inputs</text>
+            <path class="line" d="M250 574 V552" marker-end="url(#ah2)"/>
+          </g>
+          <!-- decoder -->
+          <g class="blk g-dec">
+            <rect class="box-soft" x="452" y="98" width="220" height="346" rx="16" data-fade="300"/>
+            <text x="700" y="278" class="t-display t-ink" font-size="30">6×</text>
+            <rect class="box-accent" x="477" y="366" width="170" height="58" rx="8" data-pop="500"/>
+            <text x="562" y="391" text-anchor="middle" font-size="16" class="t-ink">Masked Multi-Head</text>
+            <text x="562" y="411" text-anchor="middle" font-size="16" class="t-ink">Attention</text>
+            <rect class="box" x="477" y="330" width="170" height="22" rx="5" data-pop="600"/>
+            <text x="562" y="346" text-anchor="middle" font-size="13" class="t-muted">Add &amp; Norm</text>
+            <rect class="box-accent" x="477" y="258" width="170" height="58" rx="8" data-pop="700"/>
+            <text x="562" y="283" text-anchor="middle" font-size="16" class="t-ink">Multi-Head</text>
+            <text x="562" y="303" text-anchor="middle" font-size="16" class="t-ink">Attention</text>
+            <rect class="box" x="477" y="222" width="170" height="22" rx="5" data-pop="800"/>
+            <text x="562" y="238" text-anchor="middle" font-size="13" class="t-muted">Add &amp; Norm</text>
+            <rect class="box" x="477" y="150" width="170" height="58" rx="8" data-pop="900"/>
+            <text x="562" y="184" text-anchor="middle" font-size="16" class="t-ink">Feed Forward</text>
+            <rect class="box" x="477" y="114" width="170" height="22" rx="5" data-pop="1000"/>
+            <text x="562" y="130" text-anchor="middle" font-size="13" class="t-muted">Add &amp; Norm</text>
+            <g class="line" marker-end="url(#ah2)">
+              <path d="M562 454 V430" data-draw="450"/>
+              <path d="M562 366 V356" data-draw="550"/>
+              <path d="M562 330 V320" data-draw="650"/>
+              <path d="M562 258 V248" data-draw="750"/>
+              <path d="M562 222 V212" data-draw="850"/>
+              <path d="M562 150 V140" data-draw="950"/>
+            </g>
+            <path class="line-soft" d="M562 440 H662 V341 H651" data-draw="600"/>
+            <path class="line-soft" d="M562 324 H662 V233 H651" data-draw="800"/>
+            <path class="line-soft" d="M562 216 H662 V125 H651" data-draw="1000"/>
+            <rect class="box" x="467" y="506" width="190" height="42" rx="8" data-pop="300"/>
+            <text x="562" y="533" text-anchor="middle" font-size="16" class="t-ink">Output Embedding</text>
+            <circle class="box" cx="562" cy="474" r="12" data-pop="400"/>
+            <path class="line" d="M556 474 H568 M562 468 V480"/>
+            <path class="line" d="M562 506 V488" marker-end="url(#ah2)" data-draw="360"/>
+            <circle class="box" cx="636" cy="474" r="17"/>
+            <path class="line" d="M625 474 C 629 464, 633 464, 636 474 S 643 484, 647 474"/>
+            <path class="line-soft" d="M619 474 H576"/>
+            <text x="662" y="468" font-size="14" class="t-muted">Positional</text>
+            <text x="662" y="486" font-size="14" class="t-muted">Encoding</text>
+            <text x="562" y="590" text-anchor="middle" font-size="16" class="t-muted">Outputs (shifted right)</text>
+            <path class="line" d="M562 574 V552" marker-end="url(#ah2)"/>
+            <rect class="box" x="497" y="48" width="130" height="34" rx="7" data-pop="1100"/>
+            <text x="562" y="71" text-anchor="middle" font-size="16" class="t-ink">Linear</text>
+            <rect class="box" x="497" y="-4" width="130" height="34" rx="7" data-pop="1200"/>
+            <text x="562" y="19" text-anchor="middle" font-size="16" class="t-ink">Softmax</text>
+            <g class="line" marker-end="url(#ah2)">
+              <path d="M562 114 V86" data-draw="1050"/>
+              <path d="M562 48 V34" data-draw="1150"/>
+            </g>
+            <text x="652" y="18" font-size="15" class="t-muted">輸出機率 Output Probabilities</text>
+          </g>
+          <!-- encoder → decoder cross-attention -->
+          <g class="blk g-cross">
+            <path class="line x-path" d="M250 222 V170 Q250 160 260 160 H404 Q414 160 414 170 V277 Q414 287 424 287 H473" marker-end="url(#ah2)" data-draw="1250"/>
+            <text x="330" y="148" text-anchor="middle" font-size="14" class="t-muted">交叉注意力</text>
+          </g>
+        </svg>
+      </figure>
+      <div class="span-3 arch-note self-center" data-step="2">
+        <h3>解碼器<span class="en">Decoder</span></h3>
+        <p>逐字寫出譯文。「遮罩」讓它看不到還沒寫出的字；交叉注意力讓它隨時回頭查詢原文。</p>
+        <p class="spec">6 層 · <i>d</i><sub>ff</sub> = 2048 · 參數 65M（base）／213M（big）</p>
+        <p class="note" data-step="3" style="margin-top:28px"><span class="accent">交叉注意力</span>：Query 來自解碼器，Key 與 Value 來自編碼器的輸出。</p>
+      </div>
+    </div>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), Figure 1、§3.1、Table 3；依原圖重繪。</p>
+  <aside class="notes">
+    <p>把這些積木組起來，就是 Transformer 的完整架構。（下一步）左邊是編碼器，負責讀懂原文：自注意力加前饋網路，疊六層。</p>
+    <p>（下一步）右邊是解碼器，負責逐字寫出譯文：它有遮罩，看不到未來的字。（下一步）中間這條線是交叉注意力：解碼器拿自己的 Query，去查編碼器的 Key 和 Value——也就是隨時回頭查原文。基礎版約 6,500 萬個參數。（約 1.5 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 13 · RESULTS ══════════════════════════════ -->
+<section class="slide" data-chapter="03" data-chapter-title="成果 · The Evidence">
+  <div class="head">
+    <p class="kicker">WMT 2014 機器翻譯</p>
+    <h2 class="title">更準，也更省：以一小部分的訓練成本，刷新翻譯紀錄</h2>
+  </div>
+  <div class="body">
+    <div class="grid">
+      <figure class="figure span-8 chart">
+        <svg class="dg" viewBox="0 0 1096 560" role="img" aria-label="散布圖：橫軸訓練成本，縱軸英德翻譯 BLEU；Transformer 位於左上方"><!--gen:scatter-->
+<path class="grid-line" d="M96 470.0 H1060"/>
+<text x="80" y="476.0" text-anchor="end" class="tick">24</text>
+<path class="grid-line" d="M96 384.0 H1060"/>
+<text x="80" y="390.0" text-anchor="end" class="tick">25</text>
+<path class="grid-line" d="M96 298.0 H1060"/>
+<text x="80" y="304.0" text-anchor="end" class="tick">26</text>
+<path class="grid-line" d="M96 212.0 H1060"/>
+<text x="80" y="218.0" text-anchor="end" class="tick">27</text>
+<path class="grid-line" d="M96 126.0 H1060"/>
+<text x="80" y="132.0" text-anchor="end" class="tick">28</text>
+<path class="grid-line" d="M96 40.0 H1060"/>
+<text x="80" y="46.0" text-anchor="end" class="tick">29</text>
+<path class="axis" d="M173.6 470 V478"/><text x="173.6" y="504" text-anchor="middle" class="tick">3×10¹⁸</text>
+<path class="axis" d="M402.7 470 V478"/><text x="402.7" y="504" text-anchor="middle" class="tick">10¹⁹</text>
+<path class="axis" d="M611.8 470 V478"/><text x="611.8" y="504" text-anchor="middle" class="tick">3×10¹⁹</text>
+<path class="axis" d="M840.9 470 V478"/><text x="840.9" y="504" text-anchor="middle" class="tick">10²⁰</text>
+<path class="axis" d="M1050.0 470 V478"/><text x="1050.0" y="504" text-anchor="middle" class="tick">3×10²⁰</text>
+<path class="axis" d="M96 470 H1060"/>
+<text x="96" y="20" class="ax-label">BLEU · 英→德（越高越準）</text>
+<text x="1060" y="546" text-anchor="end" class="ax-label">訓練成本 · FLOPs，對數刻度（越右越貴）</text>
+<path class="line-soft" d="M575.2 418.4 H583.2 V91.6 H575.2" data-draw="1500"/>
+<text x="597.2" y="251.0" class="lbl-key" data-fade="1800">同樣成本</text>
+<text x="597.2" y="279.0" class="lbl-val" data-fade="1800">BLEU 高出 3.8</text>
+<g data-pop="300"><title>GNMT + RL：BLEU 24.6，2.3e+19 FLOPs</title><circle class="pt" cx="561.2" cy="418.4" r="7.5"/></g>
+<text x="597.2" y="425.4" text-anchor="start" class="lbl" data-fade="700">GNMT + RL</text>
+<g data-pop="390"><title>ConvS2S：BLEU 25.16，9.6e+18 FLOPs</title><circle class="pt" cx="395.0" cy="370.2" r="7.5"/></g>
+<text x="411.0" y="377.2" text-anchor="start" class="lbl" data-fade="790">ConvS2S</text>
+<g data-pop="480"><title>MoE：BLEU 26.03，2.0e+19 FLOPs</title><circle class="pt" cx="534.6" cy="295.4" r="7.5"/></g>
+<text x="518.6" y="302.4" text-anchor="end" class="lbl" data-fade="880">MoE</text>
+<g data-pop="570"><title>GNMT + RL 集成：BLEU 26.3，1.8e+20 FLOPs</title><circle class="pt" cx="952.8" cy="272.2" r="7.5"/></g>
+<text x="952.8" y="308.2" text-anchor="middle" class="lbl" data-fade="970">GNMT + RL 集成</text>
+<g data-pop="660"><title>ConvS2S 集成：BLEU 26.36，7.7e+19 FLOPs</title><circle class="pt" cx="791.2" cy="267.0" r="7.5"/></g>
+<text x="791.2" y="247.0" text-anchor="middle" class="lbl" data-fade="1060">ConvS2S 集成</text>
+<circle class="halo" cx="191.7" cy="186.2" r="11"/>
+<g data-pop="1000"><title>Transformer (base)：BLEU 27.3，3.3e+18 FLOPs</title><circle class="pt-key" cx="191.7" cy="186.2" r="10"/></g>
+<text x="213.7" y="184.2" class="lbl-key" data-fade="1200">Transformer (base)</text>
+<text x="213.7" y="211.2" class="lbl-val" data-fade="1250">BLEU 27.3</text>
+<circle class="halo" cx="561.2" cy="91.6" r="11"/>
+<g data-pop="1200"><title>Transformer (big)：BLEU 28.4，2.3e+19 FLOPs</title><circle class="pt-key" cx="561.2" cy="91.6" r="10"/></g>
+<text x="597.2" y="89.6" class="lbl-key" data-fade="1400">Transformer (big)</text>
+<text x="597.2" y="116.6" class="lbl-val" data-fade="1450">BLEU 28.4</text>
+<g data-fade="1900"><circle class="pt-key" cx="806" cy="14" r="8"/><text x="822" y="21" class="lbl">Transformer</text><circle class="pt" cx="958" cy="14" r="7"/><text x="972" y="21" class="lbl">先前模型</text></g>
+<text x="1052" y="439.9" text-anchor="end" class="ax-label" data-fade="2000">越往左上 · 越準也越省</text>
+<!--/gen--></svg>
+      </figure>
+      <div class="span-4 stack stack--lg self-center" data-step="1">
+        <div class="stat stat--sm"><div class="stat__value"><span data-count="28.4">28.4</span><small>BLEU</small></div><div class="stat__label"><span class="nw">英→德翻譯，</span><span class="nw">比先前最佳（含集成模型）</span><span class="nw">高出 2 分以上</span></div></div>
+        <div class="stat stat--sm"><div class="stat__value"><span data-count="41.8">41.8</span><small>BLEU</small></div><div class="stat__label">英→法翻譯，單一模型的最佳成績</div></div>
+        <div class="stat stat--sm"><div class="stat__value"><span data-count="3.5">3.5</span><small>天</small></div><div class="stat__label"><span class="nw">big 版在 8 張 P100 GPU 上</span><span class="nw">的訓練時間</span><span class="nw">（base 版只要 12 小時）</span></div></div>
+      </div>
+    </div>
+  </div>
+  <p class="source">資料來源：Vaswani et al. (2017), Table 2、§5.2、§6.1；訓練成本為作者估算的浮點運算次數（FLOPs）。</p>
+  <aside class="notes">
+    <p>結果如何？這張圖橫軸是訓練成本，縱軸是翻譯品質，越左上角越好。灰色是當時最好的模型，紅色是 Transformer。</p>
+    <p>同樣的訓練成本下，Transformer big 比 GNMT 高出將近 4 分；base 版成本只有 ConvS2S 集成模型的約二十分之一，分數卻更高。（下一步）英法翻譯也拿到 41.8，單一模型最佳；而且只要 3.5 天。（約 1.5 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 14 · LEGACY ═══════════════════════════════ -->
+<section class="slide" data-chapter="04" data-chapter-title="影響 · The Legacy">
+  <div class="head">
+    <p class="kicker">之後發生的事</p>
+    <h2 class="title">一篇翻譯論文，成了今日 AI 的共同骨架</h2>
+  </div>
+  <div class="body body--center">
+    <ol class="timeline" style="--n:6">
+      <li class="is-key"><span class="when">2017</span><span class="dot"></span><p class="what"><span class="en">Transformer</span></p><p class="desc"><span class="nw">本論文：只靠注意力的</span><span class="nw">翻譯模型</span></p></li>
+      <li><span class="when">2018</span><span class="dot"></span><p class="what"><span class="en">GPT · BERT</span></p><p class="desc"><span class="nw">只取解碼器做生成；</span><span class="nw">只取編碼器做理解</span></p></li>
+      <li><span class="when">2020</span><span class="dot"></span><p class="what"><span class="en">GPT-3</span></p><p class="desc"><span class="nw">1,750 億參數：</span><span class="nw">放大規模，能力湧現</span></p></li>
+      <li><span class="when">2020</span><span class="dot"></span><p class="what"><span class="en">ViT</span></p><p class="desc"><span class="nw">把圖片切成小塊當成字：</span><span class="nw">影像也交給 Transformer</span></p></li>
+      <li><span class="when">2022</span><span class="dot"></span><p class="what"><span class="en">ChatGPT</span></p><p class="desc">對話式 AI 走進大眾日常</p></li>
+      <li><span class="when">今日</span><span class="dot"></span><p class="what"><span class="en">LLMs</span></p><p class="desc"><span class="nw">GPT、Claude、Gemini⋯⋯</span><span class="nw">背後幾乎都是 Transformer</span></p></li>
+    </ol>
+    <div class="grid" style="height:auto; margin-top: 84px; align-items: end;">
+      <p class="takeaway span-7">GPT 的「T」就是 Transformer。</p>
+      <div class="stat stat--sm span-5"><div class="stat__value"><span data-count="29">29</span><span class="cjk-unit">萬</span><small>次引用</small></div><div class="stat__label"><span class="nw">Google Scholar，2026 年 10 月。</span><span class="nw">Nature 2025 年統計：</span><span class="nw">21 世紀被引用第 7 多的論文</span></div></div>
+    </div>
+  </div>
+  <p class="source">資料來源：各模型原始論文與發表公告（GPT 2018.06、BERT 2018.10、GPT-3 2020.05、ViT 2020.10、ChatGPT 2022.11）；Google Scholar（2026.10）；Nature 640:588 (2025)。</p>
+  <aside class="notes">
+    <p>這篇論文的影響遠超出翻譯。隔年，OpenAI 只取了解碼器，做出 GPT；Google 只取編碼器，做出 BERT。2020 年 GPT-3 證明放大規模就會更強，ViT 則把影像也交給 Transformer。</p>
+    <p>2022 年 ChatGPT 讓大眾第一次感受到它的力量。今天你用的 GPT、Claude、Gemini，背後幾乎都是 Transformer——GPT 的 T，就是 Transformer。（約 1 分鐘）</p>
+  </aside>
+</section>
+
+<!-- ═════════════════════════ 15 · CLOSING ══════════════════════════════ -->
+<section class="slide" data-layout="closing" data-tone="invert" data-tracker="結語 · Takeaways">
+  <div class="head">
+    <p class="kicker">三個帶得走的觀點</p>
+    <p class="closing__line" lang="en">Attention is all you need.</p>
+  </div>
+  <div class="body body--end">
+    <ol class="points">
+      <li data-step="1"><span class="n">01</span><h3>平行勝過循序</h3><p>能被 GPU 平行計算的架構，才吃得下更多資料與算力。</p></li>
+      <li data-step="2"><span class="n">02</span><h3>注意力是可學習的檢索</h3><p>Query、Key、Value，讓模型自己決定該看哪裡。</p></li>
+      <li data-step="3"><span class="n">03</span><h3>簡單，才能擴展</h3><p>同一種積木反覆堆疊，從翻譯一路長成今日的大型語言模型。</p></li>
+    </ol>
+    <div class="thanks"><span>謝謝聆聽 · Q &amp; A</span><span>Vaswani et al., NeurIPS 2017 · arXiv:1706.03762</span></div>
+  </div>
+  <aside class="notes">
+    <p>最後，三個帶得走的觀點。（逐步）第一，能平行的架構，才吃得下更多資料與算力；第二，注意力本質上是一種可以學習的檢索；第三，簡單的設計才能擴展。</p>
+    <p>Attention is all you need——謝謝大家，歡迎提問。</p>
+  </aside>
+</section>
+
+</main>
+<script src="../../assets/engine/atelier.js"></script>
+</body>
+</html>
