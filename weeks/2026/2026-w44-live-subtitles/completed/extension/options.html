@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>雙語字幕設定</title>
+  <link rel="stylesheet" href="noise-winston/tokens.css">
+  <link rel="stylesheet" href="noise-winston/components.css">
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="options.css">
+  <script src="options.js" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="nw-appbar__brand">
+        <img src="icons/icon-48.png" alt="" class="nw-appbar__icon">
+        <span class="nw-appbar__title">雙語字幕</span>
+      </div>
+      <span class="nw-signature nw-signature__mark">Noise Winston · Lab 004</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <header class="intro">
+      <h1>雙語字幕設定</h1>
+      <p>填入自己的 Gemini API key 後，在發出聲音的分頁按「開始雙語字幕」。分頁音訊會直接傳送至 Google Gemini 辨識與翻譯。</p>
+    </header>
+
+    <section class="setting" aria-labelledby="api-title">
+      <div class="setting__aside">
+        <h2 id="api-title" class="nw-section__title">Gemini API</h2>
+        <p id="key-status" class="nw-status">載入中</p>
+      </div>
+
+      <div class="setting__body">
+        <div class="nw-field">
+          <label class="nw-field__label" for="gemini-api-key">API key</label>
+          <div class="key-field">
+            <input id="gemini-api-key" class="nw-input nw-input--lg" type="password" spellcheck="false" autocomplete="off" placeholder="貼上 Gemini API key" aria-describedby="key-hint status-message">
+            <button id="toggle-key" class="key-field__toggle nw-btn nw-btn--ghost nw-btn--sm" type="button" aria-label="顯示 Gemini API key" aria-pressed="false">顯示</button>
+          </div>
+          <p id="key-hint" class="nw-field__hint">到 <a class="nw-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">Google AI Studio 取得 API key ↗</a>。字幕執行中無法更換金鑰，請先停止字幕。</p>
+        </div>
+
+        <div class="actions">
+          <button id="save-key" class="nw-btn nw-btn--primary nw-btn--lg" type="button" disabled>儲存設定</button>
+          <button id="check-gemini" class="nw-btn nw-btn--secondary nw-btn--lg" type="button" disabled>測試 Gemini 連線</button>
+          <button id="clear-key" class="nw-btn nw-btn--danger nw-btn--lg actions__end" type="button" disabled>清除 API key</button>
+        </div>
+
+        <p id="status-message" class="nw-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="setting" aria-labelledby="guide-title">
+      <div class="setting__aside">
+        <h2 id="guide-title" class="nw-section__title">使用說明</h2>
+      </div>
+
+      <div class="setting__body">
+        <ol class="steps">
+          <li>貼上 Gemini API key 後儲存；「測試 Gemini 連線」會檢查目前的目標語言，不傳送音訊。</li>
+          <li>開啟要翻譯的影片、直播或 Meet／Zoom 網頁版分頁。</li>
+          <li>點擴充功能圖示，或按 <kbd class="nw-kbd">Alt + Shift + U</kbd> 開啟控制面板，選擇目標語言後按「開始雙語字幕」。</li>
+          <li>先前的字幕可從畫面右上角的「字幕紀錄」回看。換目標語言前請先停止字幕。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="setting" aria-labelledby="privacy-title">
+      <div class="setting__aside">
+        <h2 id="privacy-title" class="nw-section__title">資料與費用</h2>
+      </div>
+
+      <div class="setting__body privacy">
+        <p>API key 儲存在這台瀏覽器的 <code>chrome.storage.local</code>，只限擴充功能頁面存取，不會透過 Chrome 同步。此空間並非加密保險庫，請使用可撤銷的專用金鑰。</p>
+        <p>開始字幕後，所選分頁播放的聲音會直接傳送至 Google Gemini，使用量依你的 API 帳戶計費。只擷取該分頁，不含其他分頁、桌面軟體或自己的麥克風。</p>
+      </div>
+    </section>
+
+    <footer class="nw-signature page__signature">
+      <span class="nw-signature__mark">Noise Winston · Lab 004</span>
+      <span>Created by Winston.</span>
+    </footer>
+  </main>
+</body>
+</html>

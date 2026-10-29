@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <title>雙語字幕, 16px</title>
+  <!-- Drawn pixel by pixel: the screen keeps one-pixel corners, each caption line is one pixel high. -->
+  <defs>
+    <mask id="captions" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+      <rect width="16" height="16" fill="#fff"/>
+      <path d="M6 7H10V8H6ZM5 9H11V10H5Z" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="16" height="16" rx="3" fill="#DFF813"/>
+  <path d="M4 4H12V5H13V11H12V12H4V11H3V5H4Z" fill="#111111" mask="url(#captions)"/>
+</svg>

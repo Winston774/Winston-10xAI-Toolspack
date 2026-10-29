@@ -1,0 +1,193 @@
+/*
+ * Noise Winston — Extension Kit 2.1.0 · tokens
+ * Derived from Noise Winston Design System 2.0.0. Identical copy in every extension.
+ *
+ * Custom properties only. This file is also injected into third-party pages by
+ * content scripts, so it must never style elements or set color-scheme.
+ * Scope: the extension page root, or any injected element marked [data-nw-root].
+ * Theme: follows the OS unless data-nw-theme="light" | "dark" is set on the root.
+ */
+
+:root,
+[data-nw-root] {
+  /* Surfaces — calm structure */
+  --nw-canvas: #F1EFE7;
+  --nw-surface: #FFFFFF;
+  --nw-surface-raised: #FFFFFF;
+  --nw-surface-muted: #E8E6DE;
+  --nw-surface-inverse: #111111;
+  --nw-on-inverse: #F4F1E8;
+
+  /* Quiet fills for hover, pressed and grouped areas */
+  --nw-fill: rgba(17, 17, 17, 0.045);
+  --nw-fill-hover: rgba(17, 17, 17, 0.075);
+  --nw-fill-press: rgba(17, 17, 17, 0.11);
+
+  /* Lines: dividers stay faint; control edges keep 3:1 against their field */
+  --nw-line: rgba(17, 17, 17, 0.1);
+  --nw-line-strong: rgba(17, 17, 17, 0.17);
+  --nw-line-control: #96958F;
+
+  /* Segmented controls: the selected thumb always sits above its track */
+  --nw-control-track: rgba(17, 17, 17, 0.06);
+  --nw-control-thumb: #FFFFFF;
+  --nw-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236B6B68' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  /* Text */
+  --nw-text: #111111;
+  --nw-text-muted: #6B6B68;
+
+  /* Signal — action is purple, result is lime */
+  --nw-action: #7432FF;
+  --nw-action-hover: #5B20E6;
+  --nw-action-text: #7432FF;
+  --nw-on-action: #FFFFFF;
+  --nw-action-tint: rgba(116, 50, 255, 0.09);
+  --nw-result: #DFF813;
+  --nw-on-result: #111111;
+
+  /* Feedback: base hue for dots and fills, -text for legible copy */
+  --nw-focus: #1877F2;
+  --nw-success: #18A76B;
+  --nw-success-text: #0F7A4C;
+  --nw-success-tint: rgba(24, 167, 107, 0.11);
+  --nw-warning: #D8B400;
+  --nw-warning-text: #7D6000;
+  --nw-warning-tint: rgba(216, 180, 0, 0.14);
+  --nw-error: #DB1B1B;
+  --nw-error-text: #C21818;
+  --nw-error-tint: rgba(219, 27, 27, 0.09);
+
+  /* Elevation — declared once per element: ring + shadow, never border + shadow */
+  --nw-shadow-thumb: 0 1px 2px rgba(17, 17, 17, 0.12), 0 0 0 0.5px rgba(17, 17, 17, 0.08);
+  --nw-shadow-raised: 0 0 0 1px rgba(17, 17, 17, 0.08), 0 2px 6px rgba(17, 17, 17, 0.05), 0 14px 36px rgba(17, 17, 17, 0.12);
+  --nw-shadow-overlay: 0 0 0 1px rgba(17, 17, 17, 0.08), 0 24px 64px rgba(17, 17, 17, 0.24);
+
+  /* Type */
+  --nw-font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei UI", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+  --nw-font-signal: "Roboto Condensed", "Bahnschrift", "DIN Alternate", "Avenir Next Condensed", "Arial Narrow", sans-serif;
+  --nw-font-mono: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --nw-font-display: Italiana, Georgia, serif;
+  --nw-text-xs: 11px;
+  --nw-text-sm: 12px;
+  --nw-text-md: 13px;
+  --nw-text-base: 14px;
+  --nw-text-lg: 15px;
+  --nw-text-xl: 17px;
+  --nw-text-2xl: 22px;
+  --nw-text-3xl: 28px;
+  --nw-leading-tight: 1.3;
+  --nw-leading: 1.55;
+  --nw-leading-loose: 1.7;
+
+  /* Space (4px base), shape, controls */
+  --nw-space-1: 4px;
+  --nw-space-2: 8px;
+  --nw-space-3: 12px;
+  --nw-space-4: 16px;
+  --nw-space-5: 20px;
+  --nw-space-6: 24px;
+  --nw-space-8: 32px;
+  --nw-space-10: 40px;
+  --nw-space-12: 48px;
+  --nw-radius-xs: 4px;
+  --nw-radius-sm: 6px;
+  --nw-radius-md: 8px;
+  --nw-radius-lg: 12px;
+  --nw-radius-xl: 14px;
+  --nw-radius-pill: 999px;
+  --nw-control-sm: 28px;
+  --nw-control-md: 34px;
+  --nw-control-lg: 40px;
+
+  /* Motion */
+  --nw-duration-fast: 120ms;
+  --nw-duration: 180ms;
+  --nw-duration-slow: 280ms;
+  --nw-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --nw-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Brand primitives — only for brand marks, never for interface roles */
+  --nw-brand-ink: #111111;
+  --nw-brand-ivory: #F1EFE7;
+  --nw-brand-lime: #DFF813;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-nw-theme="light"]),
+  [data-nw-root]:not([data-nw-theme="light"]) {
+    --nw-canvas: #0D0F12;
+    --nw-surface: #16191E;
+    --nw-surface-raised: #1D2128;
+    --nw-surface-muted: #242933;
+    --nw-surface-inverse: #F4F1E8;
+    --nw-on-inverse: #111111;
+    --nw-fill: rgba(244, 241, 232, 0.05);
+    --nw-fill-hover: rgba(244, 241, 232, 0.085);
+    --nw-fill-press: rgba(244, 241, 232, 0.12);
+    --nw-line: rgba(244, 241, 232, 0.09);
+    --nw-line-strong: rgba(244, 241, 232, 0.15);
+    --nw-line-control: #646A73;
+    --nw-control-track: rgba(244, 241, 232, 0.06);
+    --nw-control-thumb: #2B303A;
+    --nw-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23B4B5B9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    --nw-text: #F4F1E8;
+    --nw-text-muted: #B4B5B9;
+    --nw-action: #8550FF;
+    --nw-action-hover: #7432E8;
+    --nw-action-text: #B092FF;
+    --nw-on-action: #FFFFFF;
+    --nw-action-tint: rgba(133, 80, 255, 0.18);
+    --nw-focus: #5DA9FF;
+    --nw-success: #46D6A0;
+    --nw-success-text: #46D6A0;
+    --nw-success-tint: rgba(70, 214, 160, 0.13);
+    --nw-warning: #F4C95D;
+    --nw-warning-text: #F4C95D;
+    --nw-warning-tint: rgba(244, 201, 93, 0.13);
+    --nw-error: #FF7272;
+    --nw-error-text: #FF7272;
+    --nw-error-tint: rgba(255, 114, 114, 0.13);
+    --nw-shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(244, 241, 232, 0.06);
+    --nw-shadow-raised: 0 0 0 1px rgba(244, 241, 232, 0.1), 0 2px 6px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.5);
+    --nw-shadow-overlay: 0 0 0 1px rgba(244, 241, 232, 0.1), 0 24px 64px rgba(0, 0, 0, 0.6);
+  }
+}
+
+[data-nw-theme="dark"] {
+  --nw-canvas: #0D0F12;
+  --nw-surface: #16191E;
+  --nw-surface-raised: #1D2128;
+  --nw-surface-muted: #242933;
+  --nw-surface-inverse: #F4F1E8;
+  --nw-on-inverse: #111111;
+  --nw-fill: rgba(244, 241, 232, 0.05);
+  --nw-fill-hover: rgba(244, 241, 232, 0.085);
+  --nw-fill-press: rgba(244, 241, 232, 0.12);
+  --nw-line: rgba(244, 241, 232, 0.09);
+  --nw-line-strong: rgba(244, 241, 232, 0.15);
+  --nw-line-control: #646A73;
+  --nw-control-track: rgba(244, 241, 232, 0.06);
+  --nw-control-thumb: #2B303A;
+  --nw-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23B4B5B9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --nw-text: #F4F1E8;
+  --nw-text-muted: #B4B5B9;
+  --nw-action: #8550FF;
+  --nw-action-hover: #7432E8;
+  --nw-action-text: #B092FF;
+  --nw-on-action: #FFFFFF;
+  --nw-action-tint: rgba(133, 80, 255, 0.18);
+  --nw-focus: #5DA9FF;
+  --nw-success: #46D6A0;
+  --nw-success-text: #46D6A0;
+  --nw-success-tint: rgba(70, 214, 160, 0.13);
+  --nw-warning: #F4C95D;
+  --nw-warning-text: #F4C95D;
+  --nw-warning-tint: rgba(244, 201, 93, 0.13);
+  --nw-error: #FF7272;
+  --nw-error-text: #FF7272;
+  --nw-error-tint: rgba(255, 114, 114, 0.13);
+  --nw-shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(244, 241, 232, 0.06);
+  --nw-shadow-raised: 0 0 0 1px rgba(244, 241, 232, 0.1), 0 2px 6px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.5);
+  --nw-shadow-overlay: 0 0 0 1px rgba(244, 241, 232, 0.1), 0 24px 64px rgba(0, 0, 0, 0.6);
+}

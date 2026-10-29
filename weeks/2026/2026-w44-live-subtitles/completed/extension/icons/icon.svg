@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <title>雙語字幕</title>
+  <!-- Noise Winston Extension Kit 2.1.0: Signal Lime tile, ink mark. Master drawing on the 128 grid.
+       A screen carrying two caption lines: the short one is the original, the long one the translation.
+       icon-16/32/48.svg are the same mark refitted to whole pixels at those sizes. -->
+  <defs>
+    <mask id="captions" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128">
+      <rect width="128" height="128" fill="#fff"/>
+      <rect x="44" y="58" width="40" height="9" rx="4.5" fill="#000"/>
+      <rect x="36" y="73" width="56" height="9" rx="4.5" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="#DFF813"/>
+  <rect x="26" y="32" width="76" height="64" rx="12" fill="#111111" mask="url(#captions)"/>
+</svg>

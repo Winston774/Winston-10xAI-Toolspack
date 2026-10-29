@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <title>雙語字幕, 32px</title>
+  <defs>
+    <mask id="captions" maskUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">
+      <rect width="32" height="32" fill="#fff"/>
+      <rect x="11" y="14" width="10" height="2" rx="1" fill="#000"/>
+      <rect x="9" y="18" width="14" height="2" rx="1" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="32" height="32" rx="6" fill="#DFF813"/>
+  <rect x="6" y="8" width="20" height="16" rx="3" fill="#111111" mask="url(#captions)"/>
+</svg>

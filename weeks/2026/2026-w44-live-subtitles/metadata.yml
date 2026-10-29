@@ -1,0 +1,11 @@
+id: 2026-w44
+title: Winston 雙語字幕：分頁語音即時翻譯
+type: chrome-extension
+difficulty: intermediate
+estimated_minutes: 60
+status: preview
+published_at: 2026-10-29
+version: 0.3.0
+platform: chrome-manifest-v3
+license: "unspecified for the supplied extension; no additional license grant"
+include_root_license: false
