@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Winston 雙語字幕",
+  "description": "直接連接 Gemini，翻譯影片、直播及網頁會議的分頁音訊；自動辨識來源，選擇目標語言並顯示雙語字幕。",
+  "version": "0.3.0",
+  "minimum_chrome_version": "116",
+  "icons": {"16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png"},
+  "permissions": ["activeTab", "scripting", "storage", "tabCapture", "offscreen"],
+  "host_permissions": ["https://www.youtube.com/*", "https://youtube.com/*", "https://m.youtube.com/*", "https://generativelanguage.googleapis.com/*"],
+  "background": {"service_worker": "background.js", "type": "module"},
+  "options_ui": {"page": "options.html", "open_in_tab": true},
+  "action": {"default_title": "Winston 雙語字幕", "default_popup": "popup.html", "default_icon": {"16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png"}},
+  "commands": {"_execute_action": {"suggested_key": {"default": "Alt+Shift+U", "mac": "Alt+Shift+U"}, "description": "開啟雙語字幕控制面板"}},
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://generativelanguage.googleapis.com wss://generativelanguage.googleapis.com"}
+}

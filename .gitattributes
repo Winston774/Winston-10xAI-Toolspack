@@ -4,3 +4,5 @@ weeks/2026/2026-w41-source-led-video/completed/source-led-video/** -text whitesp
 weeks/2026/2026-w42-video-bridge/completed/** -text whitespace=cr-at-eol,-blank-at-eof
 # Keep the W43 source snapshot and learner checks byte-identical across Git clients.
 weeks/2026/2026-w43-deck-atelier/completed/** -text whitespace=cr-at-eol,-blank-at-eof
+# Keep W44 extension source bytes unchanged when packaged across platforms.
+weeks/2026/2026-w44-live-subtitles/completed/extension/** -text whitespace=cr-at-eol,-blank-at-eof

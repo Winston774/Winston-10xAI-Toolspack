@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winston 雙語字幕</title>
+  <link rel="stylesheet" href="noise-winston/tokens.css">
+  <link rel="stylesheet" href="noise-winston/components.css">
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="popup.css">
+  <script src="popup.js" type="module"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="nw-appbar">
+      <div class="nw-appbar__brand">
+        <img src="icons/icon-48.png" alt="" class="nw-appbar__icon">
+        <div>
+          <h1 class="nw-appbar__title">雙語字幕</h1>
+          <p id="summary" class="nw-appbar__meta">載入中</p>
+        </div>
+      </div>
+      <button id="settings-button" class="nw-btn nw-btn--ghost nw-btn--sm" type="button">設定</button>
+    </header>
+
+    <section id="setup-warning" class="setup nw-callout nw-callout--warning" hidden>
+      <strong>尚未設定 Gemini API key</strong>
+      <span>請先到設定頁貼上 Gemini API key，再回到發出聲音的分頁開始字幕。</span>
+    </section>
+
+    <section class="session nw-card" aria-labelledby="session-title">
+      <div class="session__head">
+        <h2 id="session-title" class="session__title nw-status">準備開始</h2>
+        <span id="segment-count" class="nw-chip nw-signal">0 段</span>
+      </div>
+      <p id="session-message" class="session__message" role="status" aria-live="polite">開啟影片、直播或網頁會議，翻譯此分頁的聲音。</p>
+      <div class="session__actions">
+        <button id="start" class="nw-btn nw-btn--primary nw-btn--lg" type="button">開始雙語字幕</button>
+        <button id="stop" class="nw-btn nw-btn--secondary nw-btn--lg" type="button" disabled>停止</button>
+      </div>
+    </section>
+
+    <p id="error" class="message nw-callout nw-callout--error" role="alert" hidden></p>
+
+    <section class="settings" aria-label="字幕設定">
+      <div class="nw-field">
+        <label class="nw-field__label" for="target-language">翻譯成</label>
+        <select id="target-language" class="nw-select" aria-describedby="language-note"></select>
+        <p id="language-note" class="nw-field__hint">來源語言自動辨識。更換語言前請先停止字幕。</p>
+      </div>
+      <div class="split-row">
+        <div class="nw-field">
+          <label class="nw-field__label size-label" for="font-size">字幕大小 <output id="font-value" class="nw-signal" for="font-size">24</output></label>
+          <input id="font-size" class="range" type="range" min="16" max="40" step="2" value="24">
+        </div>
+        <div class="nw-field">
+          <label class="nw-field__label" for="position">字幕位置</label>
+          <select id="position" class="nw-select">
+            <option value="bottom">畫面下方</option>
+            <option value="top">畫面上方</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="notes" aria-label="使用須知">
+      <p>字幕跟隨語音逐步更新，讀完後自動退場。先前內容可從畫面上的「字幕紀錄」回看。</p>
+      <p>支援影片、直播與 Meet／Zoom 網頁版。只擷取所選分頁播放的聲音，不含桌面軟體或自己的麥克風。</p>
+    </section>
+
+    <div class="appearance">
+      <label for="theme-mode">外觀模式</label>
+      <select id="theme-mode" class="nw-select">
+        <option value="system">跟隨系統</option>
+        <option value="light">亮色</option>
+        <option value="dark">暗色</option>
+      </select>
+    </div>
+
+    <footer class="nw-signature">
+      <span class="nw-signature__mark">Noise Winston · Lab 004</span>
+      <span>Created by Winston.</span>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,60 @@
+/* Popup layout. Visual language comes from noise-winston/components.css. */
+
+body { width: 380px; overflow-x: hidden; }
+
+.app { display: grid; gap: 0; padding: var(--nw-space-4) var(--nw-space-4) var(--nw-space-3); }
+
+.app > .nw-appbar { align-items: flex-start; padding-bottom: var(--nw-space-4); }
+.app > .nw-appbar .nw-appbar__meta { max-width: 240px; line-height: var(--nw-leading); }
+
+.setup { margin-bottom: var(--nw-space-3); }
+
+/* Current task: the subtitle session */
+.session { display: grid; gap: var(--nw-space-2); padding: var(--nw-space-4); }
+
+.session__head { display: flex; align-items: center; justify-content: space-between; gap: var(--nw-space-3); }
+.session__title { font-weight: 600; }
+.session__message { min-height: 40px; color: var(--nw-text-muted); font-size: var(--nw-text-sm); line-height: var(--nw-leading); overflow-wrap: anywhere; }
+
+.session__actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--nw-space-2); margin-top: var(--nw-space-1); }
+
+.message { margin-top: var(--nw-space-3); overflow-wrap: anywhere; }
+.message.nw-callout--error { color: var(--nw-error-text); }
+
+/* Subtitle settings: ruled, not boxed */
+.settings { display: grid; gap: var(--nw-space-3); margin-top: var(--nw-space-5); padding-top: var(--nw-space-4); border-top: 1px solid var(--nw-line-strong); }
+
+.split-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--nw-space-3); }
+
+.size-label { display: flex; align-items: baseline; justify-content: space-between; gap: var(--nw-space-2); }
+.size-label output { color: var(--nw-text-muted); font-size: var(--nw-text-sm); }
+
+.range { width: 100%; min-height: var(--nw-control-md); margin: 0; accent-color: var(--nw-action); }
+
+.notes {
+  display: grid;
+  gap: 3px;
+  margin-top: var(--nw-space-5);
+  padding-top: var(--nw-space-3);
+  border-top: 1px solid var(--nw-line);
+  color: var(--nw-text-muted);
+  font-size: var(--nw-text-sm);
+  line-height: 1.6;
+}
+
+/* Appearance: system / light / dark, stored by theme.js */
+.appearance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nw-space-3);
+  margin-top: var(--nw-space-4);
+  padding-top: var(--nw-space-3);
+  border-top: 1px solid var(--nw-line);
+  font-size: var(--nw-text-md);
+  font-weight: 500;
+}
+
+.appearance .nw-select { width: 136px; }
+
+.app > .nw-signature { margin-top: var(--nw-space-4); padding-top: var(--nw-space-3); border-top: 1px solid var(--nw-line); }

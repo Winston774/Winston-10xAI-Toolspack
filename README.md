@@ -39,6 +39,8 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W44：Winston 雙語字幕 — 分頁語音即時翻譯](weeks/2026/2026-w44-live-subtitles/README.md)（`0.3.0 Preview`）— 自備 Gemini API key，將所選分頁音訊辨識翻譯為雙語字幕；附學員操作與隱私說明。
+
 - [2026-W43：Deck Atelier — 把資料做成可講、可編輯的 HTML 簡報](weeks/2026/2026-w43-deck-atelier/README.md)（`0.1.0 Preview`）— 來源匯入、SCQA 故事線、十種風格、原生 SVG、動態揭露、講者模式與截圖／PDF 品管。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
 
 - [2026-W42：影片接力 Video Bridge — 從 X／Threads 到社群發文框](weeks/2026/2026-w42-video-bridge/README.md)（`0.3.0 Preview`）— 右鍵下載與複製、單支本機快取、Threads／Facebook 附件插入、亮暗色介面與可重跑的模擬測試。本週以主分支與 CI 打包附件交付，尚無獨立 Release。
@@ -79,3 +81,5 @@ W41 的 Source-led Video 來源技能未附授權檔，本週 metadata 記為未
 W42 的 Video Bridge 來源擴充功能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。
 
 W43 的 Deck Atelier 來源技能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。
+
+W44 的雙語字幕來源擴充功能未附授權檔，本週 metadata 記為未指定，不套用根目錄 MIT，ZIP 不加入根目錄 LICENSE。

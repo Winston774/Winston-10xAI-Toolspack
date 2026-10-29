@@ -1,0 +1,79 @@
+/* Settings page layout. Visual language comes from noise-winston/components.css. */
+
+body { min-height: 100vh; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: 1px solid var(--nw-line);
+  background: color-mix(in srgb, var(--nw-canvas) 86%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px);
+}
+
+.topbar__inner,
+.page { width: min(880px, calc(100vw - 48px)); margin: 0 auto; }
+
+.topbar__inner { display: flex; min-height: 56px; align-items: center; justify-content: space-between; gap: var(--nw-space-4); }
+.topbar .nw-appbar__icon { width: 28px; height: 28px; }
+.topbar .nw-signature { display: block; }
+
+.page { padding: var(--nw-space-12) 0 var(--nw-space-10); }
+
+.intro { max-width: 640px; padding-bottom: var(--nw-space-8); }
+.intro h1 { font-size: var(--nw-text-3xl); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; text-wrap: balance; }
+.intro p { margin-top: var(--nw-space-3); color: var(--nw-text-muted); font-size: var(--nw-text-base); line-height: var(--nw-leading-loose); }
+
+/* Settings rows: title on the left, controls on the right, ruled between */
+.setting {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--nw-space-8);
+  padding: var(--nw-space-8) 0;
+  border-top: 1px solid var(--nw-line-strong);
+}
+
+.setting__aside { display: grid; align-content: start; gap: 6px; }
+.setting__body { display: grid; min-width: 0; gap: var(--nw-space-4); }
+
+#key-status { font-size: var(--nw-text-sm); font-weight: 400; color: var(--nw-text-muted); }
+
+/* Password field with an inline reveal toggle */
+.key-field { position: relative; }
+.key-field .nw-input { padding-right: 64px; font-family: var(--nw-font-signal); font-stretch: 87.5%; letter-spacing: 0.02em; }
+.key-field .nw-input::placeholder { font-family: var(--nw-font-body); letter-spacing: 0; }
+.key-field__toggle { position: absolute; top: 6px; right: 6px; }
+
+code {
+  padding: 1px 5px;
+  border-radius: var(--nw-radius-xs);
+  background: var(--nw-fill-hover);
+  color: var(--nw-text);
+  font-family: var(--nw-font-mono);
+  font-size: 0.92em;
+}
+
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--nw-space-2); }
+.actions__end { margin-left: auto; }
+
+#status-message { overflow-wrap: anywhere; }
+
+/* Guide */
+.steps { display: grid; gap: var(--nw-space-2); margin: 0; padding-left: 22px; font-size: var(--nw-text-base); line-height: var(--nw-leading-loose); }
+.steps li { padding-left: 4px; }
+.steps li::marker { color: var(--nw-text-muted); font-family: var(--nw-font-signal); font-stretch: 87.5%; font-variant-numeric: tabular-nums; font-weight: 600; }
+.steps .nw-kbd { vertical-align: 1px; }
+
+.privacy { gap: var(--nw-space-2); color: var(--nw-text-muted); font-size: var(--nw-text-sm); line-height: var(--nw-leading-loose); }
+
+.page__signature { margin-top: var(--nw-space-4); padding-top: var(--nw-space-5); border-top: 1px solid var(--nw-line); }
+
+@media (max-width: 720px) {
+  .topbar__inner,
+  .page { width: calc(100vw - 32px); }
+  .page { padding-top: var(--nw-space-8); }
+  .setting { grid-template-columns: minmax(0, 1fr); gap: var(--nw-space-4); padding: var(--nw-space-6) 0; }
+  .setting__aside { grid-auto-flow: column; justify-content: space-between; align-items: baseline; }
+  .actions__end { margin-left: 0; }
+  .topbar .nw-signature { display: none; }
+}
