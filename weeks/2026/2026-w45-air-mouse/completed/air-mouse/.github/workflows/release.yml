@@ -1,0 +1,66 @@
+name: Publish release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag matching Info.plist (for example, v0.1.0)
+        required: true
+        default: v0.1.0
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Require an existing matching tag and an unpublished release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' AirMouse/Info.plist)"
+          [[ "$RELEASE_TAG" == "v$VERSION" ]]
+          git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"
+          [[ "$(git rev-parse HEAD)" == "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")" ]]
+          test -s "docs/release-${RELEASE_TAG}.md"
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; refusing to overwrite it." >&2
+            exit 1
+          fi
+      - name: Build, validate, and package with an ad-hoc signature
+        run: bash scripts/package.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Air-Mouse-${{ inputs.tag }}-macos-arm64
+          path: |
+            dist/Air-Mouse-${{ inputs.tag }}-macos-arm64.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+      - name: Publish the existing tag and upload release files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            "dist/Air-Mouse-${RELEASE_TAG}-macos-arm64.zip" \
+            dist/SHA256SUMS.txt \
+            --verify-tag --title "Air Mouse ${RELEASE_TAG}" \
+            --notes-file "docs/release-${RELEASE_TAG}.md"

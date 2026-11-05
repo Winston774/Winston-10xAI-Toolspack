@@ -1,0 +1,22 @@
+# Generated build and release files
+AirMouse/build/
+dist/
+.build/
+
+# Local logs, settings, and macOS metadata
+*.log
+*.jsonl
+.DS_Store
+._*
+.env
+.env.*
+!.env.example
+
+# Signing material must stay local
+*.p12
+*.pfx
+*.pem
+*.key
+*.cer
+*.mobileprovision
+*.provisionprofile
