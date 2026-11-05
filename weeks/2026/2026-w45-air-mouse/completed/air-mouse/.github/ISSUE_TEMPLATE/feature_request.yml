@@ -1,0 +1,17 @@
+name: 功能提案 / Feature request
+description: 說明使用情境、目前困難與希望改善的行為。
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 希望解決的問題
+      description: 描述具體使用情境，以及目前如何處理。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建議行為與替代方案
+    validations:
+      required: true

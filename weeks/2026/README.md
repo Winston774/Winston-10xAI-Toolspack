@@ -8,6 +8,7 @@
 
 | 週次 | 主題 | 類型 | 狀態 |
 |---|---|---|---|
+| [2026-W45](2026-w45-air-mouse/README.md) | Air Mouse：用 AirPods 充電盒控制 Mac 游標 | Local AI Tool | Preview |
 | [2026-W44](2026-w44-live-subtitles/README.md) | Winston 雙語字幕：分頁語音即時翻譯 | Chrome Extension | Preview |
 | [2026-W43](2026-w43-deck-atelier/README.md) | Deck Atelier：把資料做成可講、可編輯的 HTML 簡報 | AI Skill | Preview |
 | [2026-W42](2026-w42-video-bridge/README.md) | 影片接力 Video Bridge：從 X／Threads 到社群發文框 | Chrome Extension | Preview |
