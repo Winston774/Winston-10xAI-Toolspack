@@ -39,6 +39,8 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
+- [2026-W46：All Around You Preview — Windows 四位置喇叭與 Agent 安裝](weeks/2026/2026-w46-all-around-you-preview/README.md)（程式 `0.1.0-preview.1`）— 原樣 Windows x64 可攜程式由獨立 Release 附件提供；教材含下載雜湊、安裝、校正與還原邊界。
+
 - [2026-W44：Winston 雙語字幕 — 分頁語音即時翻譯](weeks/2026/2026-w44-live-subtitles/README.md)（`0.3.0 Preview`）— 自備 Gemini API key，將所選分頁音訊辨識翻譯為雙語字幕；附學員操作與隱私說明。
 
 - [2026-W43：Deck Atelier — 把資料做成可講、可編輯的 HTML 簡報](weeks/2026/2026-w43-deck-atelier/README.md)（`0.1.0 Preview`）— 來源匯入、SCQA 故事線、十種風格、原生 SVG、動態揭露、講者模式與截圖／PDF 品管。本週以主分支與 CI 打包附件交付，尚無獨立 Release。

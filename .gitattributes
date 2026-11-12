@@ -6,3 +6,5 @@ weeks/2026/2026-w42-video-bridge/completed/** -text whitespace=cr-at-eol,-blank-
 weeks/2026/2026-w43-deck-atelier/completed/** -text whitespace=cr-at-eol,-blank-at-eof
 # Keep W44 extension source bytes unchanged when packaged across platforms.
 weeks/2026/2026-w44-live-subtitles/completed/extension/** -text whitespace=cr-at-eol,-blank-at-eof
+# Preserve W46 supplied installation handoff and checksum bytes.
+weeks/2026/2026-w46-all-around-you-preview/completed/** -text whitespace=cr-at-eol,-blank-at-eof
