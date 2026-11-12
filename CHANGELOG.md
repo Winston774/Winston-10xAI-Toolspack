@@ -6,6 +6,12 @@
 
 - 尚無。
 
+## 2026-W46 v0.1.0-preview.1 — 2026-11-12
+
+- 新增 All Around You Preview Windows x64 可攜程式的學員教材、下載 manifest、SHA-256、安裝指南與四位置練習。
+- 原樣程式 ZIP 與原始 SHA-256 由獨立 W46 Release 附件交付，不放入 Git 歷史或教材 ZIP；保留 AGENTS 入口、官方 VB-CABLE、執行環境及原始授權。
+- 區分上傳前靜態檢查、來源 189 項測試紀錄與尚待現場驗收的路由、聲學及乾淨機安裝，維持 Preview。
+
 ## 2026-W44 v0.3.0 Preview — 2026-10-29
 
 - 新增 Winston 雙語字幕 Chrome 擴充功能、學員安裝指南、講義、權限隱私、疑難排解及驗證說明。

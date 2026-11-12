@@ -1,0 +1,15 @@
+{
+  "product": "All Around You Preview",
+  "version": "0.1.0-preview.1",
+  "platform": "Windows x64",
+  "release_tag": "2026-w46-v0.1.0-preview.1",
+  "release_url": "https://github.com/Winston774/Winston-10xAI-Toolspack/releases/tag/2026-w46-v0.1.0-preview.1",
+  "asset_name": "All-Around-You-Preview-Windows-x64-0.1.0-preview.1.zip",
+  "asset_bytes": 58577023,
+  "sha256": "e30c04e3d1c8e821e6522ac579c4ec2509aea40d3ba8140a9ca3a0c4323b5e7a",
+  "asset_url": "https://github.com/Winston774/Winston-10xAI-Toolspack/releases/download/2026-w46-v0.1.0-preview.1/All-Around-You-Preview-Windows-x64-0.1.0-preview.1.zip",
+  "checksum_url": "https://github.com/Winston774/Winston-10xAI-Toolspack/releases/download/2026-w46-v0.1.0-preview.1/All-Around-You-Preview-Windows-x64-0.1.0-preview.1.zip.sha256",
+  "distribution": "unaltered portable ZIP as separate Release asset; not in Git history or lesson ZIP",
+  "unsigned_application": true,
+  "requires_python_install": false
+}
