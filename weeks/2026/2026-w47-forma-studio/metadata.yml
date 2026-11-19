@@ -1,0 +1,10 @@
+id: 2026-w47
+title: Forma Studio：本機數位人角色、定裝照與配音
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 60
+status: preview
+version: 0.1.0
+platform: windows-x64-first
+license: "Learner share; Lucide notices retained; third-party reference collections excluded"
+include_root_license: false
