@@ -2,6 +2,7 @@
 
 | 週次 | 主題 | 類型 | 難度 | 預估時間 | 狀態 |
 |---|---|---|---|---:|---|
+| [2026-W47](weeks/2026/2026-w47-forma-studio/README.md) | Forma Studio：本機數位人角色、定裝照與配音 | Local AI Tool | 中級 | 60 分鐘 | Preview |
 | [2026-W46](weeks/2026/2026-w46-all-around-you-preview/README.md) | All Around You Preview：Windows 四位置喇叭與 Agent 安裝 | Local AI Tool | 中級 | 120 分鐘 | Preview |
 | [2026-W44](weeks/2026/2026-w44-live-subtitles/README.md) | Winston 雙語字幕：分頁語音即時翻譯 | Chrome Extension | 中級 | 60 分鐘 | Preview |
 | [2026-W43](weeks/2026/2026-w43-deck-atelier/README.md) | Deck Atelier：把資料做成可講、可編輯的 HTML 簡報 | AI Skill | 中級 | 120 分鐘 | Preview |

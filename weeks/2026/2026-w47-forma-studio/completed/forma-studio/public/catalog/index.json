@@ -1,0 +1,11 @@
+{
+  "faces": [
+    { "id": "forma-sora", "name": "Sora 空", "group": "內建範本", "tags": ["短髮", "棚拍"], "source": "Forma Studio", "image": "/art/sora.webp", "reference": "/art/sora.webp" },
+    { "id": "forma-mio", "name": "Mio 美緒", "group": "內建範本", "tags": ["長髮", "清新"], "source": "Forma Studio", "image": "/art/mio.webp", "reference": "/art/mio.webp" },
+    { "id": "forma-ren", "name": "Ren 阿任", "group": "內建範本", "tags": ["短髮", "街頭"], "source": "Forma Studio", "image": "/art/ren.webp", "reference": "/art/ren.webp" },
+    { "id": "forma-noa", "name": "Noa 諾雅", "group": "內建範本", "tags": ["深髮", "時尚"], "source": "Forma Studio", "image": "/art/noa.webp", "reference": "/art/noa.webp" },
+    { "id": "forma-kai", "name": "Kai 凱", "group": "內建範本", "tags": ["捲髮", "暖調"], "source": "Forma Studio", "image": "/art/kai.webp", "reference": "/art/kai.webp" }
+  ],
+  "outfits": [],
+  "poses": []
+}
