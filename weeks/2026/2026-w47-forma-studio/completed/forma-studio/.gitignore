@@ -1,0 +1,10 @@
+node_modules/
+storage/
+public/catalog/cache/
+.env
+.env.*
+!.env.example
+*.log
+tmp/
+test-results/
+__pycache__/

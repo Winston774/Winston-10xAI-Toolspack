@@ -41,6 +41,8 @@ scripts/     驗證與打包工具
 
 - [2026-W48：Shift PM — 從 MVP 到 Production 的產品化助手](weeks/2026/2026-w48-shift-pm/README.md) — 收錄原版 `chrome-extension-saas-architect`，附完整外掛商業化路線、25 個避坑案例及三份範本。
 
+- [2026-W47：Forma Studio — 本機數位人角色、定裝照與配音](weeks/2026/2026-w47-forma-studio/README.md)（`0.1.0 Preview`）— 附 Codex 安裝任務、OpenAI 與 Fish Audio 的本機設定及四張操作畫面。基本流程不需要 Colab。
+
 - [2026-W46：All Around You Preview — Windows 四位置喇叭與 Agent 安裝](weeks/2026/2026-w46-all-around-you-preview/README.md)（程式 `0.1.0-preview.1`）— 原樣 Windows x64 可攜程式由獨立 Release 附件提供；教材含下載雜湊、安裝、校正與還原邊界。
 
 - [2026-W45：Air Mouse — 用 AirPods 充電盒控制 Mac 游標](weeks/2026/2026-w45-air-mouse/README.md)（`0.1.0 Preview`）— Apple Silicon 開蓋感測、游標、點按校正與本機資料說明。
@@ -77,6 +79,8 @@ scripts/     驗證與打包工具
 本倉庫自行創作的程式碼、教材與隨附素材依 [MIT License](LICENSE) 授權。個別週次若含第三方或衍生專案，以該週 `metadata.yml` 與 completed 內授權檔為準；根目錄 MIT 不會覆蓋第三方授權。
 
 W48 Shift PM 來源未附單獨授權；學員包不套用倉庫根目錄 MIT，也不加附根目錄 LICENSE。
+
+W47 Forma Studio 來源專案未附總授權檔；學員包保留 Lucide 原授權，不加入根目錄 LICENSE 或第三方參考圖庫。
 
 W38 的 video-understanding 技能授權欄位為未指定，發布包不附 LICENSE／NOTICE，也不套用根目錄 MIT。
 
