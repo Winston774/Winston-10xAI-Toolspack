@@ -1,0 +1,25 @@
+{
+  "source_id": "REPLACE_WITH_EXACT_CABLE_INPUT_LOOPBACK_ID_FROM_DEVICES",
+  "channels": {
+    "FL": {
+      "device_id": "REPLACE_WITH_EXACT_FRONT_LEFT_OUTPUT_ID",
+      "delay_ms": 0
+    },
+    "FR": {
+      "device_id": "REPLACE_WITH_EXACT_FRONT_RIGHT_OUTPUT_ID",
+      "delay_ms": 0
+    },
+    "RL": {
+      "device_id": "REPLACE_WITH_EXACT_REAR_LEFT_OUTPUT_ID",
+      "delay_ms": 0
+    },
+    "RR": {
+      "device_id": "REPLACE_WITH_EXACT_REAR_RIGHT_OUTPUT_ID",
+      "delay_ms": 0
+    }
+  },
+  "mic_id": "REPLACE_WITH_EXACT_PHYSICAL_MIC_ID_OR_REMOVE_THIS_FIELD",
+  "playback_mode": "all_stereo",
+  "rear_volume_percent": 50,
+  "resident_enabled": true
+}

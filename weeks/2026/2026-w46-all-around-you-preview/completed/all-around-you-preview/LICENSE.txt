@@ -1,0 +1,71 @@
+MIT License
+
+Copyright (c) 2026 Abhinav Puthukkudi <abhinavputhukkudi31@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+========================================================================
+                          EASY SURROUND PRO
+========================================================================
+Version: 1.1.0
+Developer & Publisher: Abhinav Puthukkudi
+GitHub: @abhinav2231
+Instagram: @ig_abhi.nav
+LinkedIn: @abhinav_2231
+Contact Email: abhinavputhukkudi31@gmail.com
+
+------------------------------------------------------------------------
+ABOUT THE SOFTWARE
+------------------------------------------------------------------------
+Easy Surround PRO is an ultra-low latency, professional multi-channel 
+audio DSP routing engine. It is designed specifically to bridge separate 
+physical audio outputs (such as front AUX speakers and rear USB-C/Bluetooth 
+speakers) to create a unified, high-fidelity spatial surround sound field.
+
+------------------------------------------------------------------------
+CORE PROCESSING FEATURES
+------------------------------------------------------------------------
+- Real-Time Loopback Capture: Bit-perfect capture of Windows system audio 
+  using a high-performance, low-latency WASAPI loopback engine.
+- Dual-Device Routing: Simultaneously routes front channels to one audio 
+  interface and rear channels to a separate physical output device.
+- Microsecond Delay Compensation: Allows precise phase-alignment to 
+  compensate for hardware and distance latency.
+- Stable Name Resolution: Saves your configuration using physical hardware 
+  device names, preventing channel swaps on reboot.
+- Inactive Stream Watchdog: Automatic 2.0s heartbeat thread control to 
+  detect and self-heal stream freezes.
+
+------------------------------------------------------------------------
+SUPPORTED AUDIO FORMATS & SPECIFICATIONS
+------------------------------------------------------------------------
+- True Discrete 7.1 Surround (FL, FR, C, LFE, RL, RR, SL, SR)
+- True Discrete 5.1 Surround (FL, FR, C, LFE, RL, RR)
+- Smart Peak-Based Fallback: Automatically falls back to high-fidelity 
+  matrix upmixing for downmixed multi-channel signals, and silences rear 
+  speakers for standard stereo streams (e.g., Spotify).
+
+------------------------------------------------------------------------
+TECHNICAL DSP DETAILS
+------------------------------------------------------------------------
+- Sampling Rates: 44.1 kHz, 48.0 kHz, 96.0 kHz
+- Resolution: 16-bit PCM / 24-bit Studio Depth
+- Loopback Mode: WASAPI Shared Mode Capture
+- Output Drivers: Low-latency PortAudio MME
+- Priority Class: HIGH_PRIORITY_CLASS

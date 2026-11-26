@@ -1,0 +1,10 @@
+id: 2026-w48
+title: Shift PM：從 MVP 到 Production 的產品化助手
+type: skill
+difficulty: intermediate
+estimated_minutes: 45
+status: preview
+version: 0.1.0
+platform: codex-agent-skills
+license: unspecified
+include_root_license: false

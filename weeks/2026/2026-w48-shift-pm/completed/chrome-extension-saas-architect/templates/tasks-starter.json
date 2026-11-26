@@ -1,0 +1,158 @@
+{
+  "project": {
+    "name": "<YOUR_PRODUCT_NAME>",
+    "domain": "<yourdomain.com>",
+    "pattern": "<Pattern 1 | Pattern 2 | Pattern 3 | Pattern 4>",
+    "monetization": "<One-Time | Tiered Subscription | Hybrid Quota + Top-up>",
+    "updatedAt": "YYYY-MM-DD"
+  },
+  "milestones": [
+    { "id": "M0", "name": "治理建置、基線稽核與 CI 品質門禁", "status": "IN_PROGRESS" },
+    { "id": "M1", "name": "後端架構、資安加固與金流狀態機", "status": "BACKLOG" },
+    { "id": "M2", "name": "Chrome Extension MV3 商業化與 Web 雙向橋接", "status": "BACKLOG" },
+    { "id": "M3", "name": "官網、合規法務包、全站多語系與會員控制台", "status": "BACKLOG" },
+    { "id": "M4", "name": "Staging 雲端 E2E、金流／CWS 雙審與正式切網", "status": "BACKLOG" },
+    { "id": "M5", "name": "公開上市、漏斗監控、GTM 成長與毛利優化", "status": "BACKLOG" }
+  ],
+  "ownerActions": [
+    {
+      "id": "OWN-001",
+      "batch": "Batch A (Day 1)",
+      "priority": "P0",
+      "milestone": "M0",
+      "status": "TODO",
+      "title": "建立 GitHub 私有倉庫並登入 gh CLI",
+      "leadTime": "10 分鐘"
+    },
+    {
+      "id": "OWN-002",
+      "batch": "Batch A (Day 1)",
+      "priority": "P0",
+      "milestone": "M3",
+      "status": "TODO",
+      "title": "拍板法定營運主體（中／英姓名、英譯地址、準據法）與網域客服信箱",
+      "leadTime": "當日確認"
+    },
+    {
+      "id": "OWN-003",
+      "batch": "Batch A (Day 1)",
+      "priority": "P0",
+      "milestone": "M2",
+      "status": "TODO",
+      "title": "註冊 Chrome Web Store 開發者帳號（$5）並建立草稿取得永久 32 碼 Extension ID",
+      "leadTime": "當日取得 ID（關鍵路徑！）"
+    },
+    {
+      "id": "OWN-004",
+      "batch": "Batch B1 (官網就緒即辦)",
+      "priority": "P0",
+      "milestone": "M4",
+      "status": "TODO",
+      "title": "設定 Cloudflare（DNS、Email Routing、Pages、Workers、Turnstile、Deploy Token）",
+      "leadTime": "30–60 分鐘"
+    },
+    {
+      "id": "OWN-005",
+      "batch": "Batch B1 (關鍵路徑加速)",
+      "priority": "P0",
+      "milestone": "M4",
+      "status": "TODO",
+      "title": "部署 Pre-Approval 正式官網並提交金流（如 Paddle Live）網域審核、收款銀行與 KYC",
+      "leadTime": "1 小時～5 工作天"
+    },
+    {
+      "id": "OWN-006",
+      "batch": "Batch B2 (Staging 聯調前)",
+      "priority": "P0",
+      "milestone": "M4",
+      "status": "TODO",
+      "title": "開通 Staging 專用外部服務（資料庫、Redis、上游 API、金流 Sandbox、PostHog、Resend）",
+      "leadTime": "60–90 分鐘"
+    },
+    {
+      "id": "OWN-007",
+      "batch": "Batch C (Staging 全綠後)",
+      "priority": "P0",
+      "milestone": "M4",
+      "status": "TODO",
+      "title": "上傳 CI 打包之 v1.0.0 .zip 至 Chrome Web Store（先送 Unlisted）",
+      "leadTime": "3–7 工作天（外部關鍵路徑！）"
+    },
+    {
+      "id": "OWN-008",
+      "batch": "Batch D (上市前)",
+      "priority": "P1",
+      "milestone": "M5",
+      "status": "TODO",
+      "title": "邀請 30–50 位種子封測用戶並核准上市 Demo 短片與社群文案",
+      "leadTime": "3–5 天封測"
+    },
+    {
+      "id": "OWN-009",
+      "batch": "Batch D (Go-Live)",
+      "priority": "P0",
+      "milestone": "M5",
+      "status": "TODO",
+      "title": "核准切換正式環境（Production Secrets + Live 金流）、1 筆實卡自測＋退款並將 CWS 轉 Public",
+      "leadTime": "Launch Day"
+    }
+  ],
+  "workOrders": [
+    {
+      "id": "WO-001",
+      "milestone": "M0",
+      "title": "治理憲章、雙基線稽核（資安＋MV3 合規）與 GitHub CI 品質門禁",
+      "status": "READY",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-002",
+      "milestone": "M1",
+      "title": "資料庫 Migrations（RLS 欄位保護、顯式 GRANT 與原子權限／帳本 RPC）",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-003",
+      "milestone": "M1",
+      "title": "Edge API、防濫刷（Turnstile／黑名單／成本熔斷）與金流 Webhook 狀態機",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-004",
+      "milestone": "M2",
+      "title": "Chrome Extension MV3 商業化、Service Worker 單飛認證與 Web 雙向連線橋接",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-005",
+      "milestone": "M3",
+      "title": "官網、合規法務頁、SEO 頁面、全站多語系與會員控制台（統一剩餘額度＋全域登入狀態）",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-006",
+      "milestone": "M4",
+      "title": "Staging 全棧雲端部署、自動化 E2E 與 Sandbox 測試卡實刷驗收",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-007",
+      "milestone": "M4",
+      "title": "金流 Pre-Approval 自動驗收、CWS 送審包與 Production 切網 Runbook",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    },
+    {
+      "id": "WO-008",
+      "milestone": "M5",
+      "title": "Server-side 匿名漏斗、留存信件、示範短片與上市 GTM 執行",
+      "status": "BACKLOG",
+      "gates": { "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING" }
+    }
+  ]
+}

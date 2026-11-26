@@ -1,0 +1,9 @@
+{
+  "name": "toolspack-all-around-you-preview-distribution",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/distribution.test.mjs",
+    "validate": "node --test tests/distribution.test.mjs"
+  }
+}

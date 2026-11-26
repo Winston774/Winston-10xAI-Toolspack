@@ -1,0 +1,12 @@
+id: 2026-w46
+title: All Around You Preview：Windows 四位置喇叭與 Agent 安裝
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 120
+status: preview
+published_at: 2026-11-12
+version: 0.1.0
+source_version: 0.1.0-preview.1
+platform: windows-x64
+license: "EasySurround MIT and bundled third-party terms; VB-CABLE donationware separately licensed"
+include_root_license: false

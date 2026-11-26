@@ -2,6 +2,8 @@
 
 | 週次 | 主題 | 類型 | 難度 | 預估時間 | 狀態 |
 |---|---|---|---|---:|---|
+| [2026-W48](weeks/2026/2026-w48-shift-pm/README.md) | Shift PM：從 MVP 到 Production 的產品化助手 | AI Skill | 中級 | 45 分鐘 | Preview |
+| [2026-W46](weeks/2026/2026-w46-all-around-you-preview/README.md) | All Around You Preview：Windows 四位置喇叭與 Agent 安裝 | Local AI Tool | 中級 | 120 分鐘 | Preview |
 | [2026-W45](weeks/2026/2026-w45-air-mouse/README.md) | Air Mouse：用 AirPods 充電盒控制 Mac 游標 | Local AI Tool | 中級 | 60 分鐘 | Preview |
 | [2026-W44](weeks/2026/2026-w44-live-subtitles/README.md) | Winston 雙語字幕：分頁語音即時翻譯 | Chrome Extension | 中級 | 60 分鐘 | Preview |
 | [2026-W43](weeks/2026/2026-w43-deck-atelier/README.md) | Deck Atelier：把資料做成可講、可編輯的 HTML 簡報 | AI Skill | 中級 | 120 分鐘 | Preview |
