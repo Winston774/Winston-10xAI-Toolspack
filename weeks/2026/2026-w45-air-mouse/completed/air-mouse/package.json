@@ -1,0 +1,9 @@
+{
+  "name": "toolspack-air-mouse-distribution-check",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/distribution.test.mjs",
+    "validate": "node --test tests/distribution.test.mjs"
+  }
+}

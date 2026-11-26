@@ -1,0 +1,32 @@
+name: 問題回報 / Bug report
+description: 回報可重現的操作、連線或建置問題。
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: 請先閱讀操作說明。不要貼上藍牙位址、序號、個人路徑或完整系統診斷。安全漏洞請透過 Security 分頁私密回報。
+  - type: input
+    id: version
+    attributes:
+      label: Air Mouse 版本與安裝方式
+      placeholder: v0.1.0 / Release ZIP 或自行建置
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 硬體與系統
+      description: Mac 晶片、macOS、AirPods 型號與韌體、自動耳朵偵測、盒蓋狀態、已授予權限。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 重現步驟、預期與實際結果
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 觀察與最小記錄片段
+      description: 選單顯示的來源耳與 Hz、觀察秒數、是否有通話或其他動作讀取程式。附檔前請移除個人資料。

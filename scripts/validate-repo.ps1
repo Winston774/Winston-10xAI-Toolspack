@@ -178,7 +178,7 @@ foreach ($yearDirectory in $yearDirectories) {
 
                 $referenceMatches = [regex]::Matches(
                     $skillContent,
-                    '\]\((?<path>references/[^\s\)#]+)(?:#[^\)]*)?\)'
+                    '\]\((?:\./)?(?<path>references/[^\s\)#]+)(?:#[^\)]*)?\)'
                 )
                 $linkedReferences = [System.Collections.Generic.HashSet[string]]::new(
                     [System.StringComparer]::OrdinalIgnoreCase
