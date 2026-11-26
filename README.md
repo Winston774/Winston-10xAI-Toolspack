@@ -39,7 +39,7 @@ scripts/     驗證與打包工具
 
 ## 最新內容
 
-- [2026-W48：Shift PM — 從 MVP 到 Production 的產品化助手](weeks/2026/2026-w48-shift-pm/README.md)（`0.1.0 Preview`）— 在 Codex 盤點 Chrome 外掛、挑出下一張工單、留下驗收證據，再依需求走向封測、上架與營運。
+- [2026-W48：Shift PM — 從 MVP 到 Production 的產品化助手](weeks/2026/2026-w48-shift-pm/README.md) — 收錄原版 `chrome-extension-saas-architect`，附完整外掛商業化路線、25 個避坑案例及三份範本。
 
 - [2026-W46：All Around You Preview — Windows 四位置喇叭與 Agent 安裝](weeks/2026/2026-w46-all-around-you-preview/README.md)（程式 `0.1.0-preview.1`）— 原樣 Windows x64 可攜程式由獨立 Release 附件提供；教材含下載雜湊、安裝、校正與還原邊界。
 

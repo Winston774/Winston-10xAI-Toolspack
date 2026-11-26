@@ -1,4 +1,0 @@
-interface:
-  display_name: "Shift PM｜從 MVP 到 Production 的產品化助手"
-  short_description: "協助 Chrome 外掛盤點現況、拆解工單、驗收並準備上架"
-  default_prompt: "用 $shift-pm 唯讀盤點我的 Chrome 外掛，找出目前階段、先做與先省略的事，給我一張可驗收的下一步工單。"
