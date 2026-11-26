@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 操作說明
+    url: https://github.com/Winston774/air-mouse/blob/main/docs/usage.zh-TW.md
+    about: 第一次使用、校正、設定與疑難排解。
+  - name: 私密安全回報
+    url: https://github.com/Winston774/air-mouse/security/advisories/new
+    about: 請將漏洞細節透過私密管道提交。

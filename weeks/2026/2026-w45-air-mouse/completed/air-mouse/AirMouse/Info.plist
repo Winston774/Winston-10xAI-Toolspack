@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleExecutable</key><string>AirPodsAirMouse</string>
+  <key>CFBundleIdentifier</key><string>local.winston.airpods-air-mouse</string>
+  <key>CFBundleName</key><string>Air Mouse</string>
+  <key>CFBundleDisplayName</key><string>Air Mouse</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleVersion</key><string>1</string>
+  <key>CFBundleShortVersionString</key><string>0.1.0</string>
+  <key>LSMinimumSystemVersion</key><string>14.0</string>
+  <key>LSUIElement</key><true/>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSMotionUsageDescription</key><string>讀取充電盒內 AirPods 的動作感測資料，用來移動游標與點擊。</string>
+  <key>NSBluetoothAlwaysUsageDescription</key><string>AirPods 斷線時自動重新連線，讓空中滑鼠可以持續使用。</string>
+</dict>
+</plist>

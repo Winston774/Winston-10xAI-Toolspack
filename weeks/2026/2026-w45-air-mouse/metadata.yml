@@ -1,0 +1,11 @@
+id: 2026-w45
+title: Air Mouse：用 AirPods 充電盒控制 Mac 游標
+type: local-ai-tool
+difficulty: intermediate
+estimated_minutes: 60
+status: preview
+published_at: 2026-11-05
+version: 0.1.0
+platform: macos-apple-silicon
+license: "MIT: see completed/air-mouse/LICENSE"
+include_root_license: false
