@@ -10,3 +10,5 @@ weeks/2026/2026-w44-live-subtitles/completed/extension/** -text whitespace=cr-at
 weeks/2026/2026-w46-all-around-you-preview/completed/** -text whitespace=cr-at-eol,-blank-at-eof
 # Keep original license prose, including upstream trailing spaces.
 weeks/2026/2026-w46-all-around-you-preview/completed/all-around-you-preview/LICENSE.txt whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+# Keep the original Shift PM skill files byte-for-byte, including Markdown hard breaks.
+weeks/2026/2026-w48-shift-pm/completed/chrome-extension-saas-architect/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
